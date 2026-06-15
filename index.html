@@ -2,1127 +2,491 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AE Convenient Store</title>
-    <!-- Tailwind CSS for styling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AE Operations & Analytics Portal</title>
+    <!-- Tailwind CSS Engine -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-12">
 
-    <!-- NAVIGATION BAR -->
-    <nav class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <span class="text-2xl">🏪</span>
-                <h1 class="text-lg font-bold tracking-tight">AE Convenient Store</h1>
+    <!-- TOP GLOBAL STICKY HEADER -->
+    <nav class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl bg-blue-600 p-1.5 rounded-xl shadow-xs">📊</span>
+                <div>
+                    <h1 class="text-base font-black tracking-tight leading-none">AE Convenient Store</h1>
+                    <p class="text-[10px] text-slate-400 mt-0.5 font-medium">Live Executive Enterprise Dashboard</p>
+                </div>
             </div>
-            <div id="nav-controls" class="flex gap-3 items-center">
-                <!-- JavaScript injects actions here -->
+            <div class="flex items-center space-x-3">
+                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5 animate-pulse">
+                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span> Live Connection Established
+                </span>
             </div>
         </div>
     </nav>
 
-    <!-- FLOATING MOBILE CART NOTIFIER -->
-    <div id="mobile-cart-badge" class="fixed bottom-4 right-4 z-40 lg:hidden hidden">
-        <button onclick="scrollToCart()" class="bg-emerald-600 text-white px-4 py-3 rounded-full shadow-xl font-bold flex items-center space-x-2 border border-emerald-500 animate-bounce">
-            <span>🛒 Basket</span>
-            <span id="mobile-cart-count" class="bg-white text-emerald-700 text-xs px-2 py-0.5 rounded-full">0</span>
-        </button>
-    </div>
-
-    <main class="max-w-6xl mx-auto p-4 md:p-6">
+    <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
         
-        <!-- SECTION 1: AUTHENTICATION -->
-        <div id="auth-view" class="max-w-md mx-auto mt-6 bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-100 hidden">
-            <div class="text-center mb-6">
-                <h2 id="auth-title" class="text-2xl font-black text-slate-900 tracking-tight">Welcome Back</h2>
-                <p id="auth-subtitle" class="text-sm text-slate-500 mt-1">Log in to shop and manage your store credit line.</p>
-            </div>
-            
-            <div class="space-y-4">
-                <div id="email-field-container" class="hidden">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Email Address</label>
-                    <input type="email" id="auth-email" onkeydown="handleAuthKeyDown(event)" class="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" placeholder="yourname@domain.com">
-                </div>
+        <!-- MODULE 1: ANALYTICS CONTROL PANEL & CHRONOLOGICAL MATRIX FILTERS -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-5 border-b border-slate-100 gap-4 mb-6">
                 <div>
-                    <label id="username-label" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Enter Username</label>
-                    <input type="text" id="auth-username" onkeydown="handleAuthKeyDown(event)" class="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" placeholder="e.g. johndoe99">
-                </div>
-                <div>
-                    <label id="password-label" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Secure Password</label>
-                    <input type="password" id="auth-password" onkeydown="handleAuthKeyDown(event)" class="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm" placeholder="••••••••">
-                </div>
-
-                <button onclick="handleAuthSubmit()" id="auth-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition duration-150 shadow-md shadow-blue-500/10 mt-2 cursor-pointer">
-                    Sign In securely
-                </button>
-            </div>
-            
-            <div class="text-center text-sm mt-6 pt-4 border-t border-slate-100">
-                <span id="auth-toggle-text" class="text-slate-500">New to our convenience store?</span> 
-                <button onclick="toggleAuthMode()" id="auth-toggle-btn" class="text-blue-600 font-bold hover:underline ml-1 cursor-pointer">Create Profile</button>
-            </div>
-        </div>
-
-        <!-- SECTION 2: CUSTOMER STOREFRONT, BASKET & HISTORY -->
-        <div id="shop-view" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-2 hidden">
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Customer Quick Metrics Banner -->
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5 rounded-2xl shadow-md flex justify-between items-center">
-                    <div>
-                        <p class="text-xs text-blue-100 uppercase font-bold tracking-wider">Store Profile Account</p>
-                        <h3 class="text-lg font-bold" id="user-display-name">--</h3>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-xs text-blue-100 uppercase font-bold tracking-wider">Available Credit Allowance</p>
-                        <p class="text-2xl font-black text-emerald-300" id="user-display-credit">R0.00</p>
-                    </div>
-                </div>
-
-                <!-- CREDIT BALANCE NOTIFICATION MODULE -->
-                <div id="credit-statement-alert" class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex gap-3.5 items-start">
-                    <div class="text-2xl pt-0.5">📅</div>
-                    <div class="flex-1">
-                        <h4 class="font-bold text-amber-900 text-sm">Monthly Credit Statement Tracking</h4>
-                        <p class="text-xs text-amber-700 mt-0.5 leading-relaxed">
-                            Your active account statement is generated dynamically. You will receive an official automated notification for items bought on credit on the <strong class="underline">27th of this month</strong>.
-                        </p>
-                        <div class="mt-3 bg-white/70 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-amber-200/60">
-                            <span class="text-xs text-slate-500 font-medium">Accumulated Outstanding Credit Balance:</span>
-                            <span id="current-month-credit-total" class="text-xs font-black text-rose-600">R0.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Display Grid -->
-                <div>
-                    <h3 class="text-lg font-extrabold text-slate-900 mb-3 flex items-center space-x-2">
-                        <span>🛒</span> <span>Fresh Grocery Items</span>
-                    </h3>
-                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Installs via JavaScript -->
-                    </div>
-                </div>
-
-                <!-- 30-DAY PURCHASE HISTORY -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="text-lg font-extrabold text-slate-900 mb-1 flex items-center space-x-2">
-                        <span>📋</span> <span>Your 30-Day Purchase History</span>
-                    </h3>
-                    <p class="text-xs text-slate-400 mb-4">Review all checkout transactions fulfilled over the last rolling 30 days.</p>
-                    <div id="customer-history-container" class="space-y-3">
-                        <!-- Installs via JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Basket Sidebar -->
-            <div id="basket-section" class="bg-white p-5 rounded-2xl shadow-lg border border-slate-100 h-fit sticky top-20">
-                <h3 class="text-lg font-extrabold text-slate-900 mb-3 border-b border-slate-100 pb-2 flex items-center justify-between">
-                    <span>Your Basket Checkout</span>
-                    <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-bold" id="basket-pill-count">0 items</span>
-                </h3>
-                
-                <div id="basket-items" class="space-y-3 mb-4 max-h-64 overflow-y-auto pr-1">
-                    <!-- Dynamic Rows inject here -->
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                        <span>🏆</span> Customer Value Matrix Filter Engine
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Isolate and analyze top-performing consumer expenditures by real-time chronological sliding windows.</p>
                 </div>
                 
-                <div class="border-t border-slate-100 pt-3 space-y-2 mb-4">
-                    <div class="flex justify-between items-center text-slate-900 font-extrabold text-base">
-                        <span>Total Checkout Bill:</span>
-                        <span id="basket-total" class="text-xl text-blue-600">R0.00</span>
-                    </div>
+                <!-- TIMEFRAME TOGGLE TABS (DAILY, MONTHLY, BI-ANNUAL, ANNUAL) -->
+                <div class="bg-slate-100 p-1 rounded-xl flex flex-wrap gap-1 w-full lg:w-auto border border-slate-200/60">
+                    <button onclick="setSalesFilter('daily')" id="time-btn-daily" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
+                        ☀️ Daily Sales
+                    </button>
+                    <button onclick="setSalesFilter('monthly')" id="time-btn-monthly" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
+                        📅 Monthly Sales
+                    </button>
+                    <button onclick="setSalesFilter('biannual')" id="time-btn-biannual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
+                        🔄 Bi-Annual Sales
+                    </button>
+                    <button onclick="setSalesFilter('annual')" id="time-btn-annual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
+                        🦅 Annual Sales
+                    </button>
                 </div>
+            </div>
 
-                <div class="mb-4">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Settle Payment Via</label>
-                    <select id="payment-method" class="w-full border border-slate-200 p-3 rounded-xl bg-slate-50 font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer">
-                        <option value="cash">💵 Cash / Card inside Physical Store</option>
-                        <option value="credit">💳 Deduct my Store Credit Balance</option>
+            <!-- INTERACTIVE CONTROL THRESHOLDS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
+                    <select id="filter-top-n" onchange="renderTopCustomersGrid()" class="w-full bg-white border border-slate-200 p-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
+                        <option value="3">Show Top 3 Shoppers</option>
+                        <option value="5" selected>Show Top 5 Shoppers</option>
+                        <option value="10">Show Top 10 Shoppers</option>
                     </select>
                 </div>
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Minimum Spending Value</label>
+                    <div class="relative">
+                        <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">R</span>
+                        <input type="number" id="filter-min-spend" oninput="renderTopCustomersGrid()" value="0" class="w-full bg-white border border-slate-200 pl-6 pr-2 py-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="flex flex-col justify-end">
+                    <div class="text-right text-xs text-slate-400 font-medium">
+                        Active Time Horizon Scope: <span id="scope-date-badge" class="font-bold text-blue-600 block text-sm mt-0.5">--</span>
+                    </div>
+                </div>
+            </div>
 
-                <button onclick="checkout()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition duration-150 shadow-md shadow-emerald-500/10 flex justify-center items-center space-x-2 cursor-pointer">
-                    <span>Finalize Purchase Securely</span>
-                </button>
+            <!-- MAIN DATA RENDER GRID FOR TOP CUSTOMERS -->
+            <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dynamic Cards Inject Here -->
             </div>
         </div>
 
-        <!-- SECTION 3: MANAGER/ADMIN DASHBOARD WITH SUB-PAGES -->
-        <div id="admin-view" class="mt-2 hidden space-y-6">
+        <!-- MODULE 2: SPLIT MATRIX (CREDIT DEBTORS MATRIX & STOCK ALERT SHIELD) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <!-- ADMIN CORE HEADER -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                        <span>📊</span> Manager Operations Center
-                    </h2>
-                    <p class="text-sm text-slate-500">Live analytics metrics, catalog configuration desk, and balance debt ledgers.</p>
-                </div>
-                
-                <!-- NAVIGATION MENU TABS -->
-                <div class="bg-slate-100 p-1 rounded-xl flex gap-1 w-full md:w-auto border border-slate-200/50">
-                    <button onclick="switchAdminTab('dashboard')" id="tab-btn-dashboard" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 cursor-pointer">
-                        <span>🏠</span> <span>Dashboard Overview</span>
-                    </button>
-                    <button onclick="switchAdminTab('products')" id="tab-btn-products" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 cursor-pointer">
-                        <span>📦</span> <span>Manage Products</span>
-                    </button>
-                    <button onclick="switchAdminTab('users')" id="tab-btn-users" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 cursor-pointer">
-                        <span>👥</span> <span>Customer Accounts</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- TAB CONTAINER 1: VISUALLY IMPROVED HOME OVERVIEW DASHBOARD -->
-            <div id="admin-tab-dashboard" class="space-y-6 hidden">
-                
-                <!-- SECTION: ACTIVE STORE LIABILITIES & OUTSTANDING DEBT (REQUESTED HIGHLIGHT) -->
-                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/20">
-                    <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <div>
-                            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-rose-800">
-                                <span class="bg-rose-100 p-1.5 rounded-lg text-sm">💳</span> Outstanding Debts & Liabilities Collection
-                            </h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Real-time tracking of shoppers with open tabs who currently owe money to the store credit line.</p>
-                        </div>
-                        <span id="dashboard-total-debt-badge" class="bg-rose-600 text-white text-xs font-black px-3 py-1 rounded-full w-fit shadow-xs">
-                            Total Owed: R0.00
-                        </span>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[500px]">
-                            <thead>
-                                <tr class="border-b border-slate-100 text-slate-400 text-[11px] font-bold uppercase tracking-wider">
-                                    <th class="pb-2.5">Customer Username</th>
-                                    <th class="pb-2.5">Email Context</th>
-                                    <th class="pb-2.5">Max Limit Allowance</th>
-                                    <th class="pb-2.5 text-rose-700">Current Balance Owed</th>
-                                    <th class="pb-2.5 text-right">Quick Ledger Link</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dashboard-debtors-table" class="divide-y divide-slate-100 text-sm">
-                                <!-- Injected dynamically via JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TWO COLUMN LAYOUT: POPULAR PRODUCTS & RESTOCK DESK -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    
-                    <!-- POPULAR PRODUCTS SALES LEADERBOARD -->
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                        <div class="mb-4 border-b border-slate-100 pb-2">
-                            <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-1.5 text-amber-800">
-                                <span>🔥</span> Popular Products Leaderboard
-                            </h3>
-                            <p class="text-[11px] text-slate-400">Total volume demand recorded across rolling checkout histories.</p>
-                        </div>
-                        <div id="dashboard-popular-list" class="space-y-2.5 max-h-[280px] overflow-y-auto pr-1">
-                            <!-- Injected via JS -->
-                        </div>
-                    </div>
-
-                    <!-- RESTOCK ADVISORY CONTAINER -->
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                        <div class="mb-4 border-b border-slate-100 pb-2">
-                            <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
-                                <span>⚠️</span> Shelf Inventory Restock Notices
-                            </h3>
-                            <p class="text-[11px] text-slate-400">Products requiring critical manual restock management (&lt; 6 units left).</p>
-                        </div>
-                        <div id="dashboard-restock-list" class="space-y-2.5 max-h-[280px] overflow-y-auto pr-1">
-                            <!-- Injected via JS -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FULL-WIDTH SECTION: TOP CUSTOMERS BY EXPENDITURE -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="mb-3 border-b border-slate-100 pb-2">
-                        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-1.5 text-emerald-800">
-                            <span>💎</span> Customer Value Matrix (By Total Lifetime Sales)
+            <!-- OUTSTANDING DEBTS LEDGER -->
+            <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/10 lg:col-span-2">
+                <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-rose-800">
+                            <span class="bg-rose-100 p-1.5 rounded-lg text-sm">💳</span> Store Credit Outstanding Tab Tracker
                         </h3>
-                        <p class="text-[11px] text-slate-400">Total gross checkouts completed by individual customer profiles.</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Real-time balances for users currently utilizing open house lines of store credit.</p>
                     </div>
-                    <div id="dashboard-customers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <!-- Injected via JS -->
-                    </div>
+                    <span id="global-debt-badge" class="bg-rose-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-xs">
+                        Total Open Risk: R0.00
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[500px]">
+                        <thead>
+                            <tr class="border-b border-slate-100 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+                                <th class="pb-2.5">Customer Handle</th>
+                                <th class="pb-2.5">Email Context</th>
+                                <th class="pb-2.5">Credit Window Limit</th>
+                                <th class="pb-2.5 text-rose-700">Balance Owed</th>
+                                <th class="pb-2.5 text-right">Quick Ledger Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="debt-ledger-rows" class="divide-y divide-slate-100 text-xs">
+                            <!-- Dynamic rows via JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- TAB CONTAINER 2: PRODUCTS STOCK MANAGER -->
-            <div id="admin-tab-products" class="space-y-6 hidden">
-                <!-- PRODUCT ADD & EDIT CONTROLS FORM -->
-                <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-100">
-                    <h3 id="admin-form-title" class="text-base font-extrabold text-slate-900 mb-4 flex items-center space-x-2">
-                        <span>➕</span> <span>Create or Modify Store Product</span>
-                    </h3>
-                    <input type="hidden" id="prod-edit-id" value="">
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Product Title</label>
-                            <input type="text" id="prod-name" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20" placeholder="e.g. Fresh Bananas">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Price (ZAR)</label>
-                            <input type="number" step="0.01" id="prod-price" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20" placeholder="0.00">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">In-Stock Quantity</label>
-                            <input type="number" id="prod-stock" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20" placeholder="0">
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="saveProduct()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition cursor-pointer">
-                                Save Product
-                            </button>
-                            <button onclick="clearProductForm()" id="prod-cancel-btn" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 px-3 rounded-xl text-sm transition cursor-pointer">
-                                Cancel
-                            </button>
-                        </div>
+            <!-- SHELF INVENTORY RESTOCK ENGINE -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="mb-4 border-b border-slate-100 pb-2">
+                        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
+                            <span>📦</span> Shelf Stock Warning Signals
+                        </h3>
+                        <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
+                    </div>
+                    <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                        <!-- Warnings Injected Here -->
                     </div>
                 </div>
-
-                <!-- STOCK MATRIX TABLE -->
-                <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-100">
-                    <h3 class="text-base font-extrabold text-slate-900 mb-4 flex items-center space-x-2">
-                        <span>📦</span> <span>Active Inventory Shelf Grid</span>
-                    </h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[500px]">
-                            <thead>
-                                <tr class="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                                    <th class="pb-3">Product Item Name</th>
-                                    <th class="pb-3">Unit Price</th>
-                                    <th class="pb-3">Status</th>
-                                    <th class="pb-3 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-stock-table" class="divide-y divide-slate-100">
-                                <!-- Installs via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="pt-4 border-t border-slate-100 mt-4">
+                    <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
+                        <span>⚡</span> Simulate Live Store Checkout Sale
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- TAB CONTAINER 3: CUSTOMER CREDIT REGISTRY LEDGER -->
-            <div id="admin-tab-users" class="space-y-6 hidden">
-                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 mb-4 gap-2">
-                        <div>
-                            <h3 class="text-lg font-extrabold text-slate-900 flex items-center space-x-2">
-                                <span>👥</span> <span>Customer Store Credit Registry Ledger</span>
-                            </h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Track balances, configure maximum credit lines, and process over-the-counter payments.</p>
-                        </div>
-                        <span class="bg-slate-100 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-lg border border-slate-200 w-fit">
-                            Total Accounts: <span id="admin-ledger-count" class="text-blue-600">0</span>
-                        </span>
-                    </div>
-
-                    <div id="admin-customer-ledger-container" class="space-y-4">
-                        <!-- Installs via JavaScript -->
-                    </div>
-                </div>
+        <!-- MODULE 3: USER PROFILE MANAGEMENT SECURITY COMPONENT -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 max-w-2xl mx-auto">
+            <div class="border-b border-slate-100 pb-3 mb-5">
+                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-slate-800">
+                    <span class="bg-blue-100 p-1.5 rounded-lg text-sm">👤</span> Manage Account Security
+                </h3>
+                <p class="text-[11px] text-slate-500 mt-0.5">Amend your public credentials and account access credentials securely.</p>
             </div>
 
+            <form id="profile-update-form" onsubmit="handleProfileUpdate(event)" class="space-y-4 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username Handle</label>
+                        <input type="text" id="profile-username" value="jozi_shopper" required
+                            class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Email Address</label>
+                        <input type="email" id="profile-email" value="jozi_shopper@gmail.co.za" required
+                            class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-mono text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                    </div>
+                </div>
+
+                <hr class="border-slate-100 my-2">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">New Password (Optional)</label>
+                        <input type="password" id="profile-new-password" placeholder="Leave blank to keep unchanged"
+                            class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Confirm New Password</label>
+                        <input type="password" id="profile-confirm-password" placeholder="Repeat new password"
+                            class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5 mt-2">
+                    <label class="block text-[10px] font-black uppercase tracking-wider text-amber-800 mb-1.5">
+                        🔒 Security Check: Enter Current Password to Confirm Changes
+                    </label>
+                    <input type="password" id="profile-current-password" required placeholder="Type your current password"
+                        class="w-full bg-white border border-amber-300 p-2.5 rounded-lg font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20">
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button type="submit" 
+                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center">
+                        Save Account Updates
+                    </button>
+                </div>
+            </form>
         </div>
 
     </main>
 
-    <!-- RUNTIME LOGIC SCRIPT -->
+    <!-- FOOTER LINK TO LAUNCH PRIVACY MODAL -->
+    <footer class="text-center mt-8 pb-4">
+        <button onclick="togglePrivacyModal(true)" class="text-[11px] font-bold text-slate-400 hover:text-blue-600 transition cursor-pointer underline">
+            View Legal Privacy Policy & Data Guarantee
+        </button>
+    </footer>
+
+    <!-- FIXED FLOATING PRIVACY POLICY SCREEN MODAL -->
+    <div id="privacy-policy-modal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-5 md:p-6 shadow-xl border border-slate-200 flex flex-col justify-between">
+            <div class="space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="text-base font-black text-slate-900 flex items-center gap-1.5">
+                        <span>🛡️</span> Data Privacy & Safety Policy
+                    </h3>
+                    <button onclick="togglePrivacyModal(false)" class="text-slate-400 hover:text-slate-600 text-lg font-bold cursor-pointer p-1">✕</button>
+                </div>
+                
+                <div class="text-slate-600 font-medium text-[11px] leading-relaxed space-y-3">
+                    <p><strong>Effective Date:</strong> June 15, 2026</p>
+                    <p>At AE Convenient Store, your data integrity is paramount. We process only the credentials required to keep your account operational (Username, Email, Hashed Passwords, and Store Credit Balances).</p>
+                    
+                    <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-blue-900 font-bold">
+                        🚫 <strong>Zero Third-Party Sharing:</strong> Your personal profile, contact information, and transactional histories will never be shared, sold, or distributed to any external third party, data broker, or marketer.
+                    </div>
+                    
+                    <p><strong>Profile Self-Management:</strong> You hold full authority to amend your credentials or update your passwords at any time directly through your account dashboard.</p>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 mt-5 flex justify-end">
+                <button onclick="togglePrivacyModal(false)" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-5 py-2 rounded-xl transition cursor-pointer">
+                    I Understand & Agree
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE RUNTIME LOGIC & HISTORICAL CALCULATOR ENGINE -->
     <script>
-        // --- DATA STATE LEDGER ---
-        let state = {
+        // --- REAL-TIME LIVE SIMULATED BUSINESS DATA STATE (CURRENT YEAR: 2026) ---
+        const state = {
+            activeSalesTimeframe: 'monthly',
             products: [
                 { id: 1, name: "Fresh White Bread Roll", price: 18.50, stock: 12 },
-                { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 4 }, 
+                { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 3 }, 
                 { id: 3, name: "Salted Potato Crisp Chips", price: 15.00, stock: 0 },  
                 { id: 4, name: "Premium Coffee Granules", price: 45.00, stock: 5 }     
             ],
             users: [
-                { email: "admin@store.com", username: "admin", password: "123", is_admin: true },
-                { email: "customer@test.com", username: "jozi_shopper", password: "123", credit: 163.00, max_credit: 200.00, is_admin: false },
-                { email: "sipho.m@domain.za", username: "sipho_kasi", password: "123", credit: 220.00, max_credit: 500.00, is_admin: false }
+                { email: "jozi_shopper@gmail.co.za", username: "jozi_shopper", credit: 63.00, max_credit: 200.00 },
+                { email: "sipho.m@kasi.net", username: "sipho_kasi", credit: 280.00, max_credit: 500.00 },
+                { email: "khanyisile_d@domain.za", username: "khanyi_star", credit: 150.00, max_credit: 400.00 },
+                { email: "lerato_mokoena@gmail.com", username: "lerato_m", credit: 300.00, max_credit: 300.00 },
+                { email: "dev_tester@store.com", username: "rapid_buyer", credit: 450.00, max_credit: 1000.00 }
             ],
             orders: [
-                { id: "AE-9821", username: "jozi_shopper", date: "2026-06-01", paymentMethod: "credit", total: 37.00, summary: "Fresh White Bread Roll (x2)" },
-                { id: "AE-4312", username: "sipho_kasi", date: "2026-06-05", paymentMethod: "credit", total: 220.00, summary: "Premium Coffee Granules (x4), Full Cream Milk (x2)" },
-                { id: "AE-1192", username: "jozi_shopper", date: "2026-06-10", paymentMethod: "cash", total: 15.00, summary: "Salted Potato Crisp Chips (x1)" }
-            ],
-            currentUser: null,
-            basket: [],
-            authMode: "login",
-            currentAdminTab: "dashboard" 
+                { id: "TX-901", username: "jozi_shopper", date: "2026-06-15", total: 37.00, summary: "Fresh White Bread Roll (x2)" },
+                { id: "TX-902", username: "sipho_kasi", date: "2026-06-15", total: 110.00, summary: "Premium Coffee Granules (x2), Milk (x1)" },
+                { id: "TX-801", username: "khanyi_star", date: "2026-06-10", total: 250.00, summary: "Bulk Grocery Package Fulfillment" },
+                { id: "TX-802", username: "rapid_buyer", date: "2026-06-04", total: 550.00, summary: "Premium Multi-Box Goods Store Restock" },
+                { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 95.00, summary: "Salted Potato Crisp Chips (x5), Bread (x1)" },
+                { id: "TX-701", username: "sipho_kasi", date: "2026-04-18", total: 420.00, summary: "Month-End Household Stocking" },
+                { id: "TX-702", username: "khanyi_star", date: "2026-03-22", total: 180.00, summary: "Coffee & Pantry Provisions" },
+                { id: "TX-703", username: "lerato_m", date: "2026-02-11", total: 320.00, summary: "Mid-Quarter Family Hamper Pack" },
+                { id: "TX-704", username: "jozi_shopper", date: "2026-01-29", total: 140.00, summary: "General Daily Dynamic Basket Checkouts" },
+                { id: "TX-601", username: "rapid_buyer", date: "2025-11-05", total: 1200.00, summary: "End of Year Corporate Event Snack Catering" },
+                { id: "TX-602", username: "lerato_m", date: "2025-09-14", total: 450.00, summary: "Spring Break Bulk Grocery Line Purchases" },
+                { id: "TX-603", username: "sipho_kasi", date: "2025-08-20", total: 310.00, summary: "Winter Warmers & Coffee Stock Checkouts" }
+            ]
         };
 
         window.onload = function() {
-            renderApp();
+            refreshEntireUIPanel();
         };
 
-        function renderApp() {
-            renderNav();
-            
-            document.getElementById('auth-view').classList.add('hidden');
-            document.getElementById('shop-view').classList.add('hidden');
-            document.getElementById('admin-view').classList.add('hidden');
-            document.getElementById('mobile-cart-badge').classList.add('hidden');
-
-            if (!state.currentUser) {
-                document.getElementById('auth-view').classList.remove('hidden');
-                updateAuthFormDOM();
-            } else if (state.currentUser.is_admin) {
-                document.getElementById('admin-view').classList.remove('hidden');
-                // DIRECT BOOT ROUTE TO HOME OVERVIEW TAB
-                switchAdminTab('dashboard');
-            } else {
-                document.getElementById('shop-view').classList.remove('hidden');
-                renderStorefront();
-            }
+        function refreshEntireUIPanel() {
+            renderTopCustomersGrid();
+            renderDebtOutstandingLedger();
+            renderShelfInventoryWarnings();
         }
 
-        function renderNav() {
-            const nav = document.getElementById('nav-controls');
-            if (!state.currentUser) {
-                nav.innerHTML = `<span class="text-xs bg-blue-700 font-bold px-3 py-1.5 rounded-full uppercase tracking-wider opacity-90">Guest Gateway</span>`;
-            } else {
-                let badge = state.currentUser.is_admin 
-                    ? `<span class="bg-amber-400 text-slate-900 text-xs font-black px-2.5 py-1 rounded-md shadow-sm">Manager Profile</span>`
-                    : `<span class="bg-blue-500 text-white text-xs font-bold px-2.5 py-1 rounded-md">Customer Account</span>`;
-                nav.innerHTML = `
-                    <div class="flex items-center space-x-2">
-                        ${badge}
-                        <span class="text-sm font-semibold hidden md:inline">@${state.currentUser.username}</span>
-                    </div>
-                    <button onclick="logout()" class="bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold px-3 py-2 rounded-xl transition cursor-pointer shadow-sm">Sign Out</button>
-                `;
-            }
+        // --- SUB-SYSTEM 1: DYNAMIC TIMEFRAME FILTERS ---
+        function setSalesFilter(timeframe) {
+            state.activeSalesTimeframe = timeframe;
+            renderTopCustomersGrid();
         }
 
-        // --- AUTH LOGIC TERMINALS ---
-        function handleAuthKeyDown(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                handleAuthSubmit();
-            }
-        }
+        function renderTopCustomersGrid() {
+            const targetGrid = document.getElementById('top-customers-render-target');
+            const topN = parseInt(document.getElementById('filter-top-n').value);
+            const minSpend = parseFloat(document.getElementById('filter-min-spend').value) || 0;
+            const dateBadge = document.getElementById('scope-date-badge');
 
-        function toggleAuthMode() {
-            state.authMode = state.authMode === "login" ? "register" : "login";
-            updateAuthFormDOM();
-        }
+            const intervals = ['daily', 'monthly', 'biannual', 'annual'];
+            intervals.forEach(i => {
+                const b = document.getElementById(`time-btn-${i}`);
+                b.className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-transparent text-slate-600 hover:bg-slate-200/60";
+            });
+            document.getElementById(`time-btn-${state.activeSalesTimeframe}`).className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-blue-600 text-white shadow-sm";
 
-        function updateAuthFormDOM() {
-            const title = document.getElementById('auth-title');
-            const subtitle = document.getElementById('auth-subtitle');
-            const btn = document.getElementById('auth-btn');
-            const txt = document.getElementById('auth-toggle-text');
-            const toggleBtn = document.getElementById('auth-toggle-btn');
-            const emailContainer = document.getElementById('email-field-container');
-            const usernameLabel = document.getElementById('username-label');
-            const passwordLabel = document.getElementById('password-label');
+            const systemAnchorDate = new Date("2026-06-15");
+            let cutoffDate = new Date("2026-06-15");
 
-            document.getElementById('auth-username').value = "";
-            document.getElementById('auth-password').value = "";
-            document.getElementById('auth-email').value = "";
-
-            if (state.authMode === "login") {
-                title.innerText = "Welcome Back";
-                subtitle.innerText = "Log in to shop and manage your store credit line.";
-                usernameLabel.innerText = "Enter Username";
-                passwordLabel.innerText = "Secure Password";
-                btn.innerText = "Sign In securely";
-                txt.innerText = "New to our convenience store?";
-                toggleBtn.innerText = "Create Profile";
-                emailContainer.classList.add('hidden');
-            } else {
-                title.innerText = "Choose Your Profile Details";
-                subtitle.innerText = "Create your own personalized username and password to log in anytime.";
-                usernameLabel.innerText = "Choose a Unique Username";
-                passwordLabel.innerText = "Choose a Custom Password";
-                btn.innerText = "Register & Open Store Profile";
-                txt.innerText = "Already registered profile?";
-                toggleBtn.innerText = "Sign In Instead";
-                emailContainer.classList.remove('hidden');
-            }
-        }
-
-        function handleAuthSubmit() {
-            const email = document.getElementById('auth-email').value.trim();
-            const username = document.getElementById('auth-username').value.trim();
-            const password = document.getElementById('auth-password').value;
-
-            if (!username || !password || (state.authMode === 'register' && !email)) {
-                alert("Kindly provide entries inside all active input containers.");
-                return;
+            if (state.activeSalesTimeframe === 'daily') {
+                dateBadge.innerText = "June 15, 2026 (Today)";
+            } else if (state.activeSalesTimeframe === 'monthly') {
+                dateBadge.innerText = "June 1, 2026 to Present";
+                cutoffDate.setDate(1);
+            } else if (state.activeSalesTimeframe === 'biannual') {
+                dateBadge.innerText = "Past 6 Months (Rolling)";
+                cutoffDate.setMonth(systemAnchorDate.getMonth() - 6);
+            } else if (state.activeSalesTimeframe === 'annual') {
+                dateBadge.innerText = "Past 12 Months (Rolling)";
+                cutoffDate.setFullYear(systemAnchorDate.getFullYear() - 1);
             }
 
-            if (state.authMode === "login") {
-                const found = state.users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-                if (found) {
-                    state.currentUser = found;
-                    renderApp();
+            const performanceMap = {};
+            state.users.forEach(u => { performanceMap[u.username] = 0; });
+
+            state.orders.forEach(o => {
+                const orderDate = new Date(o.date);
+                let checkPassed = false;
+
+                if (state.activeSalesTimeframe === 'daily') {
+                    checkPassed = (o.date === "2026-06-15");
                 } else {
-                    alert("Authentication Error: Credentials mismatch.");
+                    checkPassed = (orderDate >= cutoffDate && orderDate <= systemAnchorDate);
                 }
-            } else {
-                if (state.users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-                    alert("System Exception: This custom username is occupied. Please pick another one.");
-                    return;
+
+                if (checkPassed && performanceMap.hasOwnProperty(o.username)) {
+                    performanceMap[o.username] += o.total;
                 }
-                
-                const newUser = { email, username, password, credit: 200.00, max_credit: 200.00, is_admin: false };
-                state.users.push(newUser);
-                state.currentUser = newUser;
-                alert(`Account Registered Successfully! Welcome to AE Convenient Store, @${username}.`);
-                renderApp();
-            }
-        }
-
-        function logout() {
-            state.currentUser = null;
-            state.basket = [];
-            renderApp();
-        }
-
-        // --- SHOP FRONT RENDER SYSTEM ---
-        function renderStorefront() {
-            document.getElementById('user-display-name').innerText = `@${state.currentUser.username}`;
-            document.getElementById('user-display-credit').innerText = `R${state.currentUser.credit.toFixed(2)}`;
-            
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-
-            state.products.forEach(prod => {
-                const outOfStock = prod.stock <= 0;
-                grid.innerHTML += `
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between transition hover:shadow-md ${outOfStock ? 'opacity-75 bg-slate-50/50' : ''}">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-bold text-slate-900 text-base tracking-tight ${outOfStock ? 'line-through text-slate-400' : ''}">${prod.name}</h4>
-                                <p class="text-lg font-black text-blue-600 mt-1">R${prod.price.toFixed(2)}</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-center justify-between pt-3 border-t border-slate-100">
-                            <span class="text-xs ${outOfStock ? 'text-rose-600 font-bold bg-rose-50 px-2 py-1 rounded-md border border-rose-100' : 'text-slate-500 font-medium bg-slate-50 px-2 py-1 rounded-md'}">
-                                ${outOfStock ? '🔴 OUT OF STOCK' : `📦 Available: ${prod.stock}`}
-                            </span>
-                            <button onclick="addToBasket(${prod.id})" ${outOfStock ? 'disabled' : ''} 
-                                class="text-xs font-bold py-2 px-3.5 rounded-xl text-white transition duration-150 active:scale-95 cursor-pointer
-                                ${outOfStock ? 'bg-slate-200 text-slate-400 cursor-not-allowed font-medium' : 'bg-blue-600 hover:bg-blue-700 shadow-sm shadow-blue-500/10'}">
-                                ${outOfStock ? 'Unavailable' : '+ Add to Basket'}
-                            </button>
-                        </div>
-                    </div>
-                `;
             });
 
-            renderBasket();
-            renderCustomerHistory();
-            calculateStatementNotice();
-        }
+            let rankedProfiles = state.users.map(u => ({
+                ...u,
+                computedSalesVolume: performanceMap[u.username] || 0
+            }));
 
-        function calculateStatementNotice() {
-            const currentMonthCreditTotalElement = document.getElementById('current-month-credit-total');
-            const totalCreditSpentThisMonth = state.orders
-                .filter(o => o.username === state.currentUser.username && o.paymentMethod === 'credit')
-                .reduce((sum, o) => sum + o.total, 0);
+            rankedProfiles = rankedProfiles.filter(p => p.computedSalesVolume >= minSpend);
+            rankedProfiles.sort((a, b) => b.computedSalesVolume - a.computedSalesVolume);
+            const finalRenderSlice = rankedProfiles.slice(0, topN);
 
-            currentMonthCreditTotalElement.innerText = `R${totalCreditSpentThisMonth.toFixed(2)}`;
-        }
-
-        function addToBasket(id) {
-            const product = state.products.find(p => p.id === id);
-            const basketItem = state.basket.find(item => item.id === id);
-
-            if (product.stock <= 0) {
-                alert("This product is currently out of stock.");
+            targetGrid.innerHTML = '';
+            if (finalRenderSlice.length === 0) {
+                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No results match your criteria.</div>`;
                 return;
             }
 
-            if (basketItem) {
-                if (basketItem.qty >= product.stock) {
-                    alert(`We only have ${product.stock} units on the shelves.`);
-                    return;
-                }
-                basketItem.qty++;
-            } else {
-                state.basket.push({ ...product, qty: 1 });
-            }
-            renderStorefront();
-        }
-
-        function adjustBasketQty(id, change) {
-            const product = state.products.find(p => p.id === id);
-            const basketItem = state.basket.find(item => item.id === id);
-
-            if (!basketItem) return;
-
-            if (change > 0) {
-                if (basketItem.qty >= product.stock) {
-                    alert(`Cannot claim more items than our existing inventory (${product.stock} units total).`);
-                    return;
-                }
-                basketItem.qty++;
-            } else {
-                basketItem.qty--;
-                if (basketItem.qty <= 0) {
-                    state.basket = state.basket.filter(item => item.id !== id);
-                }
-            }
-            renderStorefront();
-        }
-
-        function removeAllOfItem(id) {
-            state.basket = state.basket.filter(item => item.id !== id);
-            renderStorefront();
-        }
-
-        function renderBasket() {
-            const container = document.getElementById('basket-items');
-            const pill = document.getElementById('basket-pill-count');
-            const mobileBadge = document.getElementById('mobile-cart-badge');
-            const mobileCount = document.getElementById('mobile-cart-count');
-            
-            container.innerHTML = '';
-            let total = 0;
-            let totalItems = 0;
-
-            if (state.basket.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs font-medium">Your basket is empty.</div>`;
-                mobileBadge.classList.add('hidden');
-            } else {
-                mobileBadge.classList.remove('hidden');
-                state.basket.forEach(item => {
-                    const lineCost = item.price * item.qty;
-                    total += lineCost;
-                    totalItems += item.qty;
-                    
-                    container.innerHTML += `
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-2">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="font-bold text-slate-800 text-sm">${item.name}</p>
-                                    <p class="text-xs text-slate-400">R${item.price.toFixed(2)} each</p>
-                                </div>
-                                <span class="font-extrabold text-slate-900 text-sm">R${lineCost.toFixed(2)}</span>
-                            </div>
-                            <div class="flex justify-between items-center pt-1.5 border-t border-slate-200/60">
-                                <button onclick="removeAllOfItem(${item.id})" class="text-[10px] text-rose-500 hover:underline font-bold cursor-pointer">🗑️ Delete All</button>
-                                <div class="flex items-center space-x-2">
-                                    <button onclick="adjustBasketQty(${item.id}, -1)" class="w-6 h-6 bg-slate-200 hover:bg-slate-300 rounded text-slate-800 font-bold text-xs flex items-center justify-center cursor-pointer transition">−</button>
-                                    <span class="text-xs font-bold text-slate-800 w-4 text-center">${item.qty}</span>
-                                    <button onclick="adjustBasketQty(${item.id}, 1)" class="w-6 h-6 bg-slate-200 hover:bg-slate-300 rounded text-slate-800 font-bold text-xs flex items-center justify-center cursor-pointer transition">+</button>
-                                </div>
-                            </div>
+            finalRenderSlice.forEach((p, index) => {
+                let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium tier' : '🛍️ Core Account';
+                targetGrid.innerHTML += `
+                    <div class="bg-white p-4.5 rounded-xl border border-slate-200 shadow-2xs hover:shadow-xs transition flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-1 text-slate-100 font-black text-6xl pointer-events-none select-none font-mono">#${index + 1}</div>
+                        <div class="space-y-1.5 relative z-10">
+                            <span class="inline-block text-[9px] uppercase font-black tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-100">${badgeMedal}</span>
+                            <h4 class="font-bold text-slate-900 text-base">@${p.username}</h4>
+                            <p class="text-[11px] text-slate-400 font-mono truncate">${p.email}</p>
                         </div>
-                    `;
-                });
-            }
-
-            pill.innerText = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
-            mobileCount.innerText = totalItems;
-            document.getElementById('basket-total').innerText = `R${total.toFixed(2)}`;
-        }
-
-        function renderCustomerHistory() {
-            const container = document.getElementById('customer-history-container');
-            container.innerHTML = '';
-
-            const today = new Date();
-            const cutoffDate = new Date();
-            cutoffDate.setDate(today.getDate() - 30);
-
-            const matchingOrders = state.orders.filter(order => {
-                if (order.username !== state.currentUser.username) return false;
-                const orderDate = new Date(order.date);
-                return orderDate >= cutoffDate && orderDate <= today;
-            });
-
-            matchingOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            if (matchingOrders.length === 0) {
-                container.innerHTML = `
-                    <div class="p-4 border border-dashed border-slate-200 text-slate-400 rounded-xl text-center text-xs font-medium">
-                        No transactions completed within the last 30 days.
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-baseline relative z-10">
+                            <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Accumulated Sales:</span>
+                            <span class="text-xl font-black text-emerald-600">R${p.computedSalesVolume.toFixed(2)}</span>
+                        </div>
                     </div>`;
-                return;
-            }
-
-            matchingOrders.forEach(o => {
-                const isCredit = o.paymentMethod === 'credit';
-                container.innerHTML += `
-                    <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100 flex justify-between items-center">
-                        <div class="space-y-1">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-xs font-mono font-bold text-slate-400">${o.id}</span>
-                                <span class="text-xs text-slate-500 font-medium">${o.date}</span>
-                            </div>
-                            <p class="text-sm font-bold text-slate-800">${o.summary}</p>
-                            <span class="inline-block text-[10px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded ${isCredit ? 'bg-purple-50 text-purple-600 border border-purple-100' : 'bg-amber-50 text-amber-700 border border-amber-100'}">
-                                ${isCredit ? '💳 Credit Line Deducted' : '💵 Physical Cash Settle'}
-                            </span>
-                        </div>
-                        <span class="text-base font-black text-slate-900">R${o.total.toFixed(2)}</span>
-                    </div>
-                `;
             });
         }
 
-        function scrollToCart() {
-            document.getElementById('basket-section').scrollIntoView({ behavior: 'smooth' });
-        }
+        // --- SUB-SYSTEM 2: CREDIT LINE BALANCE LEDGER ---
+        function renderDebtOutstandingLedger() {
+            const rowTarget = document.getElementById('debt-ledger-rows');
+            rowTarget.innerHTML = '';
+            let aggregateRiskPool = 0;
 
-        function checkout() {
-            if (state.basket.length === 0) return;
-
-            let total = state.basket.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const paymentMethod = document.getElementById('payment-method').value;
-
-            if (paymentMethod === "credit") {
-                if (total > state.currentUser.credit) {
-                    alert(`Declined: Total exceeds credit allowance (R${state.currentUser.credit.toFixed(2)}).`);
-                    return;
-                }
-                state.currentUser.credit -= total;
-            }
-
-            const summaryArray = state.basket.map(i => `${i.name} (x${i.qty})`);
-            const summaryString = summaryArray.join(', ');
-
-            state.basket.forEach(bItem => {
-                const targetProd = state.products.find(p => p.id === bItem.id);
-                if (targetProd) targetProd.stock -= bItem.qty;
-            });
-
-            const now = new Date();
-            const formatMonth = String(now.getMonth() + 1).padStart(2, '0');
-            const formatDay = String(now.getDate()).padStart(2, '0');
-            const dateString = `${now.getFullYear()}-${formatMonth}-${formatDay}`;
-
-            const newOrder = {
-                id: `AE-${Math.floor(1000 + Math.random() * 9000)}`,
-                username: state.currentUser.username,
-                date: dateString,
-                paymentMethod: paymentMethod,
-                total: total,
-                summary: summaryString
-            };
-            state.orders.push(newOrder);
-
-            alert(`🎉 Success: Order completed at AE Convenient Store! Stock amounts adjusted.`);
-            state.basket = [];
-            renderStorefront();
-        }
-
-        // --- ADMIN NAVIGATION CONTROLLER ---
-        function switchAdminTab(targetTab) {
-            state.currentAdminTab = targetTab;
-            
-            document.getElementById('admin-tab-dashboard').classList.add('hidden');
-            document.getElementById('admin-tab-products').classList.add('hidden');
-            document.getElementById('admin-tab-users').classList.add('hidden');
-
-            const tabs = ['dashboard', 'products', 'users'];
-            tabs.forEach(t => {
-                const btn = document.getElementById(`tab-btn-${t}`);
-                btn.className = "flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 cursor-pointer bg-transparent text-slate-600 hover:bg-slate-200/60";
-            });
-
-            document.getElementById(`admin-tab-${targetTab}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${targetTab}`).className = "flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 cursor-pointer bg-blue-600 text-white shadow-sm";
-
-            renderAdminDashboard();
-        }
-
-        function renderAdminDashboard() {
-            if (state.currentAdminTab === 'dashboard') {
-                renderExecutiveSummaryMetrics();
-            } else if (state.currentAdminTab === 'products') {
-                renderStockControlTable();
-            } else if (state.currentAdminTab === 'users') {
-                renderCustomerRegistryLedger();
-            }
-        }
-
-        // --- SUB-RENDERER 1: NEW USER-FRIENDLY EXECUTIVE METRICS & DEBT MONITORING ---
-        function renderExecutiveSummaryMetrics() {
-            const shoppers = state.users.filter(u => !u.is_admin);
-            
-            // A. DYNAMIC DEBT TRACKING ANALYSIS BLOCK
-            const debtorTableBody = document.getElementById('dashboard-debtors-table');
-            debtorTableBody.innerHTML = '';
-            
-            let totalStoreCreditOwed = 0;
-            let totalDebtorsCount = 0;
-
-            shoppers.forEach(u => {
+            state.users.forEach(u => {
                 const maxCredit = u.max_credit || 200.00;
-                const balanceOwed = maxCredit - u.credit;
+                const outstandingDue = maxCredit - u.credit;
 
-                if (balanceOwed > 0) {
-                    totalStoreCreditOwed += balanceOwed;
-                    totalDebtorsCount++;
-                    
-                    debtorTableBody.innerHTML += `
+                if (outstandingDue > 0) {
+                    aggregateRiskPool += outstandingDue;
+                    rowTarget.innerHTML += `
                         <tr class="hover:bg-rose-50/40 text-slate-700">
                             <td class="py-3 font-bold text-slate-900">@${u.username}</td>
-                            <td class="py-3 font-mono text-xs text-slate-400">${u.email}</td>
+                            <td class="py-3 font-mono text-[11px] text-slate-400">${u.email}</td>
                             <td class="py-3 text-slate-500">R${maxCredit.toFixed(2)}</td>
-                            <td class="py-3 font-black text-rose-600 bg-rose-50/30 px-2">R${balanceOwed.toFixed(2)}</td>
+                            <td class="py-3 font-black text-rose-600 bg-rose-50/20 px-2">R${outstandingDue.toFixed(2)}</td>
                             <td class="py-3 text-right">
-                                <button onclick="switchAdminTab('users')" class="text-xs font-bold text-blue-600 hover:underline bg-blue-50 px-2 py-1 rounded-md border border-blue-100 transition cursor-pointer">
-                                    Open Collect Tab 💵
-                                </button>
+                                <button onclick="settleEntireAccountDebt('${u.username}')" class="text-[10px] font-bold text-emerald-700 hover:bg-emerald-600 hover:text-white bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-100 transition cursor-pointer">Instant Settlement Clear 💵</button>
                             </td>
-                        </tr>
-                    `;
+                        </tr>`;
                 }
             });
 
-            // If no clients currently hold account balances
-            if (totalDebtorsCount === 0) {
-                debtorTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="py-6 text-center text-xs font-medium text-emerald-600 bg-emerald-50/40 rounded-xl border border-dashed border-emerald-100">
-                            🎉 Excellent: No registered accounts hold any active liabilities on their store credit line.
-                        </td>
-                    </tr>
-                `;
+            if (aggregateRiskPool === 0) {
+                rowTarget.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs font-medium text-emerald-600 bg-emerald-50/40 rounded-xl border border-dashed border-emerald-100">🎉 Complete Liability Clearance: No outstanding tabs owed.</td></tr>`;
             }
+            document.getElementById('global-debt-badge').innerText = `Total Open Risk: R${aggregateRiskPool.toFixed(2)}`;
+        }
 
-            document.getElementById('dashboard-total-debt-badge').innerText = `Total Outstanding Debt: R${totalStoreCreditOwed.toFixed(2)}`;
+        function settleEntireAccountDebt(username) {
+            const user = state.users.find(u => u.username === username);
+            if (!user) return;
+            const maxCredit = user.max_credit || 200.00;
+            const outstandingDue = maxCredit - user.credit;
 
-            // B. SHELF ADVISORY QUANTITY WARNING ENGINE
-            const restockList = document.getElementById('dashboard-restock-list');
-            restockList.innerHTML = '';
-            
+            if (outstandingDue <= 0) return;
+
+            if (confirm(`Confirm physical cash or card swipe processing of R${outstandingDue.toFixed(2)} to clear @${username}'s store credit balance?`)) {
+                user.credit = maxCredit;
+                state.orders.push({ id: `PAY-${Math.floor(1000 + Math.random() * 9000)}`, username: username, date: "2026-06-15", total: outstandingDue, summary: "Full Credit Line Settlement" });
+                alert(`Account balance fully cleared for @${username}.`);
+                refreshEntireUIPanel();
+            }
+        }
+
+        // --- SUB-SYSTEM 3: STOCK MANAGEMENT & CHECKOUT ---
+        function renderShelfInventoryWarnings() {
+            const warningBox = document.getElementById('stock-warning-box');
+            warningBox.innerHTML = '';
             const criticallyLowProducts = state.products.filter(p => p.stock < 6);
             criticallyLowProducts.sort((a, b) => a.stock - b.stock);
 
             if (criticallyLowProducts.length === 0) {
-                restockList.innerHTML = `<div class="p-4 bg-emerald-50 rounded-xl text-emerald-800 text-xs font-bold text-center border border-emerald-100">✓ All Shelf Products Fully Stocked (&gt;= 6 items)</div>`;
+                warningBox.innerHTML = `<div class="p-4 bg-emerald-50 rounded-xl text-emerald-800 text-xs font-bold text-center border border-emerald-100">✓ All catalog lines maintain secure restock baselines.</div>`;
             } else {
                 criticallyLowProducts.forEach(p => {
                     const isZero = p.stock === 0;
-                    restockList.innerHTML += `
+                    warningBox.innerHTML += `
                         <div class="p-3 rounded-xl border flex justify-between items-center bg-white ${isZero ? 'border-rose-200' : 'border-slate-200'}">
                             <div>
                                 <p class="text-xs font-bold text-slate-900">${p.name}</p>
-                                <p class="text-[10px] text-slate-400">Restock recommended</p>
+                                <p class="text-[10px] text-slate-400">Unit Price: R${p.price.toFixed(2)}</p>
                             </div>
-                            <span class="text-xs font-black px-2 py-0.5 rounded ${isZero ? 'bg-rose-100 text-rose-700 animate-pulse' : 'bg-amber-100 text-amber-800'}">
-                                ${isZero ? '⚠️ Out of Stock' : `${p.stock} units`}
-                            </span>
-                        </div>
-                    `;
+                            <span class="text-[11px] font-black px-2 py-0.5 rounded ${isZero ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-800'}">${isZero ? '⚠️ Out of Stock' : `${p.stock} left`}</span>
+                        </div>`;
                 });
             }
-
-            // C. POPULARITY VOLUME DEMAND MATRIX
-            const productSalesMap = {};
-            state.products.forEach(p => { productSalesMap[p.name] = 0; });
-
-            state.orders.forEach(o => {
-                if (o.id.startsWith('PAY-')) return;
-                state.products.forEach(p => {
-                    if (o.summary.includes(p.name)) {
-                        const regex = new RegExp(`${p.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\s*\\(x(\\d+)\\)`);
-                        const match = o.summary.match(regex);
-                        if (match && match[1]) {
-                            productSalesMap[p.name] += parseInt(match[1]);
-                        }
-                    }
-                });
-            });
-
-            const popularList = document.getElementById('dashboard-popular-list');
-            popularList.innerHTML = '';
-
-            const sortedPopularProducts = state.products.map(p => ({
-                name: p.name,
-                unitsSold: productSalesMap[p.name] || 0,
-                price: p.price
-            })).sort((a, b) => b.unitsSold - a.unitsSold);
-
-            sortedPopularProducts.forEach((p, idx) => {
-                popularList.innerHTML += `
-                    <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl flex justify-between items-center">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs font-bold text-slate-400 font-mono">#${idx+1}</span>
-                            <p class="text-xs font-bold text-slate-900">${p.name}</p>
-                        </div>
-                        <span class="text-xs font-black bg-amber-100 text-amber-800 px-2 rounded-md">${p.unitsSold} sold</span>
-                    </div>
-                `;
-            });
-
-            // D. CUSTOMER EXPENSES RANK GRID
-            const customersList = document.getElementById('dashboard-customers-list');
-            customersList.innerHTML = '';
-
-            shoppers.forEach(customer => {
-                customer._aggregateSpent = state.orders
-                    .filter(o => o.username === customer.username && !o.id.startsWith('PAY-'))
-                    .reduce((sum, o) => sum + o.total, 0);
-            });
-
-            shoppers.sort((a, b) => b._aggregateSpent - a._aggregateSpent);
-
-            shoppers.forEach(u => {
-                customersList.innerHTML += `
-                    <div class="p-3.5 bg-slate-50 border border-slate-200/60 rounded-xl flex justify-between items-center">
-                        <div>
-                            <p class="text-xs font-black text-slate-900">@${u.username}</p>
-                            <p class="text-[10px] text-slate-400 font-mono">${u.email}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-sm font-black text-emerald-600">R${u._aggregateSpent.toFixed(2)}</p>
-                            <p class="text-[9px] uppercase text-slate-400 tracking-wider">Total Sales</p>
-                        </div>
-                    </div>
-                `;
-            });
         }
 
-        // --- SUB-RENDERER 2: PRODUCTS CATALOG CONTROL ---
-        function renderStockControlTable() {
-            const tableBody = document.getElementById('admin-stock-table');
-            tableBody.innerHTML = '';
-
-            state.products.forEach(p => {
-                const outOfStock = p.stock <= 0;
-                tableBody.innerHTML += `
-                    <tr class="text-sm text-slate-700 hover:bg-slate-50/50">
-                        <td class="py-3.5 font-bold text-slate-900 w-1/2">${p.name}</td>
-                        <td class="py-3.5 font-medium">R${p.price.toFixed(2)}</td>
-                        <td class="py-3.5">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${outOfStock ? 'bg-rose-50 text-rose-700 border border-rose-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'}">
-                                ${outOfStock ? '🔴 Out of Stock' : `${p.stock} units`}
-                            </span>
-                        </td>
-                        <td class="py-3.5 text-right space-x-1">
-                            <button onclick="loadProductIntoForm(${p.id})" class="bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 font-bold px-3 py-1.5 text-xs rounded-xl border border-slate-200 transition cursor-pointer">✏️ Edit</button>
-                            <button onclick="deleteProduct(${p.id})" class="bg-slate-100 text-rose-600 hover:bg-rose-50 font-bold px-3 py-1.5 text-xs rounded-xl border border-slate-200 transition cursor-pointer">🗑️ Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
+        function triggerSimulatedSale() {
+            const availableProducts = state.products.filter(p => p.stock > 0);
+            if (availableProducts.length === 0) {
+                alert("Simulated Sale Blocked: All products are entirely out of stock.");
+                return;
+            }
+            const targetProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
+            const randomUser = state.users[Math.floor(Math.random() * state.users.length)];
+            
+            targetProduct.stock -= 1;
+            state.orders.push({ id: `TX-${Math.floor(100 + Math.random() * 900)}`, username: randomUser.username, date: "2026-06-15", total: targetProduct.price, summary: `${targetProduct.name} (x1)` });
+            alert(`Live Event: @${randomUser.username} bought 1x ${targetProduct.name} for R${targetProduct.price.toFixed(2)}.`);
+            refreshEntireUIPanel();
         }
 
-        // --- SUB-RENDERER 3: WIDE CUSTOMER DATA EDIT PANEL ---
-        function renderCustomerRegistryLedger() {
-            const customers = state.users.filter(u => !u.is_admin);
-            document.getElementById('admin-ledger-count').innerText = customers.length;
+        // --- SUB-SYSTEM 4: SECURE USER ACCREDITATION LOGIC ---
+        function handleProfileUpdate(event) {
+            event.preventDefault();
+            const username = document.getElementById('profile-username').value;
+            const email = document.getElementById('profile-email').value;
+            const newPassword = document.getElementById('profile-new-password').value;
+            const confirmPassword = document.getElementById('profile-confirm-password').value;
+            const currentPassword = document.getElementById('profile-current-password').value;
 
-            const ledgerContainer = document.getElementById('admin-customer-ledger-container');
-            ledgerContainer.innerHTML = '';
-
-            customers.forEach(u => {
-                const maxCredit = u.max_credit || 200.00;
-                const balanceDue = maxCredit - u.credit;
-                
-                let statusBadge = '';
-                if (balanceDue === 0) {
-                    statusBadge = `<span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-lg border border-emerald-200">✓ Settled (Clear Account)</span>`;
-                } else if (balanceDue >= maxCredit * 0.8) {
-                    statusBadge = `<span class="bg-rose-50 text-rose-700 text-xs font-black px-2.5 py-1 rounded-lg border border-rose-200 animate-pulse">⚠️ Near Limit Warning</span>`;
-                } else {
-                    statusBadge = `<span class="bg-amber-50 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-lg border border-amber-200">● Active Outstanding Balance</span>`;
-                }
-
-                ledgerContainer.innerHTML += `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 hover:border-slate-300 transition duration-150 shadow-xs">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-3 border-b border-slate-100 gap-2 mb-4">
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-base font-black text-slate-900">@${u.username}</span>
-                                    ${statusBadge}
-                                </div>
-                                <p class="text-xs text-slate-400 font-mono mt-0.5">${u.email}</p>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Balance Due</p>
-                                <p class="text-2xl font-black text-slate-900">R${balanceDue.toFixed(2)}</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
-                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/60">
-                                <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5 flex items-center gap-1">
-                                    <span>⚙️</span> Configure Credit Boundaries
-                                </p>
-                                <div class="grid grid-cols-2 gap-3 mb-3">
-                                    <div>
-                                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Max Credit Facility</label>
-                                        <div class="relative">
-                                            <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 font-bold">R</span>
-                                            <input type="number" id="adj-limit-${u.username}" value="${maxCredit}" class="w-full bg-white border border-slate-200 pl-6 pr-2 py-2 rounded-xl text-xs font-bold focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Remaining Available</label>
-                                        <div class="relative">
-                                            <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 font-bold">R</span>
-                                            <input type="number" id="adj-avail-${u.username}" value="${u.credit}" class="w-full bg-white border border-slate-200 pl-6 pr-2 py-2 rounded-xl text-xs font-bold focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
-                                        </div>
-                                    </div>
-                                </div>
-                                <button onclick="adjustCustomerBalances('${u.username}')" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold py-2 rounded-xl transition cursor-pointer text-center">
-                                    Apply Configuration Matrix
-                                </button>
-                            </div>
-
-                            <div class="bg-emerald-50/50 p-3.5 rounded-xl border border-emerald-100 flex flex-col justify-between">
-                                <div>
-                                    <p class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-1 flex items-center gap-1">
-                                        <span>💵</span> Collect Statement Payment
-                                    </p>
-                                    <p class="text-[11px] text-emerald-600 mb-3 leading-tight">Enter money received over the counter (Cash or Card swipe) to settle their store tab.</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <div class="relative flex-1">
-                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-600">R</span>
-                                        <input type="number" id="pay-amt-${u.username}" class="w-full bg-white border border-emerald-200 pl-6 pr-2 py-2 rounded-xl text-xs font-bold focus:ring-2 focus:emerald-500/20 focus:outline-none" placeholder="0.00">
-                                    </div>
-                                    <button onclick="recordCustomerPayment('${u.username}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition cursor-pointer shadow-xs whitespace-nowrap">
-                                        Confirm Pay
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // --- ACCOUNT BALANCES MODIFICATION TERMINALS ---
-        function adjustCustomerBalances(username) {
-            const user = state.users.find(u => u.username === username);
-            if (!user) return;
-
-            const targetLimit = parseFloat(document.getElementById(`adj-limit-${username}`).value);
-            const targetAvail = parseFloat(document.getElementById(`adj-avail-${username}`).value);
-
-            if (isNaN(targetLimit) || isNaN(targetAvail) || targetLimit < 0 || targetAvail < 0) {
-                alert("Please enter valid positive numbers for custom balance allocation.");
+            if (newPassword && newPassword !== confirmPassword) {
+                alert("Validation Error: Your new password inputs do not match each other.");
                 return;
             }
 
-            user.max_credit = targetLimit;
-            user.credit = targetAvail;
+            // Client simulation update block
+            const userInstance = state.users.find(u => u.username === "jozi_shopper");
+            if (userInstance) {
+                userInstance.username = username;
+                userInstance.email = email;
+            }
+
+            alert("Simulation Success: Account changes updated locally. In a real environment, this payload is securely routed via encrypted HTTPS request to your database.");
             
-            alert(`Account balances updated successfully for @${username}.`);
-            renderAdminDashboard();
+            document.getElementById('profile-new-password').value = '';
+            document.getElementById('profile-confirm-password').value = '';
+            document.getElementById('profile-current-password').value = '';
+            refreshEntireUIPanel();
         }
 
-        function recordCustomerPayment(username) {
-            const user = state.users.find(u => u.username === username);
-            if (!user) return;
-
-            const inputAmt = document.getElementById(`pay-amt-${username}`);
-            const paymentValue = parseFloat(inputAmt.value);
-
-            if (isNaN(paymentValue) || paymentValue <= 0) {
-                alert("Please enter a valid payment amount greater than R0.00.");
-                return;
-            }
-
-            const currentMax = user.max_credit || 200.00;
-            const currentDue = currentMax - user.credit;
-
-            if (paymentValue > currentDue + 0.01) {
-                if (!confirm(`Warning: The entered payment of R${paymentValue.toFixed(2)} is larger than their current outstanding balance due of R${currentDue.toFixed(2)}. Proceed anyway?`)) {
-                    return;
-                }
-            }
-
-            user.credit += paymentValue;
-            
-            const now = new Date();
-            const formatMonth = String(now.getMonth() + 1).padStart(2, '0');
-            const formatDay = String(now.getDate()).padStart(2, '0');
-            const dateString = `${now.getFullYear()}-${formatMonth}-${formatDay}`;
-
-            const paymentLog = {
-                id: `PAY-${Math.floor(1000 + Math.random() * 9000)}`,
-                username: username,
-                date: dateString,
-                paymentMethod: "cash", 
-                total: paymentValue,
-                summary: "Account Credit Statement Payment Received (Cash/Card)"
-            };
-            state.orders.push(paymentLog);
-
-            alert(`Fulfillment Approved: Payment of R${paymentValue.toFixed(2)} recorded for @${username}. Credit allowance updated.`);
-            inputAmt.value = "";
-            renderAdminDashboard();
-        }
-
-        // --- PRODUCT MANIPULATION TERMINALS ---
-        function saveProduct() {
-            const editId = document.getElementById('prod-edit-id').value;
-            const name = document.getElementById('prod-name').value.trim();
-            const price = parseFloat(document.getElementById('prod-price').value);
-            const stock = parseInt(document.getElementById('prod-stock').value);
-
-            if (!name || isNaN(price) || isNaN(stock)) {
-                alert("Please complete all numeric and semantic fields accurately.");
-                return;
-            }
-
-            if (editId) {
-                const product = state.products.find(p => p.id == editId);
-                if (product) {
-                    product.name = name;
-                    product.price = price;
-                    product.stock = stock;
-                    alert(`Product "${name}" updated successfully.`);
-                }
-            } else {
-                const newId = state.products.length ? Math.max(...state.products.map(p => p.id)) + 1 : 1;
-                state.products.push({ id: newId, name, price, stock });
-                alert(`New product "${name}" added to the shop catalog.`);
-            }
-
-            clearProductForm();
-            renderAdminDashboard();
-        }
-
-        function loadProductIntoForm(id) {
-            const p = state.products.find(prod => prod.id === id);
-            if (!p) return;
-
-            document.getElementById('prod-edit-id').value = p.id;
-            document.getElementById('prod-name').value = p.name;
-            document.getElementById('prod-price').value = p.price;
-            document.getElementById('prod-stock').value = p.stock;
-
-            document.getElementById('admin-form-title').innerHTML = `<span>✏️</span> <span>Modify: ${p.name}</span>`;
-            document.getElementById('prod-cancel-btn').classList.remove('hidden');
-            
-            document.getElementById('admin-form-title').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function deleteProduct(id) {
-            if (confirm("Are you certain you want to purge this inventory item?")) {
-                state.products = state.products.filter(p => p.id !== id);
-                state.basket = state.basket.filter(item => item.id !== id); 
-                renderAdminDashboard();
-            }
-        }
-
-        function clearProductForm() {
-            document.getElementById('prod-edit-id').value = '';
-            document.getElementById('prod-name').value = '';
-            document.getElementById('prod-price').value = '';
-            document.getElementById('prod-stock').value = '';
-
-            document.getElementById('admin-form-title').innerHTML = `<span>➕</span> <span>Create or Modify Store Product</span>`;
-            document.getElementById('prod-cancel-btn').classList.add('hidden');
+        // --- SUB-SYSTEM 5: POLICY EXPANSION PANEL DRAWER ---
+        function togglePrivacyModal(shouldOpen) {
+            const modal = document.getElementById('privacy-policy-modal');
+            if (shouldOpen) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
         }
     </script>
 </body>
