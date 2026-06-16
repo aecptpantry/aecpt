@@ -65,7 +65,7 @@
             <!-- AUTH SWITCH FOOTER -->
             <div class="text-center pt-2 border-t border-slate-100">
                 <button type="button" onclick="toggleAuthMode()" id="auth-toggle-link" class="text-xs text-blue-600 hover:underline cursor-pointer font-bold">
-                    New customer? Register a new profile profile here
+                    New customer? Register a new profile here
                 </button>
             </div>
         </div>
@@ -108,7 +108,21 @@
             <div id="role-view-customer" class="hidden space-y-6">
                 <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl text-white p-6 shadow-sm">
                     <h2 class="text-xl font-black tracking-tight">Your Personal Shopping Hub</h2>
-                    <p class="text-xs text-blue-100 max-w-xl mt-1">Review verified profile transactions, keep track of store credit tabs, and manage account authorization security structures.</p>
+                    <p class="text-xs text-blue-100 max-w-xl mt-1">Review verified profile transactions, browse active store inventory levels, and update your personal security files.</p>
+                </div>
+
+                <!-- CUSTOMER PRODUCT CATALOG VIEW -->
+                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="border-b border-slate-100 pb-3 mb-5">
+                        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                            <span class="bg-emerald-50 p-1.5 rounded-lg text-sm text-emerald-600">🛒</span> Store Catalog & Live Shelf Stock
+                        </h3>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Explore available stock lines. Click any product to simulate an instantaneous ledger purchase.</p>
+                    </div>
+
+                    <div id="customer-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Product Cards injected dynamically here -->
+                    </div>
                 </div>
 
                 <!-- PERSONAL INVOICE PURSUIT LEDGER -->
@@ -143,65 +157,175 @@
             <!-- ========================================== -->
             <div id="role-view-admin" class="hidden space-y-6">
                 
-                <!-- EXECUTIVE VALUE MATRIX FILTER DASHBOARD -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-5 border-b border-slate-100 gap-4 mb-6">
-                        <div>
-                            <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                                <span>🏆</span> Customer Value Matrix Filter Engine (Admin Exclusive)
-                            </h2>
-                            <p class="text-xs text-slate-500 mt-1">Isolate and analyze top-performing consumer expenditures by real-time chronological sliding windows.</p>
-                        </div>
-                        
-                        <div class="bg-slate-100 p-1 rounded-xl flex flex-wrap gap-1 w-full lg:w-auto border border-slate-200/60">
-                            <button onclick="setSalesFilter('daily')" id="time-btn-daily" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Daily Sales</button>
-                            <button onclick="setSalesFilter('monthly')" id="time-btn-monthly" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Monthly Sales</button>
-                            <button onclick="setSalesFilter('biannual')" id="time-btn-biannual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Bi-Annual Sales</button>
-                            <button onclick="setSalesFilter('annual')" id="time-btn-annual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Annual Sales</button>
-                        </div>
-                    </div>
+                <!-- ADMINISTRATIVE WORKSPACE NAVSTATION -->
+                <div class="bg-slate-900 p-2 rounded-xl flex flex-wrap gap-1 border border-slate-800 shadow-inner">
+                    <button onclick="switchAdminMenuTab('analytics')" id="admin-tab-analytics" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-white bg-blue-600">
+                        📈 Value Analytics
+                    </button>
+                    <button onclick="switchAdminMenuTab('inventory')" id="admin-tab-inventory" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                        📦 Stock Control Center
+                    </button>
+                    <button onclick="switchAdminMenuTab('purchases')" id="admin-tab-purchases" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                        📜 Global Sales Ledger
+                    </button>
+                    <button onclick="switchAdminMenuTab('debtors')" id="admin-tab-debtors" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                        💳 Customer Credit Lines
+                    </button>
+                </div>
 
-                    <!-- INTERACTIVE CONTROL THRESHOLDS -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
-                        <div>
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
-                            <select id="filter-top-n" onchange="renderTopCustomersGrid()" class="w-full bg-white border border-slate-200 p-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
-                                <option value="3">Show Top 3 Shoppers</option>
-                                <option value="5" selected>Show Top 5 Shoppers</option>
-                                <option value="10">Show Top 10 Shoppers</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Minimum Spending Value</label>
-                            <div class="relative">
-                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">R</span>
-                                <input type="number" id="filter-min-spend" oninput="renderTopCustomersGrid()" value="0" class="w-full bg-white border border-slate-200 pl-6 pr-2 py-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20" placeholder="0.00">
-                        </div>
-                        </div>
-                        <div class="flex flex-col justify-end">
-                            <div class="text-right text-xs text-slate-400 font-medium">
-                                Active Time Horizon Scope: <span id="scope-date-badge" class="font-bold text-blue-600 block text-sm mt-0.5">--</span>
+                <!-- SUB-MENU SECTION A: ANALYTICS MATRIX -->
+                <div id="admin-section-analytics" class="space-y-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
+                        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-5 border-b border-slate-100 gap-4 mb-6">
+                            <div>
+                                <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                                    <span>🏆</span> Customer Value Matrix Filter Engine
+                                </h2>
+                                <p class="text-xs text-slate-500 mt-1">Isolate and analyze top-performing consumer expenditures by real-time chronological sliding windows.</p>
+                            </div>
+                            
+                            <div class="bg-slate-100 p-1 rounded-xl flex flex-wrap gap-1 w-full lg:w-auto border border-slate-200/60">
+                                <button onclick="setSalesFilter('daily')" id="time-btn-daily" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Daily Sales</button>
+                                <button onclick="setSalesFilter('monthly')" id="time-btn-monthly" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Monthly Sales</button>
+                                <button onclick="setSalesFilter('biannual')" id="time-btn-biannual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Bi-Annual Sales</button>
+                                <button onclick="setSalesFilter('annual')" id="time-btn-annual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Annual Sales</button>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- MAIN CUSTOMER GRID -->
-                    <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Dynamic Analytics Cards Inject Here -->
+                        <!-- INTERACTIVE CONTROL THRESHOLDS -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
+                                <select id="filter-top-n" onchange="renderTopCustomersGrid()" class="w-full bg-white border border-slate-200 p-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
+                                    <option value="3">Show Top 3 Shoppers</option>
+                                    <option value="5" selected>Show Top 5 Shoppers</option>
+                                    <option value="10">Show Top 10 Shoppers</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Minimum Spending Value</label>
+                                <div class="relative">
+                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">R</span>
+                                    <input type="number" id="filter-min-spend" oninput="renderTopCustomersGrid()" value="0" class="w-full bg-white border border-slate-200 pl-6 pr-2 py-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20" placeholder="0.00">
+                                </div>
+                            </div>
+                            <div class="flex flex-col justify-end">
+                                <div class="text-right text-xs text-slate-400 font-medium">
+                                    Active Time Horizon Scope: <span id="scope-date-badge" class="font-bold text-blue-600 block text-sm mt-0.5">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MAIN CUSTOMER GRID -->
+                        <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <!-- Dynamic Analytics Cards Inject Here -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- INVENTORY CONTROL & STORE CREDIT TABS SPLIT GRID -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    <!-- MASTER DEBTORS LEDGER -->
-                    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/10 lg:col-span-2">
+                <!-- SUB-MENU SECTION B: MASTER STOCK CONTROL -->
+                <div id="admin-section-inventory" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
+                            <div class="border-b border-slate-100 pb-3 mb-4">
+                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-indigo-900">
+                                    <span>📝</span> Master Stock Inventory & Catalog Management
+                                </h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Edit live item definitions, configure price variables, and update real-time stock registers directly below.</p>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse min-w-[550px]">
+                                    <thead>
+                                        <tr class="border-b border-slate-100 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+                                            <th class="pb-2.5 w-12">ID</th>
+                                            <th class="pb-2.5">Product Label/Name</th>
+                                            <th class="pb-2.5 w-28">Unit Price</th>
+                                            <th class="pb-2.5 w-24">Stock level</th>
+                                            <th class="pb-2.5 text-right w-20">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-inventory-table-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
+                                        <!-- Dynamic Inventory Rows with inline modifiers -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- WARNING CONTROLS SIDEBAR -->
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                            <div>
+                                <div class="mb-4 border-b border-slate-100 pb-2">
+                                    <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
+                                        <span>📦</span> Shelf Stock Warning Signals
+                                    </h3>
+                                    <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
+                                </div>
+                                <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                                    <!-- Inventory Warnings Injected Here -->
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 mt-4">
+                                <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
+                                    <span>⚡</span> Simulate Random Customer Sale
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-MENU SECTION C: NEW COMPONENT - GLOBAL SALES LEDGER -->
+                <div id="admin-section-purchases" class="hidden space-y-6">
+                    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="border-b border-slate-100 pb-4 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-sky-900">
+                                    <span>📜</span> Global Store Checkout Audit Trail
+                                </h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Comprehensive chronological database indexing every transaction processed by all registered shoppers.</p>
+                            </div>
+                            
+                            <!-- DATA FILTERS FOR PURCHASES -->
+                            <div class="w-full md:w-auto flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="admin-purchase-search" oninput="renderGlobalSalesLedger()" placeholder="Search by customer username..." 
+                                    class="bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-full sm:w-64">
+                                <select id="admin-purchase-sort" onchange="renderGlobalSalesLedger()" class="bg-slate-50 border border-slate-200 p-2 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
+                                    <option value="newest">Date: Newest First</option>
+                                    <option value="oldest">Date: Oldest First</option>
+                                    <option value="highest">Value: Highest Basket</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- LIVE LEDGER TABLE -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[600px]">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+                                        <th class="pb-2.5 w-24">Invoice ID</th>
+                                        <th class="pb-2.5 w-36">Customer Account</th>
+                                        <th class="pb-2.5 w-28">Timestamp</th>
+                                        <th class="pb-2.5">Purchased Summary Breakdowns</th>
+                                        <th class="pb-2.5 text-right w-32">Total Basket Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-global-sales-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
+                                    <!-- Injected dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-MENU SECTION D: DEBTORS LIABILITIES -->
+                <div id="admin-section-debtors" class="hidden space-y-6">
+                    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/10">
                         <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                                 <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-rose-800">
-                                    <span class="bg-rose-100 p-1.5 rounded-lg text-sm">💳</span> Store Credit Outstanding Tab Tracker (Admin View)
+                                    <span>💳</span> Active Store-Financed Line Liabilities
                                 </h3>
-                                <p class="text-[11px] text-slate-500 mt-0.5">Global ledger auditing user profiles carrying active store-financed line liabilities.</p>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Global ledger auditing user profiles carrying active store-financed balances.</p>
                             </div>
                             <span id="global-debt-badge" class="bg-rose-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-xs">
                                 Total Open Risk: R0.00
@@ -223,26 +347,6 @@
                                     <!-- Dynamic Debts Injected Here -->
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-
-                    <!-- SHELF STOCK INVENTORY & SIMULATOR CONTROL BOX -->
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div>
-                            <div class="mb-4 border-b border-slate-100 pb-2">
-                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
-                                    <span>📦</span> Shelf Stock Warning Signals
-                                </h3>
-                                <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
-                            </div>
-                            <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
-                                <!-- Inventory Warnings Injected Here -->
-                            </div>
-                        </div>
-                        <div class="pt-4 border-t border-slate-100 mt-4">
-                            <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
-                                <span>⚡</span> Simulate Live Store Checkout Sale
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -349,9 +453,10 @@
         // --- DATA STATE SCHEMA ---
         const state = {
             activeSalesTimeframe: 'monthly',
-            currentSessionUser: null,    // Populated on successful auth pass
-            currentSessionRole: null,    // 'admin' or 'customer'
-            authScreenMode: 'login',     // 'login' or 'register'
+            currentAdminTab: 'analytics', // Tracks active view inside the admin workspace
+            currentSessionUser: null,    
+            currentSessionRole: null,    
+            authScreenMode: 'login',     
             products: [
                 { id: 1, name: "Fresh White Bread Roll", price: 18.50, stock: 12 },
                 { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 3 }, 
@@ -359,9 +464,7 @@
                 { id: 4, name: "Premium Coffee Granules", price: 45.00, stock: 5 }     
             ],
             users: [
-                // System Administrators
                 { email: "executive@store.co.za", username: "admin_exec", password: "admin123", role: "admin" },
-                // Store Customers
                 { email: "jozi_shopper@gmail.co.za", username: "jozi_shopper", password: "password123", role: "customer", credit: 63.00, max_credit: 200.00 },
                 { email: "sipho.m@kasi.net", username: "sipho_kasi", password: "password123", role: "customer", credit: 280.00, max_credit: 500.00 },
                 { email: "khanyisile_d@domain.za", username: "khanyi_star", password: "password123", role: "customer", credit: 150.00, max_credit: 400.00 },
@@ -397,17 +500,16 @@
                 document.getElementById('auth-portal-screen').classList.add('hidden');
                 document.getElementById('main-application-layout').classList.remove('hidden');
                 
-                // Adjust Welcome Navbar context elements
                 document.getElementById('current-user-display').innerText = `@${activeUserHandle}`;
                 const badge = document.getElementById('role-badge');
                 const descriptor = document.getElementById('portal-role-descriptor');
                 
-                // Toggle Application View Tree Nodes based on validated authorization claims
                 if (activeUserRole === 'admin') {
                     badge.className = "w-2 h-2 rounded-full bg-amber-500 shadow-xs animate-pulse";
                     descriptor.innerText = "Executive Enterprise Administrator Node";
                     document.getElementById('role-view-admin').classList.remove('hidden');
                     document.getElementById('role-view-customer').classList.add('hidden');
+                    switchAdminMenuTab(state.currentAdminTab); // Initialize with last selected workspace
                 } else {
                     badge.className = "w-2 h-2 rounded-full bg-emerald-500 shadow-xs";
                     descriptor.innerText = "Verified Customer Portal Lounge";
@@ -425,7 +527,27 @@
             }
         }
 
-        // --- LOGIN VS REGISTRATION RECONFIGURATOR ---
+        // --- MENU TABS ROUTER FOR ADMIN SUITE ---
+        function switchAdminMenuTab(targetTab) {
+            state.currentAdminTab = targetTab;
+            
+            const tabs = ['analytics', 'inventory', 'purchases', 'debtors'];
+            tabs.forEach(tab => {
+                const sectionDom = document.getElementById(`admin-section-${tab}`);
+                const buttonDom = document.getElementById(`admin-tab-${tab}`);
+                
+                if (tab === targetTab) {
+                    sectionDom.classList.remove('hidden');
+                    buttonDom.className = "flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-white bg-blue-600 shadow-sm";
+                } else {
+                    sectionDom.classList.add('hidden');
+                    buttonDom.className = "flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
+                }
+            });
+            
+            refreshEntireUIPanel();
+        }
+
         function toggleAuthMode() {
             const emailWrapper = document.getElementById('reg-email-wrapper');
             const emailInput = document.getElementById('auth-email');
@@ -458,12 +580,11 @@
                 icon.className = "text-3xl bg-blue-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1";
                 submitBtn.innerText = "Authorize Security Token";
                 submitBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center text-xs";
-                toggleLink.innerText = "New customer? Register a new profile profile here";
+                toggleLink.innerText = "New customer? Register a new profile here";
                 hints.classList.remove('hidden');
             }
         }
 
-        // --- GATEWAY SIGN IN / REGISTRATION MANAGER ---
         function handleAuthFormSubmission(event) {
             event.preventDefault();
             const usernameInput = document.getElementById('auth-username').value.trim().toLowerCase();
@@ -487,7 +608,6 @@
                     return;
                 }
 
-                // Force role claim explicitly to 'customer' upon public self-registration action
                 state.users.push({
                     username: usernameInput,
                     email: emailInput,
@@ -525,20 +645,177 @@
 
         function refreshEntireUIPanel() {
             if (state.currentSessionRole === 'admin') {
-                renderTopCustomersGrid();
-                renderDebtOutstandingLedger();
-                renderShelfInventoryWarnings();
+                if (state.currentAdminTab === 'analytics') renderTopCustomersGrid();
+                if (state.currentAdminTab === 'inventory') { renderAdminInventoryManagement(); renderShelfInventoryWarnings(); }
+                if (state.currentAdminTab === 'purchases') renderGlobalSalesLedger();
+                if (state.currentAdminTab === 'debtors') renderDebtOutstandingLedger();
             } else if (state.currentSessionRole === 'customer') {
+                renderCustomerProductCatalog();
                 renderCustomerPersonalLedger();
             }
         }
 
-        // --- SUB-SYSTEM: CUSTOMER PERSONAL HISTORY LEDGER ---
+        // --- CUSTOMER CATALOG DISPLAY & PURCHASE MECHANIC ---
+        function renderCustomerProductCatalog() {
+            const catalogGrid = document.getElementById('customer-product-grid');
+            if (!catalogGrid) return;
+
+            catalogGrid.innerHTML = '';
+            state.products.forEach(p => {
+                const outOfStock = p.stock === 0;
+                
+                catalogGrid.innerHTML += `
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between transition hover:shadow-xs">
+                        <div class="space-y-1">
+                            <h4 class="font-bold text-slate-900 text-sm">${p.name}</h4>
+                            <p class="text-xs text-slate-400 font-medium">Catalog Line #${p.id}</p>
+                            <div class="pt-2">
+                                <span class="text-xs font-bold font-mono px-2 py-0.5 rounded ${outOfStock ? 'bg-rose-100 text-rose-700' : 'bg-slate-200 text-slate-700'}">
+                                    ${outOfStock ? '🚫 Out of Stock' : `📦 ${p.stock} Available`}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mt-5 pt-3 border-t border-slate-200/60 flex items-center justify-between gap-2">
+                            <span class="text-lg font-black text-slate-900">R${p.price.toFixed(2)}</span>
+                            <button onclick="executeCustomerPurchase(${p.id})" ${outOfStock ? 'disabled' : ''}
+                                class="text-[11px] font-bold px-3 py-1.5 rounded-lg border transition cursor-pointer font-sans
+                                ${outOfStock 
+                                    ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed' 
+                                    : 'bg-emerald-600 text-white border-emerald-500 hover:bg-emerald-700'}">
+                                Buy Item
+                            </button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function executeCustomerPurchase(productId) {
+            const product = state.products.find(p => p.id === productId);
+            if (!product || product.stock <= 0) return;
+
+            product.stock -= 1;
+
+            const newInvoice = {
+                id: `TX-${Math.floor(100 + Math.random() * 900)}`,
+                username: state.currentSessionUser,
+                date: "2026-06-16", 
+                total: product.price,
+                summary: `${product.name} (x1)`
+            };
+            
+            state.orders.push(newInvoice);
+            alert(`🎉 Purchase Confirmed!\n\nYou bought 1x ${product.name} for R${product.price.toFixed(2)}.`);
+            
+            refreshEntireUIPanel();
+        }
+
+        // --- GLOBAL SALES LEDGER MANAGEMENT (ADMIN EXCLUSIVE VIEW ALL) ---
+        function renderGlobalSalesLedger() {
+            const tableBody = document.getElementById('admin-global-sales-rows');
+            if (!tableBody) return;
+
+            const searchFilter = document.getElementById('admin-purchase-search').value.trim().toLowerCase();
+            const sortMode = document.getElementById('admin-purchase-sort').value;
+
+            // Filter purchases based on user lookup string
+            let filteredOrders = state.orders.filter(o => o.username.toLowerCase().includes(searchFilter));
+
+            // Sorting strategy
+            if (sortMode === 'newest') {
+                filteredOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (sortMode === 'oldest') {
+                filteredOrders.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sortMode === 'highest') {
+                filteredOrders.sort((a, b) => b.total - a.total);
+            }
+
+            tableBody.innerHTML = '';
+            if (filteredOrders.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs text-slate-400 font-medium">No sales matches exist for current filter terms.</td></tr>`;
+                return;
+            }
+
+            filteredOrders.forEach(o => {
+                tableBody.innerHTML += `
+                    <tr class="hover:bg-slate-50/80 transition">
+                        <td class="py-3 font-mono font-bold text-blue-600">${o.id}</td>
+                        <td class="py-3 font-bold text-slate-900">@${o.username}</td>
+                        <td class="py-3 font-medium text-slate-400 font-mono">${o.date}</td>
+                        <td class="py-3 font-semibold text-slate-700">${o.summary}</td>
+                        <td class="py-3 text-right font-black text-slate-900">R${o.total.toFixed(2)}</td>
+                    </tr>`;
+            });
+        }
+
+        // --- ADMINISTRATIVE INVENTORY DATA MANAGEMENT ---
+        function renderAdminInventoryManagement() {
+            const tableBody = document.getElementById('admin-inventory-table-rows');
+            if (!tableBody) return;
+
+            tableBody.innerHTML = '';
+            state.products.forEach(p => {
+                tableBody.innerHTML += `
+                    <tr id="inventory-row-${p.id}" class="hover:bg-slate-50/80 transition">
+                        <td class="py-3 font-mono font-bold text-slate-400">#${p.id}</td>
+                        <td class="py-3">
+                            <input type="text" id="edit-p-name-${p.id}" value="${p.name}" 
+                                class="bg-transparent hover:bg-slate-100 focus:bg-white border-none focus:ring-2 focus:ring-blue-500/20 px-2 py-1 rounded font-bold text-slate-800 w-full transition">
+                        </td>
+                        <td class="py-3">
+                            <div class="relative max-w-[100px]">
+                                <span class="absolute left-1.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">R</span>
+                                <input type="number" id="edit-p-price-${p.id}" value="${p.price.toFixed(2)}" step="0.01" min="0" 
+                                    class="bg-transparent hover:bg-slate-100 focus:bg-white border-none focus:ring-2 focus:ring-blue-500/20 pl-5 pr-1 py-1 rounded font-mono font-bold text-slate-900 w-full text-left transition">
+                            </div>
+                        </td>
+                        <td class="py-3">
+                            <input type="number" id="edit-p-stock-${p.id}" value="${p.stock}" min="0" 
+                                class="bg-transparent hover:bg-slate-100 focus:bg-white border-none focus:ring-2 focus:ring-blue-500/20 px-2 py-1 rounded font-mono font-bold text-slate-700 w-20 transition">
+                        </td>
+                        <td class="py-3 text-right">
+                            <button onclick="saveAdminProductUpdates(${p.id})" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1 rounded-lg shadow-2xs transition text-[11px] cursor-pointer">
+                                Update
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function saveAdminProductUpdates(productId) {
+            const product = state.products.find(p => p.id === productId);
+            if (!product) return;
+
+            const inputName = document.getElementById(`edit-p-name-${productId}`).value.trim();
+            const inputPrice = parseFloat(document.getElementById(`edit-p-price-${productId}`).value);
+            const inputStock = parseInt(document.getElementById(`edit-p-stock-${productId}`).value);
+
+            if (!inputName) {
+                alert("❌ Input Rejection: Product name cannot be left completely empty.");
+                return;
+            }
+            if (isNaN(inputPrice) || inputPrice < 0) {
+                alert("❌ Input Rejection: Price metric must evaluate to a valid positive value configuration.");
+                return;
+            }
+            if (isNaN(inputStock) || inputStock < 0) {
+                alert("❌ Input Rejection: Shelf item levels cannot hold negative integer data.");
+                return;
+            }
+
+            product.name = inputName;
+            product.price = inputPrice;
+            product.stock = inputStock;
+
+            alert(`✨ Catalog Update Injected Successfully!\n\n"${product.name}" has been configured with updated operational definitions.`);
+            refreshEntireUIPanel();
+        }
+
+        // --- CUSTOMER PERSONAL HISTORY LEDGER ---
         function renderCustomerPersonalLedger() {
             const rowTarget = document.getElementById('customer-personal-invoice-rows');
             if (!rowTarget) return;
 
-            // Filter transactions exclusively matching active logged-in customer identity context
             const personalizedOrders = state.orders.filter(o => o.username.toLowerCase() === state.currentSessionUser.toLowerCase());
             
             rowTarget.innerHTML = '';
@@ -559,7 +836,7 @@
             });
         }
 
-        // --- SUB-SYSTEM: ADMINISTRATIVE CONTROL SUITE METRICS ---
+        // --- ADMINISTRATIVE CONTROL SUITE METRICS ---
         function setSalesFilter(timeframe) {
             state.activeSalesTimeframe = timeframe;
             renderTopCustomersGrid();
@@ -567,6 +844,8 @@
 
         function renderTopCustomersGrid() {
             const targetGrid = document.getElementById('top-customers-render-target');
+            if (!targetGrid) return;
+            
             const topN = parseInt(document.getElementById('filter-top-n').value);
             const minSpend = parseFloat(document.getElementById('filter-min-spend').value) || 0;
             const dateBadge = document.getElementById('scope-date-badge');
@@ -733,7 +1012,7 @@
             refreshEntireUIPanel();
         }
 
-        // --- SUB-SYSTEM: PROFILE PROFILE SECURITY CONFIGURATOR ---
+        // --- PROFILE SECURITY CONFIGURATOR ---
         function handleProfileUpdate(event) {
             event.preventDefault();
             const currentProfile = state.users.find(u => u.username === state.currentSessionUser);
@@ -762,7 +1041,6 @@
                     return;
                 }
                 
-                // Cascade update any orders tied to this user to protect history data-binding integrity
                 state.orders.forEach(o => {
                     if (o.username.toLowerCase() === currentProfile.username.toLowerCase()) {
                         o.username = targetUser;
