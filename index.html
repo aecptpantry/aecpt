@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AE Operations & Multi-Role Portal</title>
+    <!-- Tailwind CSS Engine -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-12">
 
+    <!-- ========================================== -->
+    <!--     UNIFIED PORTAL GATEWAY (AUTH / REG)    -->
+    <!-- ========================================== -->
     <div id="auth-portal-screen" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200/80 space-y-5 my-auto">
             
+            <!-- HEADER CONTEXT -->
             <div class="text-center space-y-1.5">
                 <span id="auth-icon" class="text-3xl bg-blue-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1">🔐</span>
                 <h2 id="auth-title" class="text-xl font-black text-slate-900 tracking-tight">AE Portal Sign In</h2>
                 <p id="auth-subtitle" class="text-xs text-slate-400 font-medium">Enter credentials to safely route your access role.</p>
             </div>
 
+            <!-- DEMO CREDENTIALS BOX -->
             <div id="demo-credentials-box" class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-[11px] text-blue-900 font-semibold leading-relaxed">
                 💡 <strong>Role Routing Testing Accounts:</strong><br>
                 <div class="mt-1 border-b border-blue-100 pb-1 mb-1">
@@ -29,6 +35,7 @@
                 </div>
             </div>
 
+            <!-- SYSTEM TARGET AUTH FORM -->
             <form id="portal-core-form" onsubmit="handleAuthFormSubmission(event)" class="space-y-4 text-xs">
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username Handle</label>
@@ -36,6 +43,7 @@
                         class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
                 </div>
 
+                <!-- Registration Email Input -->
                 <div id="reg-email-wrapper" class="hidden">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Email Address</label>
                     <input type="email" id="auth-email" placeholder="name@domain.co.za"
@@ -54,6 +62,7 @@
                 </button>
             </form>
 
+            <!-- AUTH SWITCH FOOTER -->
             <div class="text-center pt-2 border-t border-slate-100">
                 <button type="button" onclick="toggleAuthMode()" id="auth-toggle-link" class="text-xs text-blue-600 hover:underline cursor-pointer font-bold">
                     New customer? Register a new profile here
@@ -63,8 +72,12 @@
     </div>
 
 
+    <!-- ========================================== -->
+    <!--            MAIN APPLICATION SITE           -->
+    <!-- ========================================== -->
     <div id="main-application-layout" class="hidden">
         
+        <!-- MAIN STICKY NAVIGATION BAR -->
         <nav class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
@@ -89,89 +102,139 @@
 
         <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
             
+            <!-- ========================================== -->
+            <!--   VIEW NODE A: CORE CUSTOMER PERSONAL HUB  -->
+            <!-- ========================================== -->
             <div id="role-view-customer" class="hidden space-y-6">
-                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl text-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-xl font-black tracking-tight">Your Personal Shopping Hub</h2>
-                        <p class="text-xs text-blue-100 max-w-xl mt-1">Review verified profile transactions, browse active store inventory levels, and update your personal security files.</p>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-xs border border-white/20 p-3 rounded-xl text-right">
-                        <span class="block text-[10px] uppercase font-bold text-blue-200 tracking-wider">Available Credit Line</span>
-                        <span id="customer-credit-display" class="text-lg font-black text-white">R0.00</span>
-                    </div>
+                
+                <!-- NAVIGATION SUB-TAB TOGGLES FOR CUSTOMER VIEW -->
+                <div class="bg-slate-200/60 p-1 rounded-xl flex max-w-sm border border-slate-300/40">
+                    <button onclick="switchCustomerTab('shopping')" id="customer-tab-shopping" class="flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all cursor-pointer bg-white text-blue-600 shadow-xs">
+                        🛒 Shopping Lounge
+                    </button>
+                    <button onclick="switchCustomerTab('history')" id="customer-tab-history" class="flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all cursor-pointer text-slate-600 hover:text-slate-900">
+                        📜 Purchase History
+                    </button>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2 space-y-4">
-                        <div class="border-b border-slate-100 pb-3">
-                            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                                <span class="bg-emerald-50 p-1.5 rounded-lg text-sm text-emerald-600">🛒</span> Store Catalog & Live Shelf Stock
-                            </h3>
-                            <p class="text-[11px] text-slate-400 mt-0.5">Explore available lines. Add products individually to build out your personalized shopping basket.</p>
-                        </div>
-
-                        <div id="customer-product-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            </div>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between space-y-4">
+                <!-- SUB-PANEL 1: SHOPPING LOUNGE TAB -->
+                <div id="customer-section-shopping" class="space-y-6">
+                    <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl text-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <div class="border-b border-slate-100 pb-3 mb-3">
-                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-blue-900">
-                                    <span>🧺</span> Your Current Basket
-                                </h3>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Add, modify, or remove lines before submitting for ledger authorization.</p>
-                            </div>
+                            <h2 class="text-xl font-black tracking-tight">Your Digital Shopping Terminal</h2>
+                            <p class="text-xs text-blue-100 max-w-xl mt-1">Browse open shelf-stock values, manipulate items inside your live basket, and complete your billing transaction.</p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-xs border border-white/20 p-3 rounded-xl text-right">
+                            <span class="block text-[10px] uppercase font-bold text-blue-200 tracking-wider">Available Line Credit</span>
+                            <span id="customer-credit-display" class="text-lg font-black text-white">R0.00</span>
+                        </div>
+                    </div>
 
-                            <div id="customer-basket-container" class="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
-                                </div>
+                    <!-- 2-COLUMN DESIGN (CATALOGUE vs LIVE BASKET WITH PAYMENT SELECTOR) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        
+                        <!-- DYNAMIC PRODUCT STREAM -->
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2 space-y-4">
+                            <div class="border-b border-slate-100 pb-3">
+                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                                    <span class="bg-emerald-50 p-1.5 rounded-lg text-sm text-emerald-600">🛍️</span> Shelf Products & Catalog Stock
+                                </h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Click "Add to Basket" to allocate single items into your active order summary buffer.</p>
+                            </div>
+                            <div id="customer-product-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Dynamic Product Cards -->
+                            </div>
                         </div>
 
-                        <div class="pt-4 border-t border-slate-100 space-y-3">
-                            <div class="flex justify-between items-center text-xs font-medium text-slate-500">
-                                <span>Cart Subtotal</span>
-                                <span id="basket-subtotal" class="font-bold text-slate-800">R0.00</span>
+                        <!-- LIVE INTEGRATED shopping BASKET -->
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between space-y-5">
+                            <div>
+                                <div class="border-b border-slate-100 pb-3 mb-3">
+                                    <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-blue-900">
+                                        <span>🧺</span> Your Active Basket
+                                    </h3>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Adjust line quantities or strip unwanted lines cleanly prior to checkout authorization.</p>
+                                </div>
+
+                                <!-- CART NODE INJECTION WINDOW -->
+                                <div id="customer-basket-container" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                                    <!-- Dynamic Nodes -->
+                                </div>
                             </div>
-                            <div class="flex justify-between items-baseline pt-1">
-                                <span class="text-xs uppercase text-slate-400 font-bold tracking-wider">Total Owed</span>
-                                <span id="basket-total" class="text-2xl font-black text-slate-900">R0.00</span>
+
+                            <!-- ADVANCED INTERACTIVE LEDGER BILLING MATRIX -->
+                            <div class="pt-3 border-t border-slate-100 space-y-4">
+                                <div>
+                                    <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">💳 Select Payment Method</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <label id="pay-label-card" class="border-2 border-blue-600 bg-blue-50/40 p-2.5 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none">
+                                            <input type="radio" name="payment-method-option" value="card" checked onchange="updatePaymentMethodSelectionUI()" class="sr-only">
+                                            <span class="text-lg">💳</span>
+                                            <span class="text-[11px] font-extrabold text-slate-900 mt-0.5">Card / Gateway</span>
+                                        </label>
+                                        <label id="pay-label-credit" class="border border-slate-200 p-2.5 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none">
+                                            <input type="radio" name="payment-method-option" value="credit" onchange="updatePaymentMethodSelectionUI()" class="sr-only">
+                                            <span class="text-lg">🏦</span>
+                                            <span class="text-[11px] font-extrabold text-slate-700 mt-0.5">Store Account</span>
+                                        </label>
+                                    </div>
+                                    <p id="payment-method-context-caption" class="text-[10px] text-slate-400 mt-1.5 italic font-medium">Settled via simulated electronic debit transaction gateway.</p>
+                                </div>
+
+                                <div class="space-y-1.5 pt-1">
+                                    <div class="flex justify-between items-center text-xs font-medium text-slate-500">
+                                        <span>Items Subtotal</span>
+                                        <span id="basket-subtotal" class="font-bold text-slate-800">R0.00</span>
+                                    </div>
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="text-xs uppercase text-slate-400 font-bold tracking-wider">Total Owed</span>
+                                        <span id="basket-total" class="text-2xl font-black text-slate-900">R0.00</span>
+                                    </div>
+                                </div>
+
+                                <button onclick="executeBasketCheckout()" id="basket-checkout-btn" disabled
+                                    class="w-full bg-slate-100 text-slate-400 border border-slate-200 text-xs font-bold py-2.5 rounded-xl transition shadow-xs cursor-not-allowed text-center flex justify-center items-center gap-2">
+                                    🔒 <span>Authorize Checkout Purchase</span>
+                                </button>
                             </div>
-                            <button onclick="executeBasketCheckout()" id="basket-checkout-btn" disabled
-                                class="w-full bg-slate-100 text-slate-400 border border-slate-200 text-xs font-bold py-2.5 rounded-xl transition shadow-xs cursor-not-allowed text-center flex justify-center items-center gap-2">
-                                🔒 <span>Proceed To Checkout</span>
-                            </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="border-b border-slate-100 pb-3 mb-4">
+                <!-- SUB-PANEL 2: PURSUIT PURCHASE HISTORY TAB (ISOLATED VIEW) -->
+                <div id="customer-section-history" class="hidden bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                    <div class="border-b border-slate-100 pb-3">
                         <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                            <span class="bg-blue-50 p-1.5 rounded-lg text-sm text-blue-600">🛍️</span> Your Itemized Purchase History
+                            <span class="bg-blue-50 p-1.5 rounded-lg text-sm text-blue-600">📜</span> Historical Invoice Purchase Records
                         </h3>
-                        <p class="text-[11px] text-slate-400 mt-0.5">Verified chronological history of your successful checkouts at AE Convenient Store.</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Audit log mapping matching checkout invoices recorded across your shopper account profile profile.</p>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[450px]">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
                             <thead>
                                 <tr class="border-b border-slate-100 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
-                                    <th class="pb-2.5">Invoice ID</th>
-                                    <th class="pb-2.5">Checkout Date</th>
-                                    <th class="pb-2.5">Itemized Summary Breakdown</th>
-                                    <th class="pb-2.5 text-right">Total Basket Paid</th>
+                                    <th class="pb-2.5">Invoice Reference</th>
+                                    <th class="pb-2.5">Transaction Date</th>
+                                    <th class="pb-2.5">Settlement Channel</th>
+                                    <th class="pb-2.5">Itemized Purchases Breakdown</th>
+                                    <th class="pb-2.5 text-right">Total Disbursed</th>
                                 </tr>
                             </thead>
                             <tbody id="customer-personal-invoice-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
-                                </tbody>
+                                <!-- Rows Inject Dynamically Here -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
+            <!-- ========================================== -->
+            <!--    VIEW NODE B: EXECUTIVE ADMIN SUITE      -->
+            <!-- ========================================== -->
             <div id="role-view-admin" class="hidden space-y-6">
                 
+                <!-- ADMINISTRATIVE WORKSPACE NAVSTATION -->
                 <div class="bg-slate-900 p-2 rounded-xl flex flex-wrap gap-1 border border-slate-800 shadow-inner">
                     <button onclick="switchAdminMenuTab('analytics')" id="admin-tab-analytics" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-white bg-blue-600">
                         📈 Value Analytics
@@ -187,6 +250,7 @@
                     </button>
                 </div>
 
+                <!-- SUB-MENU SECTION A: ANALYTICS MATRIX -->
                 <div id="admin-section-analytics" class="space-y-6">
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
                         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-5 border-b border-slate-100 gap-4 mb-6">
@@ -205,6 +269,7 @@
                             </div>
                         </div>
 
+                        <!-- INTERACTIVE CONTROL THRESHOLDS -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
                             <div>
                                 <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
@@ -228,20 +293,25 @@
                             </div>
                         </div>
 
+                        <!-- HIGHLY VALUED CUSTOMERS LAYOUT -->
                         <div class="space-y-4">
                             <h3 class="text-xs font-black tracking-widest text-slate-400 uppercase">Top Shoppers Revenue Stream</h3>
                             <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                </div>
+                                <!-- Dynamic Analytics Cards Inject Here -->
+                            </div>
                         </div>
 
+                        <!-- TOP SELLING PRODUCTS LEADERBOARD -->
                         <div class="pt-6 border-t border-slate-100 space-y-4 mt-6">
                             <h3 class="text-xs font-black tracking-widest text-slate-400 uppercase flex items-center gap-1.5">🔥 Best Selling Inventory Lines (By Unit Volume)</h3>
                             <div id="top-products-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                </div>
+                                <!-- Dynamic Top Products Cards Inject Here -->
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- SUB-MENU SECTION B: MASTER STOCK CONTROL -->
                 <div id="admin-section-inventory" class="hidden space-y-6">
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2 space-y-4">
@@ -264,12 +334,15 @@
                                         </tr>
                                     </thead>
                                     <tbody id="admin-inventory-table-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
-                                        </tbody>
+                                        <!-- Dynamic Inventory Rows with inline modifiers -->
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
 
+                        <!-- CREATION & WARNING SIDEBAR -->
                         <div class="space-y-6">
+                            <!-- NEW PRODUCT MANIFEST CREATOR -->
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3.5">
                                 <div class="border-b border-slate-100 pb-2">
                                     <h3 class="text-sm font-black text-slate-900 flex items-center gap-1.5 text-blue-600">
@@ -301,6 +374,7 @@
                                 </form>
                             </div>
 
+                            <!-- SHELF STOCK WARNER -->
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
                                 <div>
                                     <div class="mb-4 border-b border-slate-100 pb-2">
@@ -310,7 +384,8 @@
                                         <p class="text-[10px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
                                     </div>
                                     <div id="stock-warning-box" class="space-y-2.5 max-h-[180px] overflow-y-auto pr-1">
-                                        </div>
+                                        <!-- Inventory Warnings Injected Here -->
+                                    </div>
                                 </div>
                                 <div class="pt-4 border-t border-slate-100 mt-4">
                                     <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
@@ -322,6 +397,7 @@
                     </div>
                 </div>
 
+                <!-- SUB-MENU SECTION C: GLOBAL SALES LEDGER -->
                 <div id="admin-section-purchases" class="hidden space-y-6">
                     <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
                         <div class="border-b border-slate-100 pb-4 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -332,6 +408,7 @@
                                 <p class="text-[11px] text-slate-400 mt-0.5">Comprehensive database indexing every transaction processed by all shoppers.</p>
                             </div>
                             
+                            <!-- DATA FILTERS FOR PURCHASES -->
                             <div class="w-full md:w-auto flex flex-col sm:flex-row gap-2">
                                 <input type="text" id="admin-purchase-search" oninput="renderGlobalSalesLedger()" placeholder="Search by customer username..." 
                                     class="bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-full sm:w-64">
@@ -343,6 +420,7 @@
                             </div>
                         </div>
 
+                        <!-- LIVE LEDGER TABLE -->
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse min-w-[600px]">
                                 <thead>
@@ -355,12 +433,14 @@
                                     </tr>
                                 </thead>
                                 <tbody id="admin-global-sales-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
-                                    </tbody>
+                                    <!-- Injected dynamically -->
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
+                <!-- SUB-MENU SECTION D: DEBTORS LIABILITIES -->
                 <div id="admin-section-debtors" class="hidden space-y-6">
                     <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/10">
                         <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -387,7 +467,8 @@
                                     </tr>
                                 </thead>
                                 <tbody id="debt-ledger-rows" class="text-xs divide-y divide-slate-100 font-medium">
-                                    </tbody>
+                                    <!-- Dynamic Debts Injected Here -->
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -395,6 +476,9 @@
 
             </div>
 
+            <!-- ========================================== -->
+            <!--  MODULE 3: INTEGRATED ACCOUNT UPDATE PANEL -->
+            <!-- ========================================== -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 max-w-2xl mx-auto">
                 <div class="border-b border-slate-100 pb-3 mb-5">
                     <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-slate-800">
@@ -451,6 +535,7 @@
 
         </main>
 
+        <!-- PRIVACY BUTTON FOOTER -->
         <footer class="text-center mt-8 pb-4">
             <button onclick="togglePrivacyModal(true)" class="text-[11px] font-bold text-slate-400 hover:text-blue-600 transition cursor-pointer underline">
                 View Legal Privacy Policy & Data Guarantee
@@ -458,6 +543,7 @@
         </footer>
     </div>
 
+    <!-- DATA PRIVACY MODAL COMPONENT -->
     <div id="privacy-policy-modal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 md:p-6 shadow-xl border border-slate-200 flex flex-col justify-between">
             <div class="space-y-4">
@@ -485,15 +571,17 @@
         </div>
     </div>
 
+    <!-- LIVE DATA RUNTIME ENGINE -->
     <script>
         // --- DATA STATE SCHEMA ---
         const state = {
             activeSalesTimeframe: 'monthly',
-            currentAdminTab: 'analytics', 
+            currentAdminTab: 'analytics',
+            activeCustomerTab: 'shopping', // Controls isolated tab routing for customer interface
             currentSessionUser: null,    
             currentSessionRole: null,    
             authScreenMode: 'login',     
-            customerBasket: [], // Live runtime tracker for adding/removing items individually
+            customerBasket: [], 
             products: [
                 { id: 1, name: "Fresh White Bread Roll", price: 18.50, stock: 12 },
                 { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 3 }, 
@@ -509,11 +597,11 @@
                 { email: "dev_tester@store.com", username: "rapid_buyer", password: "password123", role: "customer", credit: 450.00, max_credit: 1000.00 }
             ],
             orders: [
-                { id: "TX-901", username: "jozi_shopper", date: "2026-06-15", total: 37.00, summary: "Fresh White Bread Roll (x2)", items: [{ name: "Fresh White Bread Roll", qty: 2 }] },
-                { id: "TX-902", username: "sipho_kasi", date: "2026-06-15", total: 112.00, summary: "Premium Coffee Granules (x2), Full Cream Milk (1 Litre) (x1)", items: [{ name: "Premium Coffee Granules", qty: 2 }, { name: "Full Cream Milk (1 Litre)", qty: 1 }] },
-                { id: "TX-801", username: "khanyi_star", date: "2026-06-10", total: 250.00, summary: "Fresh White Bread Roll (x10), Premium Coffee Granules (x1)", items: [{ name: "Fresh White Bread Roll", qty: 10 }, { name: "Premium Coffee Granules", qty: 1 }] },
-                { id: "TX-802", username: "rapid_buyer", date: "2026-06-04", total: 540.00, summary: "Premium Coffee Granules (x12)", items: [{ name: "Premium Coffee Granules", qty: 12 }] },
-                { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 93.50, summary: "Salted Potato Crisp Chips (x5), Fresh White Bread Roll (x1)", items: [{ name: "Salted Potato Crisp Chips", qty: 5 }, { name: "Fresh White Bread Roll", qty: 1 }] }
+                { id: "TX-901", username: "jozi_shopper", date: "2026-06-15", total: 37.00, method: "Store Account", summary: "Fresh White Bread Roll (x2)", items: [{ name: "Fresh White Bread Roll", qty: 2 }] },
+                { id: "TX-902", username: "sipho_kasi", date: "2026-06-15", total: 112.00, method: "Card Gateway", summary: "Premium Coffee Granules (x2), Full Cream Milk (1 Litre) (x1)", items: [{ name: "Premium Coffee Granules", qty: 2 }, { name: "Full Cream Milk (1 Litre)", qty: 1 }] },
+                { id: "TX-801", username: "khanyi_star", date: "2026-06-10", total: 250.00, method: "Store Account", summary: "Fresh White Bread Roll (x10), Premium Coffee Granules (x1)", items: [{ name: "Fresh White Bread Roll", qty: 10 }, { name: "Premium Coffee Granules", qty: 1 }] },
+                { id: "TX-802", username: "rapid_buyer", date: "2026-06-04", total: 540.00, method: "Card Gateway", summary: "Premium Coffee Granules (x12)", items: [{ name: "Premium Coffee Granules", qty: 12 }] },
+                { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 93.50, method: "Card Gateway", summary: "Salted Potato Crisp Chips (x5), Fresh White Bread Roll (x1)", items: [{ name: "Salted Potato Crisp Chips", qty: 5 }, { name: "Fresh White Bread Roll", qty: 1 }] }
             ]
         };
 
@@ -549,8 +637,9 @@
                     document.getElementById('role-view-customer').classList.remove('hidden');
                     document.getElementById('role-view-admin').classList.add('hidden');
                     
-                    // Flush individual cart buffer on new logins to avoid cross-user state bleed
+                    // Default customer view state
                     state.customerBasket = [];
+                    switchCustomerTab('shopping');
                 }
 
                 populateProfileFormInputs();
@@ -563,7 +652,30 @@
             }
         }
 
-        // --- TAB NAVIGATION WORKSPACE ---
+        // --- CUSTOMER NAVIGATION CONTROL HUB ---
+        function switchCustomerTab(targetTab) {
+            state.activeCustomerTab = targetTab;
+            
+            const shoppingBtn = document.getElementById('customer-tab-shopping');
+            const historyBtn = document.getElementById('customer-tab-history');
+            const shoppingSection = document.getElementById('customer-section-shopping');
+            const historySection = document.getElementById('customer-section-history');
+
+            if (targetTab === 'shopping') {
+                shoppingSection.classList.remove('hidden');
+                historySection.classList.add('hidden');
+                shoppingBtn.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all cursor-pointer bg-white text-blue-600 shadow-xs";
+                historyBtn.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all cursor-pointer text-slate-600 hover:text-slate-900";
+            } else {
+                shoppingSection.classList.add('hidden');
+                historySection.classList.remove('hidden');
+                shoppingBtn.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all cursor-pointer text-slate-600 hover:text-slate-900";
+                historyBtn.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all cursor-pointer bg-white text-blue-600 shadow-xs";
+            }
+            refreshEntireUIPanel();
+        }
+
+        // --- ADMINISTRATIVE TAB HUB ---
         function switchAdminMenuTab(targetTab) {
             state.currentAdminTab = targetTab;
             
@@ -580,7 +692,6 @@
                     if(buttonDom) buttonDom.className = "flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
                 }
             });
-            
             refreshEntireUIPanel();
         }
 
@@ -691,7 +802,7 @@
             }
         }
 
-        // --- CUSTOMER ACTIONS & BASKET ARCHITECTURE ---
+        // --- CUSTOMER BASKET FLOW ENGINE ---
         function renderCustomerProductCatalog() {
             const catalogGrid = document.getElementById('customer-product-grid');
             if (!catalogGrid) return;
@@ -729,10 +840,9 @@
 
             const existingCartItem = state.customerBasket.find(item => item.id === productId);
             
-            // Check total added quantity against physical shelf restrictions
             if (existingCartItem) {
                 if (existingCartItem.qty >= product.stock) {
-                    alert(`⚠️ Supply Constraint: Cannot exceed physical store allocation of ${product.stock} units for this item.`);
+                    alert(`⚠️ Supply Constraint: Cannot exceed physical allocation of ${product.stock} units.`);
                     return;
                 }
                 existingCartItem.qty += 1;
@@ -744,7 +854,6 @@
                     qty: 1
                 });
             }
-
             renderCustomerBasketSidebar();
         }
 
@@ -761,7 +870,7 @@
             }
 
             if (modifier > 0 && targetQty > product.stock) {
-                alert(`⚠️ Supply Constraint: Max inventory allocation reached (${product.stock} units).`);
+                alert(`⚠️ Supply Constraint: Max inventory baseline reached (${product.stock} units).`);
                 return;
             }
 
@@ -774,6 +883,23 @@
             renderCustomerBasketSidebar();
         }
 
+        function updatePaymentMethodSelectionUI() {
+            const activeOption = document.querySelector('input[name="payment-method-option"]:checked').value;
+            const cardLabel = document.getElementById('pay-label-card');
+            const creditLabel = document.getElementById('pay-label-credit');
+            const caption = document.getElementById('payment-method-context-caption');
+
+            if (activeOption === 'card') {
+                cardLabel.className = "border-2 border-blue-600 bg-blue-50/40 p-2.5 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none";
+                creditLabel.className = "border border-slate-200 p-2.5 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none text-slate-500 hover:border-slate-300";
+                caption.innerText = "Settled instantly via secured electronic payment gateway simulator.";
+            } else {
+                cardLabel.className = "border border-slate-200 p-2.5 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none text-slate-500 hover:border-slate-300";
+                creditLabel.className = "border-2 border-blue-600 bg-blue-50/40 p-2.5 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition select-none";
+                caption.innerText = "Charged directly to your profile's outstanding store financing line.";
+            }
+        }
+
         function renderCustomerBasketSidebar() {
             const basketContainer = document.getElementById('customer-basket-container');
             const subtotalDom = document.getElementById('basket-subtotal');
@@ -781,14 +907,13 @@
             const checkoutBtn = document.getElementById('basket-checkout-btn');
             
             if (!basketContainer) return;
-
             basketContainer.innerHTML = '';
             let basketTotalValue = 0;
 
             if (state.customerBasket.length === 0) {
                 basketContainer.innerHTML = `
                     <div class="py-12 text-center text-slate-400 font-medium text-xs border border-dashed border-slate-200 rounded-xl px-2">
-                        🛒 Your basket is entirely empty.<br>Select items from the catalog.
+                        🛒 Your basket is empty.<br>Add items from the store catalog.
                     </div>`;
                 subtotalDom.innerText = "R0.00";
                 totalDom.innerText = "R0.00";
@@ -808,7 +933,7 @@
                                 <h4 class="font-bold text-slate-800 leading-tight">${item.name}</h4>
                                 <p class="text-[10px] text-slate-400 mt-0.5 font-mono">R${item.price.toFixed(2)} each</p>
                             </div>
-                            <button onclick="removeProductFromBasketCompletely(${item.id})" class="text-slate-400 hover:text-rose-600 transition cursor-pointer font-bold px-1" title="Drop Line Item">
+                            <button onclick="removeProductFromBasketCompletely(${item.id})" class="text-slate-400 hover:text-rose-600 transition cursor-pointer font-bold px-1" title="Remove Line Item">
                                 ✕
                             </button>
                         </div>
@@ -826,7 +951,6 @@
             subtotalDom.innerText = `R${basketTotalValue.toFixed(2)}`;
             totalDom.innerText = `R${basketTotalValue.toFixed(2)}`;
             
-            // Enable checkout processing node
             checkoutBtn.disabled = false;
             checkoutBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center flex justify-center items-center gap-2 text-xs";
         }
@@ -837,18 +961,21 @@
             const customerProfile = state.users.find(u => u.username === state.currentSessionUser);
             if (!customerProfile) return;
 
+            const billingOption = document.querySelector('input[name="payment-method-option"]:checked').value;
             let basketTotalValue = state.customerBasket.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-            // Credit boundary audit guard
-            if (basketTotalValue > customerProfile.credit) {
-                alert(`🚫 Liquidity Rejection: Total basket value (R${basketTotalValue.toFixed(2)}) exceeds your available financing allowance (R${customerProfile.credit.toFixed(2)}). Remove items or settle open line balances before retry.`);
+            // Audit only if financed using store debt allocation
+            if (billingOption === 'credit' && basketTotalValue > customerProfile.credit) {
+                alert(`🚫 Liquidity Rejection: Total basket value (R${basketTotalValue.toFixed(2)}) exceeds your store account limit (R${customerProfile.credit.toFixed(2)}). Settle balances or change payment option.`);
                 return;
             }
 
-            // Deduct system values from inventory logs and customer ledger limits
-            customerProfile.credit -= basketTotalValue;
+            // Deduct from credit line only if paying via Account Financing
+            if (billingOption === 'credit') {
+                customerProfile.credit -= basketTotalValue;
+            }
 
-            // Apply stock allocations sequentially
+            // Secure inventory levels
             state.customerBasket.forEach(cartItem => {
                 const liveProduct = state.products.find(p => p.id === cartItem.id);
                 if (liveProduct) {
@@ -856,7 +983,7 @@
                 }
             });
 
-            // Format dynamic ledger invoice parameters
+            const methodLabel = billingOption === 'credit' ? 'Store Account' : 'Card Gateway';
             const itemizedSummary = state.customerBasket.map(i => `${i.name} (x${i.qty})`).join(', ');
             const serializedItemsArray = state.customerBasket.map(i => ({ name: i.name, qty: i.qty }));
 
@@ -866,14 +993,16 @@
                 username: state.currentSessionUser,
                 date: "2026-06-16",
                 total: basketTotalValue,
+                method: methodLabel,
                 summary: itemizedSummary,
                 items: serializedItemsArray
             });
 
-            // Flush dynamic client state values
             state.customerBasket = [];
-            alert(`🎉 Invoice ${newInvoiceId} Approved! R${basketTotalValue.toFixed(2)} written against account finance terms.`);
-            refreshEntireUIPanel();
+            alert(`🎉 Invoice ${newInvoiceId} Approved via [${methodLabel}]! Total Paid: R${basketTotalValue.toFixed(2)}.`);
+            
+            // Auto-navigate to historical tab to show instant invoice logging
+            switchCustomerTab('history');
         }
 
         function renderCustomerPersonalLedger() {
@@ -884,17 +1013,21 @@
             rowTarget.innerHTML = '';
             
             if (personalizedOrders.length === 0) {
-                rowTarget.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-slate-400">No checkouts recorded yet.</td></tr>`;
+                rowTarget.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">No checkout transactions on file.</td></tr>`;
                 return;
             }
 
-            // Show newest transactions first for chronological readability
             [...personalizedOrders].reverse().forEach(o => {
                 rowTarget.innerHTML += `
                     <tr class="hover:bg-slate-50/80">
                         <td class="py-3 font-mono font-bold text-blue-600">${o.id}</td>
                         <td class="py-3 text-slate-400 font-medium font-mono">${o.date}</td>
-                        <td class="py-3 font-semibold text-slate-800">${o.summary}</td>
+                        <td class="py-3">
+                            <span class="px-2 py-0.5 rounded-md text-[10px] font-black tracking-wide ${o.method === 'Store Account' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-blue-100 text-blue-800 border border-blue-200'}">
+                                ${o.method || 'Card Gateway'}
+                            </span>
+                        </td>
+                        <td class="py-3 font-semibold text-slate-700">${o.summary}</td>
                         <td class="py-3 text-right font-black text-slate-900">R${o.total.toFixed(2)}</td>
                     </tr>`;
             });
@@ -915,7 +1048,7 @@
 
             tableBody.innerHTML = '';
             if (filteredOrders.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">No transactions match search filter rules.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">No matching logs.</td></tr>`;
                 return;
             }
 
@@ -925,13 +1058,13 @@
                         <td class="py-3 font-mono font-bold text-blue-600">${o.id}</td>
                         <td class="py-3 font-bold text-slate-900">@${o.username}</td>
                         <td class="py-3 font-medium text-slate-400 font-mono">${o.date}</td>
-                        <td class="py-3 font-semibold text-slate-700">${o.summary}</td>
+                        <td class="py-3 font-semibold text-slate-700">${o.summary} <span class="text-[10px] text-slate-400 block font-normal">via ${o.method || 'Card'}</span></td>
                         <td class="py-3 text-right font-black text-slate-900">R${o.total.toFixed(2)}</td>
                     </tr>`;
             });
         }
 
-        // --- ADMIN STOCK MANAGEMENT ---
+        // --- ADMIN INVENTORY CONTEXT ---
         function renderAdminInventoryManagement() {
             const tableBody = document.getElementById('admin-inventory-table-rows');
             if (!tableBody) return;
@@ -979,7 +1112,7 @@
             const inputStock = parseInt(document.getElementById(`edit-p-stock-${productId}`).value);
 
             if (!inputName || isNaN(inputPrice) || isNaN(inputStock)) {
-                alert("❌ Input Rejection: Fields cannot be left blank.");
+                alert("❌ Input Rejection: Fields cannot be blank.");
                 return;
             }
 
@@ -998,7 +1131,6 @@
             const stock = parseInt(document.getElementById('new-p-stock').value);
 
             const nextId = state.products.length > 0 ? Math.max(...state.products.map(p => p.id)) + 1 : 1;
-            
             state.products.push({ id: nextId, name, price, stock });
             
             alert(`🎉 Success: "${name}" registered into catalog under Line ID #${nextId}`);
@@ -1011,7 +1143,6 @@
             if (targetIndex === -1) return;
             
             if (confirm(`⚠️ Deletion Warning: Are you sure you want to permanently strip "${state.products[targetIndex].name}" from active store schemas?`)) {
-                // If customers have this item cached in their active carts, remove it safely
                 state.customerBasket = state.customerBasket.filter(item => item.id !== productId);
                 state.products.splice(targetIndex, 1);
                 refreshEntireUIPanel();
@@ -1057,10 +1188,8 @@
                 cutoffDate.setFullYear(systemAnchorDate.getFullYear() - 1);
             }
 
-            // --- COMPUTATION MAPS ---
             const performanceMap = {};
             const productSalesMap = {};
-            
             state.users.forEach(u => { if(u.role === 'customer') performanceMap[u.username] = 0; });
 
             state.orders.forEach(o => {
@@ -1085,7 +1214,6 @@
                 }
             });
 
-            // --- RENDER CUSTOMERS ---
             let customerProfiles = state.users.filter(u => u.role === 'customer').map(u => ({
                 ...u,
                 computedSalesVolume: performanceMap[u.username] || 0
@@ -1097,7 +1225,7 @@
 
             targetGrid.innerHTML = '';
             if (finalRenderSlice.length === 0) {
-                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No customer metrics found.</div>`;
+                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No metrics found.</div>`;
             } else {
                 finalRenderSlice.forEach((p, index) => {
                     let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite Tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium Tier' : '🛍️ Active Customer';
@@ -1117,18 +1245,16 @@
                 });
             }
 
-            // --- RENDER PRODUCTS ---
             let productRankings = Object.keys(productSalesMap).map(name => ({
                 name: name,
                 unitsSold: productSalesMap[name]
             }));
-            
             productRankings.sort((a, b) => b.unitsSold - a.unitsSold);
             const productSlice = productRankings.slice(0, topN);
 
             targetProductGrid.innerHTML = '';
             if (productSlice.length === 0) {
-                targetProductGrid.innerHTML = `<div class="col-span-full py-6 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No sales metrics recorded for this timeline frame.</div>`;
+                targetProductGrid.innerHTML = `<div class="col-span-full py-6 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No sales metrics recorded.</div>`;
             } else {
                 productSlice.forEach((prod, index) => {
                     targetProductGrid.innerHTML += `
@@ -1146,7 +1272,7 @@
             }
         }
 
-        // --- CREDIT MANAGEMENT ---
+        // --- DEBT MANAGEMENT ---
         function renderDebtOutstandingLedger() {
             const rowTarget = document.getElementById('debt-ledger-rows');
             if (!rowTarget) return;
@@ -1219,6 +1345,7 @@
                 username: "jozi_shopper", 
                 date: "2026-06-16", 
                 total: targetProduct.price, 
+                method: "Card Gateway",
                 summary: `${targetProduct.name} (x1)`,
                 items: [{ name: targetProduct.name, qty: 1 }]
             });
