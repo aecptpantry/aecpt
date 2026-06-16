@@ -4,46 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AE Operations & Analytics Portal</title>
+    <!-- Tailwind CSS Engine -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-12">
 
-    <div id="auth-portal-screen" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200/80 space-y-5">
+    <!-- ========================================== -->
+    <!--     UNIFIED PORTAL GATEWAY (AUTH / REG)    -->
+    <!-- ========================================== -->
+    <div id="auth-portal-screen" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200/80 space-y-5 my-auto">
+            
+            <!-- HEADER CONTEXT -->
             <div class="text-center space-y-1.5">
-                <span class="text-3xl bg-blue-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1">🔐</span>
-                <h2 class="text-xl font-black text-slate-900 tracking-tight">AE Portal Sign In</h2>
-                <p class="text-xs text-slate-400 font-medium">Enter your credentials to unlock management modules.</p>
+                <span id="auth-icon" class="text-3xl bg-blue-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1">🔐</span>
+                <h2 id="auth-title" class="text-xl font-black text-slate-900 tracking-tight">AE Portal Sign In</h2>
+                <p id="auth-subtitle" class="text-xs text-slate-400 font-medium">Enter your credentials to unlock management modules.</p>
             </div>
 
-            <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-[11px] text-blue-900 font-semibold leading-relaxed">
-                💡 <strong>Demo Credentials:</strong><br>
+            <!-- DEMO INFORMATION ACCORDION / HINT BOX -->
+            <div id="demo-credentials-box" class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-[11px] text-blue-900 font-semibold leading-relaxed">
+                💡 <strong>Demo Administrator Credentials:</strong><br>
                 • Username: <span class="font-mono bg-blue-100 px-1 rounded text-blue-700">jozi_shopper</span><br>
                 • Password: <span class="font-mono bg-blue-100 px-1 rounded text-blue-700">password123</span>
             </div>
 
-            <form onsubmit="handlePortalSignIn(event)" class="space-y-4 text-xs">
+            <!-- DYNAMIC TARGET FORM ENGINE -->
+            <form id="portal-core-form" onsubmit="handleAuthFormSubmission(event)" class="space-y-4 text-xs">
+                <!-- Username Input (Shared) -->
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username or Handle</label>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username Handle</label>
                     <input type="text" id="auth-username" required placeholder="e.g., jozi_shopper"
                         class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
                 </div>
+
+                <!-- Email Input (Registration Only - Hidden by Default) -->
+                <div id="reg-email-wrapper" class="hidden">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Email Address</label>
+                    <input type="email" id="auth-email" placeholder="name@domain.co.za"
+                        class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                </div>
+
+                <!-- Password Input (Shared) -->
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Account Password</label>
                     <input type="password" id="auth-password" required placeholder="••••••••"
                         class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
                 </div>
-                <button type="submit" 
+                
+                <button type="submit" id="auth-submit-btn"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center text-xs">
                     Authorize Security Token
                 </button>
             </form>
+
+            <!-- AUTH SCREEN TOGGLE FOOTER -->
+            <div class="text-center pt-2 border-t border-slate-100">
+                <button type="button" onclick="toggleAuthMode()" id="auth-toggle-link" class="text-xs text-blue-600 hover:underline cursor-pointer font-bold">
+                    New customer? Register a new profile profile here
+                </button>
+            </div>
         </div>
     </div>
 
 
+    <!-- ========================================== -->
+    <!--            MAIN APPLICATION SITE           -->
+    <!-- ========================================== -->
     <div id="main-application-layout" class="hidden">
         
+        <!-- TOP GLOBAL STICKY HEADER -->
         <nav class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
@@ -54,8 +84,8 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <span class="hidden sm:flex bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-2.5 py-1 rounded-lg items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> Live Connection Verified
+                    <span id="user-welcome-badge" class="hidden md:inline text-xs text-slate-300 font-medium bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+                        Welcome, <strong class="text-white" id="current-user-display">--</strong>
                     </span>
                     <button onclick="handlePortalSignOut()" 
                         class="bg-rose-600/10 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/20 text-xs font-bold px-3 py-1.5 rounded-lg transition cursor-pointer flex items-center gap-1">
@@ -67,6 +97,7 @@
 
         <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
             
+            <!-- MODULE 1: ANALYTICS CONTROL PANEL & FILTERS -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-5 border-b border-slate-100 gap-4 mb-6">
                     <div>
@@ -92,6 +123,7 @@
                     </div>
                 </div>
 
+                <!-- INTERACTIVE CONTROL THRESHOLDS -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
                     <div>
                         <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
@@ -115,12 +147,16 @@
                     </div>
                 </div>
 
+                <!-- MAIN DATA RENDER GRID FOR TOP CUSTOMERS -->
                 <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    </div>
+                    <!-- Dynamic Cards Inject Here -->
+                </div>
             </div>
 
+            <!-- MODULE 2: SPLIT MATRIX (DEBTORS MATRIX & STOCK RESTOCK ENGINE) -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
+                <!-- OUTSTANDING DEBTS LEDGER -->
                 <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/10 lg:col-span-2">
                     <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div>
@@ -144,408 +180,518 @@
                                     <th class="pb-2.5 text-rose-700">Balance Owed</th>
                                     <th class="pb-2.5 text-right">Quick Ledger Action</th>
                                 </tr>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div>
-                            <div class="mb-4 border-b border-slate-100 pb-2">
-                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
-                                    <span>📦</span> Shelf Stock Warning Signals
-                                </h3>
-                                <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
-                            </div>
-                            <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
-                                </div>
-                        </div>
-                        <div class="pt-4 border-t border-slate-100 mt-4">
-                            <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
-                                <span>⚡</span> Simulate Live Store Checkout Sale
-                            </button>
-                        </div>
+                            </thead>
+                            <tbody id="debt-ledger-rows" class="text-xs divide-y divide-slate-100 font-medium">
+                                <!-- Debts dynamically inject here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 max-w-2xl mx-auto">
-                    <div class="border-b border-slate-100 pb-3 mb-5">
-                        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-slate-800">
-                            <span class="bg-blue-100 p-1.5 rounded-lg text-sm">👤</span> Manage Account Security
-                        </h3>
-                        <p class="text-[11px] text-slate-500 mt-0.5">Amend your public credentials and account access credentials securely.</p>
+                <!-- SHELF INVENTORY RESTOCK ENGINE -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-4 border-b border-slate-100 pb-2">
+                            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
+                                <span>📦</span> Shelf Stock Warning Signals
+                            </h3>
+                            <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
+                        </div>
+                        <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                            <!-- Warnings Injected Here -->
+                        </div>
                     </div>
-
-                    <form id="profile-update-form" onsubmit="handleProfileUpdate(event)" class="space-y-4 text-xs">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username Handle</label>
-                                <input type="text" id="profile-username" value="jozi_shopper" required
-                                    class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Email Address</label>
-                                <input type="email" id="profile-email" value="jozi_shopper@gmail.co.za" required
-                                    class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-mono text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
-                            </div>
-                        </div>
-
-                        <hr class="border-slate-100 my-2">
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">New Password (Optional)</label>
-                                <input type="password" id="profile-new-password" placeholder="Leave blank to keep unchanged"
-                                    class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Confirm New Password</label>
-                                <input type="password" id="profile-confirm-password" placeholder="Repeat new password"
-                                    class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
-                            </div>
-                        </div>
-
-                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5 mt-2">
-                            <label class="block text-[10px] font-black uppercase tracking-wider text-amber-800 mb-1.5">
-                                🔒 Security Check: Enter Current Password to Confirm Changes
-                            </label>
-                            <input type="password" id="profile-current-password" required placeholder="Type your current password"
-                                class="w-full bg-white border border-amber-300 p-2.5 rounded-lg font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20">
-                        </div>
-
-                        <div class="flex justify-end pt-2">
-                            <button type="submit" 
-                                class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center">
-                                Save Account Updates
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-            </main>
-
-            <footer class="text-center mt-8 pb-4">
-                <button onclick="togglePrivacyModal(true)" class="text-[11px] font-bold text-slate-400 hover:text-blue-600 transition cursor-pointer underline">
-                    View Legal Privacy Policy & Data Guarantee
-                </button>
-            </footer>
-        </div>
-
-        <div id="privacy-policy-modal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-            <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-5 md:p-6 shadow-xl border border-slate-200 flex flex-col justify-between">
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                        <h3 class="text-base font-black text-slate-900 flex items-center gap-1.5">
-                            <span>🛡️</span> Data Privacy & Safety Policy
-                        </h3>
-                        <button onclick="togglePrivacyModal(false)" class="text-slate-400 hover:text-slate-600 text-lg font-bold cursor-pointer p-1">✕</button>
+                    <div class="pt-4 border-t border-slate-100 mt-4">
+                        <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
+                            <span>⚡</span> Simulate Live Store Checkout Sale
+                        </button>
                     </div>
-                    
-                    <div class="text-slate-600 font-medium text-[11px] leading-relaxed space-y-3">
-                        <p><strong>Effective Date:</strong> June 15, 2026</p>
-                        <p>At AE Convenient Store, your data integrity is paramount. We process only the credentials required to keep your account operational (Username, Email, Hashed Passwords, and Store Credit Balances).</p>
-                        
-                        <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-blue-900 font-bold">
-                            🚫 <strong>Zero Third-Party Sharing:</strong> Your personal profile, contact information, and transactional histories will never be shared, sold, or distributed to any external third party, data broker, or marketer.
-                        </div>
-                        
-                        <p><strong>Profile Self-Management:</strong> You hold full authority to amend your credentials or update your passwords at any time directly through your account dashboard.</p>
-                    </div>
-                </div>
-
-                <div class="pt-4 border-t border-slate-100 mt-5 flex justify-end">
-                    <button onclick="togglePrivacyModal(false)" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-5 py-2 rounded-xl transition cursor-pointer">
-                        I Understand & Agree
-                    </button>
                 </div>
             </div>
-        </div>
 
-        <script>
-            // --- REAL-TIME LIVE SIMULATED BUSINESS DATA STATE (CURRENT YEAR: 2026) ---
-            const state = {
-                activeSalesTimeframe: 'monthly',
-                products: [
-                    { id: 1, name: "Fresh White Bread Roll", price: 18.50, stock: 12 },
-                    { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 3 }, 
-                    { id: 3, name: "Salted Potato Crisp Chips", price: 15.00, stock: 0 },  
-                    { id: 4, name: "Premium Coffee Granules", price: 45.00, stock: 5 }     
-                ],
-                users: [
-                    { email: "jozi_shopper@gmail.co.za", username: "jozi_shopper", credit: 63.00, max_credit: 200.00 },
-                    { email: "sipho.m@kasi.net", username: "sipho_kasi", credit: 280.00, max_credit: 500.00 },
-                    { email: "khanyisile_d@domain.za", username: "khanyi_star", credit: 150.00, max_credit: 400.00 },
-                    { email: "lerato_mokoena@gmail.com", username: "lerato_m", credit: 300.00, max_credit: 300.00 },
-                    { email: "dev_tester@store.com", username: "rapid_buyer", credit: 450.00, max_credit: 1000.00 }
-                ],
-                orders: [
-                    { id: "TX-901", username: "jozi_shopper", date: "2026-06-15", total: 37.00, summary: "Fresh White Bread Roll (x2)" },
-                    { id: "TX-902", username: "sipho_kasi", date: "2026-06-15", total: 110.00, summary: "Premium Coffee Granules (x2), Milk (x1)" },
-                    { id: "TX-801", username: "khanyi_star", date: "2026-06-10", total: 250.00, summary: "Bulk Grocery Package Fulfillment" },
-                    { id: "TX-802", username: "rapid_buyer", date: "2026-06-04", total: 550.00, summary: "Premium Multi-Box Goods Store Restock" },
-                    { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 95.00, summary: "Salted Potato Crisp Chips (x5), Bread (x1)" },
-                    { id: "TX-701", username: "sipho_kasi", date: "2026-04-18", total: 420.00, summary: "Month-End Household Stocking" },
-                    { id: "TX-702", username: "khanyi_star", date: "2026-03-22", total: 180.00, summary: "Coffee & Pantry Provisions" },
-                    { id: "TX-703", username: "lerato_m", date: "2026-02-11", total: 320.00, summary: "Mid-Quarter Family Hamper Pack" },
-                    { id: "TX-704", username: "jozi_shopper", date: "2026-01-29", total: 140.00, summary: "General Daily Dynamic Basket Checkouts" },
-                    { id: "TX-601", username: "rapid_buyer", date: "2025-11-05", total: 1200.00, summary: "End of Year Corporate Event Snack Catering" },
-                    { id: "TX-602", username: "lerato_m", date: "2025-09-14", total: 450.00, summary: "Spring Break Bulk Grocery Line Purchases" },
-                    { id: "TX-603", username: "sipho_kasi", date: "2025-08-20", total: 310.00, summary: "Winter Warmers & Coffee Stock Checkouts" }
-                ]
-            };
+            <!-- MODULE 3: USER PROFILE MANAGEMENT SECURITY COMPONENT -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 max-w-2xl mx-auto">
+                <div class="border-b border-slate-100 pb-3 mb-5">
+                    <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-slate-800">
+                        <span class="bg-blue-100 p-1.5 rounded-lg text-sm">👤</span> Manage Account Security
+                    </h3>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Amend your public credentials and account access credentials securely.</p>
+                </div>
 
-            // --- RUNTIME INTRUSION GATE CHECK ---
-            window.onload = function() {
-                evaluateSessionToken();
-            };
+                <form id="profile-update-form" onsubmit="handleProfileUpdate(event)" class="space-y-4 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username Handle</label>
+                            <input type="text" id="profile-username" value="" required
+                                class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Email Address</label>
+                            <input type="email" id="profile-email" value="" required
+                                class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-mono text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                        </div>
+                    </div>
 
-            function evaluateSessionToken() {
-                const isAuthenticated = sessionStorage.getItem('portal_active_session') === 'true';
+                    <hr class="border-slate-100 my-2">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">New Password (Optional)</label>
+                            <input type="password" id="profile-new-password" placeholder="Leave blank to keep unchanged"
+                                class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Confirm New Password</label>
+                            <input type="password" id="profile-confirm-password" placeholder="Repeat new password"
+                                class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5 mt-2">
+                        <label class="block text-[10px] font-black uppercase tracking-wider text-amber-800 mb-1.5">
+                            🔒 Security Check: Enter Current Password to Confirm Changes
+                        </label>
+                        <input type="password" id="profile-current-password" required placeholder="Type your current password"
+                            class="w-full bg-white border border-amber-300 p-2.5 rounded-lg font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20">
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" 
+                            class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center">
+                            Save Account Updates
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+
+        <!-- FOOTER PRIVACY MODAL BUTTON -->
+        <footer class="text-center mt-8 pb-4">
+            <button onclick="togglePrivacyModal(true)" class="text-[11px] font-bold text-slate-400 hover:text-blue-600 transition cursor-pointer underline">
+                View Legal Privacy Policy & Data Guarantee
+            </button>
+        </footer>
+    </div>
+
+    <!-- FIXED FLOATING PRIVACY POLICY SCREEN MODAL -->
+    <div id="privacy-policy-modal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-5 md:p-6 shadow-xl border border-slate-200 flex flex-col justify-between">
+            <div class="space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="text-base font-black text-slate-900 flex items-center gap-1.5">
+                        <span>🛡️</span> Data Privacy & Safety Policy
+                    </h3>
+                    <button onclick="togglePrivacyModal(false)" class="text-slate-400 hover:text-slate-600 text-lg font-bold cursor-pointer p-1">✕</button>
+                </div>
                 
-                if (isAuthenticated) {
-                    // Hide entry gate, expose workspace
-                    document.getElementById('auth-portal-screen').classList.add('hidden');
-                    document.getElementById('main-application-layout').classList.remove('hidden');
-                    refreshEntireUIPanel();
-                } else {
-                    // Lock interface, enforce gatehouse
-                    document.getElementById('auth-portal-screen').classList.remove('hidden');
-                    document.getElementById('main-application-layout').classList.add('hidden');
-                }
+                <div class="text-slate-600 font-medium text-[11px] leading-relaxed space-y-3">
+                    <p><strong>Effective Date:</strong> June 16, 2026</p>
+                    <p>At AE Convenient Store, your data integrity is paramount. We process only the credentials required to keep your account operational (Username, Email, Passwords, and Store Credit Balances).</p>
+                    
+                    <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-blue-900 font-bold">
+                        🚫 <strong>Zero Third-Party Sharing:</strong> Your personal profile, contact information, and transactional histories will never be shared, sold, or distributed to any external third party, data broker, or marketer.
+                    </div>
+                    
+                    <p><strong>Profile Self-Management:</strong> You hold full authority to amend your credentials or update your passwords at any time directly through your account dashboard.</p>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 mt-5 flex justify-end">
+                <button onclick="togglePrivacyModal(false)" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-5 py-2 rounded-xl transition cursor-pointer">
+                    I Understand & Agree
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE RUNTIME LOGIC ENGINE -->
+    <script>
+        // --- DATA STATE SCHEMA ---
+        const state = {
+            activeSalesTimeframe: 'monthly',
+            currentSessionUser: null, // Populated dynamically upon valid authorization
+            authScreenMode: 'login', // Tracks either 'login' or 'register'
+            products: [
+                { id: 1, name: "Fresh White Bread Roll", price: 18.50, stock: 12 },
+                { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 3 }, 
+                { id: 3, name: "Salted Potato Crisp Chips", price: 15.00, stock: 0 },  
+                { id: 4, name: "Premium Coffee Granules", price: 45.00, stock: 5 }     
+            ],
+            users: [
+                { email: "jozi_shopper@gmail.co.za", username: "jozi_shopper", password: "password123", credit: 63.00, max_credit: 200.00 },
+                { email: "sipho.m@kasi.net", username: "sipho_kasi", password: "password123", credit: 280.00, max_credit: 500.00 },
+                { email: "khanyisile_d@domain.za", username: "khanyi_star", password: "password123", credit: 150.00, max_credit: 400.00 },
+                { email: "lerato_mokoena@gmail.com", username: "lerato_m", password: "password123", credit: 300.00, max_credit: 300.00 },
+                { email: "dev_tester@store.com", username: "rapid_buyer", password: "password123", credit: 450.00, max_credit: 1000.00 }
+            ],
+            orders: [
+                { id: "TX-901", username: "jozi_shopper", date: "2026-06-15", total: 37.00, summary: "Fresh White Bread Roll (x2)" },
+                { id: "TX-902", username: "sipho_kasi", date: "2026-06-15", total: 110.00, summary: "Premium Coffee Granules (x2), Milk (x1)" },
+                { id: "TX-801", username: "khanyi_star", date: "2026-06-10", total: 250.00, summary: "Bulk Grocery Package Fulfillment" },
+                { id: "TX-802", username: "rapid_buyer", date: "2026-06-04", total: 550.00, summary: "Premium Multi-Box Goods Store Restock" },
+                { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 95.00, summary: "Salted Potato Crisp Chips (x5), Bread (x1)" },
+                { id: "TX-701", username: "sipho_kasi", date: "2026-04-18", total: 420.00, summary: "Month-End Household Stocking" },
+                { id: "TX-702", username: "khanyi_star", date: "2026-03-22", total: 180.00, summary: "Coffee & Pantry Provisions" },
+                { id: "TX-703", username: "lerato_m", date: "2026-02-11", total: 320.00, summary: "Mid-Quarter Family Hamper Pack" },
+                { id: "TX-704", username: "jozi_shopper", date: "2026-01-29", total: 140.00, summary: "General Daily Dynamic Basket Checkouts" }
+            ]
+        };
+
+        // --- GATEWAY RUNTIME CHECK ---
+        window.onload = function() {
+            evaluateSessionToken();
+        };
+
+        function evaluateSessionToken() {
+            const activeUserHandle = sessionStorage.getItem('portal_active_user');
+            
+            if (activeUserHandle) {
+                state.currentSessionUser = activeUserHandle;
+                document.getElementById('auth-portal-screen').classList.add('hidden');
+                document.getElementById('main-application-layout').classList.remove('hidden');
+                
+                // Establish current profile view data bind
+                document.getElementById('current-user-display').innerText = `@${activeUserHandle}`;
+                populateProfileFormInputs();
+                refreshEntireUIPanel();
+            } else {
+                state.currentSessionUser = null;
+                document.getElementById('auth-portal-screen').classList.remove('hidden');
+                document.getElementById('main-application-layout').classList.add('hidden');
             }
+        }
 
-            // --- LIVE GATEWAY PORTAL HANDLERS ---
-            function handlePortalSignIn(event) {
-                event.preventDefault();
-                const inputUser = document.getElementById('auth-username').value.trim();
-                const inputPass = document.getElementById('auth-password').value;
+        // --- REGISTRATION VS LOGIN INTERFACE TOGGLE ENGINE ---
+        function toggleAuthMode() {
+            const emailWrapper = document.getElementById('reg-email-wrapper');
+            const emailInput = document.getElementById('auth-email');
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            const icon = document.getElementById('auth-icon');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const toggleLink = document.getElementById('auth-toggle-link');
+            const hints = document.getElementById('demo-credentials-box');
 
-                // Match parameters against our demo baseline
-                if (inputUser === "jozi_shopper" && inputPass === "password123") {
-                    sessionStorage.setItem('portal_active_session', 'true');
+            if (state.authScreenMode === 'login') {
+                state.authScreenMode = 'register';
+                emailWrapper.classList.remove('hidden');
+                emailInput.required = true;
+                title.innerText = "Create Your Account";
+                subtitle.innerText = "Register a new profile to access your dashboard metrics.";
+                icon.innerText = "📝";
+                icon.className = "text-3xl bg-emerald-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1";
+                submitBtn.innerText = "Register Account Profile";
+                submitBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center text-xs";
+                toggleLink.innerText = "Already registered? Sign in instead";
+                hints.classList.add('hidden');
+            } else {
+                state.authScreenMode = 'login';
+                emailWrapper.classList.add('hidden');
+                emailInput.required = false;
+                title.innerText = "AE Portal Sign In";
+                subtitle.innerText = "Enter your credentials to unlock management modules.";
+                icon.innerText = "🔐";
+                icon.className = "text-3xl bg-blue-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1";
+                submitBtn.innerText = "Authorize Security Token";
+                submitBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center text-xs";
+                toggleLink.innerText = "New customer? Register a new profile profile here";
+                hints.classList.remove('hidden');
+            }
+        }
+
+        // --- UNIFIED GATEWAY CONTROLLER ---
+        function handleAuthFormSubmission(event) {
+            event.preventDefault();
+            const usernameInput = document.getElementById('auth-username').value.trim().toLowerCase();
+            const passwordInput = document.getElementById('auth-password').value;
+
+            if (state.authScreenMode === 'login') {
+                // RUN LOGIN MATCH
+                const userMatch = state.users.find(u => u.username.toLowerCase() === usernameInput && u.password === passwordInput);
+                if (userMatch) {
+                    sessionStorage.setItem('portal_active_user', userMatch.username);
                     evaluateSessionToken();
                 } else {
-                    alert("🚫 Access Denied: Invalid username handle or secure password profile match configuration.");
+                    alert("🚫 Access Denied: Invalid username handle or profile password configuration.");
                 }
-            }
-
-            function handlePortalSignOut() {
-                sessionStorage.removeItem('portal_active_session');
-                // Clear input values
-                document.getElementById('auth-username').value = '';
-                document.getElementById('auth-password').value = '';
-                evaluateSessionToken();
-            }
-
-            function refreshEntireUIPanel() {
-                renderTopCustomersGrid();
-                renderDebtOutstandingLedger();
-                renderShelfInventoryWarnings();
-            }
-
-            // --- SUB-SYSTEM 1: DYNAMIC TIMEFRAME FILTERS ---
-            function setSalesFilter(timeframe) {
-                state.activeSalesTimeframe = timeframe;
-                renderTopCustomersGrid();
-            }
-
-            function renderTopCustomersGrid() {
-                const targetGrid = document.getElementById('top-customers-render-target');
-                const topN = parseInt(document.getElementById('filter-top-n').value);
-                const minSpend = parseFloat(document.getElementById('filter-min-spend').value) || 0;
-                const dateBadge = document.getElementById('scope-date-badge');
-
-                const intervals = ['daily', 'monthly', 'biannual', 'annual'];
-                intervals.forEach(i => {
-                    const b = document.getElementById(`time-btn-${i}`);
-                    b.className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-transparent text-slate-600 hover:bg-slate-200/60";
-                });
-                document.getElementById(`time-btn-${state.activeSalesTimeframe}`).className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-blue-600 text-white shadow-sm";
-
-                const systemAnchorDate = new Date("2026-06-15");
-                let cutoffDate = new Date("2026-06-15");
-
-                if (state.activeSalesTimeframe === 'daily') {
-                    dateBadge.innerText = "June 15, 2026 (Today)";
-                } else if (state.activeSalesTimeframe === 'monthly') {
-                    dateBadge.innerText = "June 1, 2026 to Present";
-                    cutoffDate.setDate(1);
-                } else if (state.activeSalesTimeframe === 'biannual') {
-                    dateBadge.innerText = "Past 6 Months (Rolling)";
-                    cutoffDate.setMonth(systemAnchorDate.getMonth() - 6);
-                } else if (state.activeSalesTimeframe === 'annual') {
-                    dateBadge.innerText = "Past 12 Months (Rolling)";
-                    cutoffDate.setFullYear(systemAnchorDate.getFullYear() - 1);
-                }
-
-                const performanceMap = {};
-                state.users.forEach(u => { performanceMap[u.username] = 0; });
-
-                state.orders.forEach(o => {
-                    const orderDate = new Date(o.date);
-                    let checkPassed = false;
-
-                    if (state.activeSalesTimeframe === 'daily') {
-                        checkPassed = (o.date === "2026-06-15");
-                    } else {
-                        checkPassed = (orderDate >= cutoffDate && orderDate <= systemAnchorDate);
-                    }
-
-                    if (checkPassed && performanceMap.hasOwnProperty(o.username)) {
-                        performanceMap[o.username] += o.total;
-                    }
-                });
-
-                let rankedProfiles = state.users.map(u => ({
-                    ...u,
-                    computedSalesVolume: performanceMap[u.username] || 0
-                }));
-
-                rankedProfiles = rankedProfiles.filter(p => p.computedSalesVolume >= minSpend);
-                rankedProfiles.sort((a, b) => b.computedSalesVolume - a.computedSalesVolume);
-                const finalRenderSlice = rankedProfiles.slice(0, topN);
-
-                targetGrid.innerHTML = '';
-                if (finalRenderSlice.length === 0) {
-                    targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No results match your criteria.</div>`;
+            } else {
+                // RUN REGISTER ACTION
+                const emailInput = document.getElementById('auth-email').value.trim();
+                
+                // Guard: Check duplication constraints
+                const exists = state.users.some(u => u.username.toLowerCase() === usernameInput || u.email.toLowerCase() === emailInput.toLowerCase());
+                if (exists) {
+                    alert("⚠️ Registration Halted: That username or email profile already exists inside our store system database registry.");
                     return;
                 }
 
-                finalRenderSlice.forEach((p, index) => {
-                    let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium tier' : '🛍️ Core Account';
-                    targetGrid.innerHTML += `
-                        <div class="bg-white p-4.5 rounded-xl border border-slate-200 shadow-2xs hover:shadow-xs transition flex flex-col justify-between relative overflow-hidden">
-                            <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-1 text-slate-100 font-black text-6xl pointer-events-none select-none font-mono">#${index + 1}</div>
-                            <div class="space-y-1.5 relative z-10">
-                                <span class="inline-block text-[9px] uppercase font-black tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-100">${badgeMedal}</span>
-                                <h4 class="font-bold text-slate-900 text-base">@${p.username}</h4>
-                                <p class="text-[11px] text-slate-400 font-mono truncate">${p.email}</p>
+                // Append newly registered account directly into state runtime structure
+                state.users.push({
+                    username: usernameInput,
+                    email: emailInput,
+                    password: passwordInput,
+                    credit: 200.00, // Pre-assign a starting R200 store credit account tier balance cap
+                    max_credit: 200.00
+                });
+
+                alert("🎉 Registration Profile Generated Successfully!\n\nYou can now immediately pass through authentication checks using your newly defined credentials.");
+                
+                // Clear state inputs and flip window back to standard login matrix context
+                document.getElementById('auth-email').value = '';
+                document.getElementById('auth-username').value = usernameInput; // Pre-fill registration handle for ease
+                document.getElementById('auth-password').value = '';
+                toggleAuthMode();
+            }
+        }
+
+        function handlePortalSignOut() {
+            sessionStorage.removeItem('portal_active_user');
+            document.getElementById('auth-username').value = '';
+            document.getElementById('auth-password').value = '';
+            evaluateSessionToken();
+        }
+
+        function populateProfileFormInputs() {
+            const currentProfile = state.users.find(u => u.username === state.currentSessionUser);
+            if (currentProfile) {
+                document.getElementById('profile-username').value = currentProfile.username;
+                document.getElementById('profile-email').value = currentProfile.email;
+            }
+        }
+
+        function refreshEntireUIPanel() {
+            renderTopCustomersGrid();
+            renderDebtOutstandingLedger();
+            renderShelfInventoryWarnings();
+        }
+
+        // --- SUB-SYSTEM 1: DYNAMIC TIMEFRAME FILTERS ---
+        function setSalesFilter(timeframe) {
+            state.activeSalesTimeframe = timeframe;
+            renderTopCustomersGrid();
+        }
+
+        function renderTopCustomersGrid() {
+            const targetGrid = document.getElementById('top-customers-render-target');
+            const topN = parseInt(document.getElementById('filter-top-n').value);
+            const minSpend = parseFloat(document.getElementById('filter-min-spend').value) || 0;
+            const dateBadge = document.getElementById('scope-date-badge');
+
+            const intervals = ['daily', 'monthly', 'biannual', 'annual'];
+            intervals.forEach(i => {
+                const b = document.getElementById(`time-btn-${i}`);
+                b.className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-transparent text-slate-600 hover:bg-slate-200/60";
+            });
+            document.getElementById(`time-btn-${state.activeSalesTimeframe}`).className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-blue-600 text-white shadow-sm";
+
+            const systemAnchorDate = new Date("2026-06-16");
+            let cutoffDate = new Date("2026-06-16");
+
+            if (state.activeSalesTimeframe === 'daily') {
+                dateBadge.innerText = "June 16, 2026 (Today)";
+            } else if (state.activeSalesTimeframe === 'monthly') {
+                dateBadge.innerText = "June 1, 2026 to Present";
+                cutoffDate.setDate(1);
+            } else if (state.activeSalesTimeframe === 'biannual') {
+                dateBadge.innerText = "Past 6 Months (Rolling)";
+                cutoffDate.setMonth(systemAnchorDate.getMonth() - 6);
+            } else if (state.activeSalesTimeframe === 'annual') {
+                dateBadge.innerText = "Past 12 Months (Rolling)";
+                cutoffDate.setFullYear(systemAnchorDate.getFullYear() - 1);
+            }
+
+            const performanceMap = {};
+            state.users.forEach(u => { performanceMap[u.username] = 0; });
+
+            state.orders.forEach(o => {
+                const orderDate = new Date(o.date);
+                let checkPassed = false;
+
+                if (state.activeSalesTimeframe === 'daily') {
+                    checkPassed = (o.date === "2026-06-16");
+                } else {
+                    checkPassed = (orderDate >= cutoffDate && orderDate <= systemAnchorDate);
+                }
+
+                if (checkPassed && performanceMap.hasOwnProperty(o.username)) {
+                    performanceMap[o.username] += o.total;
+                }
+            });
+
+            let rankedProfiles = state.users.map(u => ({
+                ...u,
+                computedSalesVolume: performanceMap[u.username] || 0
+            }));
+
+            rankedProfiles = rankedProfiles.filter(p => p.computedSalesVolume >= minSpend);
+            rankedProfiles.sort((a, b) => b.computedSalesVolume - a.computedSalesVolume);
+            const finalRenderSlice = rankedProfiles.slice(0, topN);
+
+            targetGrid.innerHTML = '';
+            if (finalRenderSlice.length === 0) {
+                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No results match your criteria.</div>`;
+                return;
+            }
+
+            finalRenderSlice.forEach((p, index) => {
+                let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium tier' : '🛍️ Core Account';
+                targetGrid.innerHTML += `
+                    <div class="bg-white p-4.5 rounded-xl border border-slate-200 shadow-2xs hover:shadow-xs transition flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-1 text-slate-100 font-black text-6xl pointer-events-none select-none font-mono">#${index + 1}</div>
+                        <div class="space-y-1.5 relative z-10">
+                            <span class="inline-block text-[9px] uppercase font-black tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-100">${badgeMedal}</span>
+                            <h4 class="font-bold text-slate-900 text-base">@${p.username}</h4>
+                            <p class="text-[11px] text-slate-400 font-mono truncate">${p.email}</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-baseline relative z-10">
+                            <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Accumulated Sales:</span>
+                            <span class="text-xl font-black text-emerald-600">R${p.computedSalesVolume.toFixed(2)}</span>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // --- SUB-SYSTEM 2: DEBT OUTSTANDING LEDGER TRACKER ---
+        function renderDebtOutstandingLedger() {
+            const rowTarget = document.getElementById('debt-ledger-rows');
+            if (!rowTarget) return;
+            rowTarget.innerHTML = '';
+            let aggregateRiskPool = 0;
+
+            state.users.forEach(u => {
+                const maxCredit = u.max_credit || 200.00;
+                const outstandingDue = maxCredit - u.credit;
+
+                if (outstandingDue > 0) {
+                    aggregateRiskPool += outstandingDue;
+                    rowTarget.innerHTML += `
+                        <tr class="hover:bg-rose-50/40 text-slate-700">
+                            <td class="py-3 font-bold text-slate-900">@${u.username}</td>
+                            <td class="py-3 font-mono text-[11px] text-slate-400">${u.email}</td>
+                            <td class="py-3 text-slate-500">R${maxCredit.toFixed(2)}</td>
+                            <td class="py-3 font-black text-rose-600 bg-rose-50/20 px-2">R${outstandingDue.toFixed(2)}</td>
+                            <td class="py-3 text-right">
+                                <button onclick="settleEntireAccountDebt('${u.username}')" class="text-[10px] font-bold text-emerald-700 hover:bg-emerald-600 hover:text-white bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-100 transition cursor-pointer">Instant Settlement Clear 💵</button>
+                            </td>
+                        </tr>`;
+                }
+            });
+
+            if (aggregateRiskPool === 0) {
+                rowTarget.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs font-medium text-emerald-600 bg-emerald-50/40 rounded-xl border border-dashed border-emerald-100">🎉 Complete Liability Clearance: No outstanding tabs owed.</td></tr>`;
+            }
+            document.getElementById('global-debt-badge').innerText = `Total Open Risk: R${aggregateRiskPool.toFixed(2)}`;
+        }
+
+        function settleEntireAccountDebt(username) {
+            const user = state.users.find(u => u.username === username);
+            if (!user) return;
+            const maxCredit = user.max_credit || 200.00;
+            const outstandingDue = maxCredit - user.credit;
+
+            if (outstandingDue <= 0) return;
+
+            if (confirm(`Confirm physical cash or card swipe processing of R${outstandingDue.toFixed(2)} to clear @${username}'s store credit balance?`)) {
+                user.credit = maxCredit;
+                state.orders.push({ id: `PAY-${Math.floor(1000 + Math.random() * 9000)}`, username: username, date: "2026-06-16", total: outstandingDue, summary: "Full Credit Line Settlement" });
+                alert(`Account balance fully cleared for @${username}.`);
+                refreshEntireUIPanel();
+            }
+        }
+
+        // --- SUB-SYSTEM 3: INVENTORY RESTOCK & SALES SIMULATOR ---
+        function renderShelfInventoryWarnings() {
+            const warningBox = document.getElementById('stock-warning-box');
+            warningBox.innerHTML = '';
+            const criticallyLowProducts = state.products.filter(p => p.stock < 6);
+            criticallyLowProducts.sort((a, b) => a.stock - b.stock);
+
+            if (criticallyLowProducts.length === 0) {
+                warningBox.innerHTML = `<div class="p-4 bg-emerald-50 rounded-xl text-emerald-800 text-xs font-bold text-center border border-emerald-100">✓ All catalog lines maintain secure restock baselines.</div>`;
+            } else {
+                criticallyLowProducts.forEach(p => {
+                    const isZero = p.stock === 0;
+                    warningBox.innerHTML += `
+                        <div class="p-3 rounded-xl border flex justify-between items-center bg-white ${isZero ? 'border-rose-200' : 'border-slate-200'}">
+                            <div>
+                                <p class="text-xs font-bold text-slate-900">${p.name}</p>
+                                <p class="text-[10px] text-slate-400">Unit Price: R${p.price.toFixed(2)}</p>
                             </div>
-                            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-baseline relative z-10">
-                                <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Accumulated Sales:</span>
-                                <span class="text-xl font-black text-emerald-600">R${p.computedSalesVolume.toFixed(2)}</span>
-                            </div>
+                            <span class="text-[11px] font-black px-2 py-0.5 rounded ${isZero ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-800'}">${isZero ? '⚠️ Out of Stock' : `${p.stock} left`}</span>
                         </div>`;
                 });
             }
+        }
 
-            // --- ANSWER ENGINE LEDGER LINK ---
-            function renderDebtOutstandingLedger() {
-                const rowTarget = document.getElementById('debt-ledger-rows');
-                if (!rowTarget) return;
-                rowTarget.innerHTML = '';
-                let aggregateRiskPool = 0;
+        function triggerSimulatedSale() {
+            const availableProducts = state.products.filter(p => p.stock > 0);
+            if (availableProducts.length === 0) {
+                alert("Simulated Sale Blocked: All products are entirely out of stock.");
+                return;
+            }
+            const targetProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
+            const randomUser = state.users[Math.floor(Math.random() * state.users.length)];
+            
+            targetProduct.stock -= 1;
+            state.orders.push({ id: `TX-${Math.floor(100 + Math.random() * 900)}`, username: randomUser.username, date: "2026-06-16", total: targetProduct.price, summary: `${targetProduct.name} (x1)` });
+            alert(`Live Event: @${randomUser.username} bought 1x ${targetProduct.name} for R${targetProduct.price.toFixed(2)}.`);
+            refreshEntireUIPanel();
+        }
 
-                state.users.forEach(u => {
-                    const maxCredit = u.max_credit || 200.00;
-                    const outstandingDue = maxCredit - u.credit;
+        // --- SUB-SYSTEM 4: SECURITY MODIFICATIONS PANEL ---
+        function handleProfileUpdate(event) {
+            event.preventDefault();
+            const currentProfile = state.users.find(u => u.username === state.currentSessionUser);
+            if (!currentProfile) return;
 
-                    if (outstandingDue > 0) {
-                        aggregateRiskPool += outstandingDue;
-                        rowTarget.innerHTML += `
-                            <tr class="hover:bg-rose-50/40 text-slate-700">
-                                <td class="py-3 font-bold text-slate-900">@${u.username}</td>
-                                <td class="py-3 font-mono text-[11px] text-slate-400">${u.email}</td>
-                                <td class="py-3 text-slate-500">R${maxCredit.toFixed(2)}</td>
-                                <td class="py-3 font-black text-rose-600 bg-rose-50/20 px-2">R${outstandingDue.toFixed(2)}</td>
-                                <td class="py-3 text-right">
-                                    <button onclick="settleEntireAccountDebt('${u.username}')" class="text-[10px] font-bold text-emerald-700 hover:bg-emerald-600 hover:text-white bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-100 transition cursor-pointer">Instant Settlement Clear 💵</button>
-                                </td>
-                            </tr>`;
-                    }
-                });
+            const targetUser = document.getElementById('profile-username').value.trim();
+            const targetEmail = document.getElementById('profile-email').value.trim();
+            const currentPassCheck = document.getElementById('profile-current-password').value;
+            const newPassword = document.getElementById('profile-new-password').value;
+            const confirmPassword = document.getElementById('profile-confirm-password').value;
 
-                if (aggregateRiskPool === 0) {
-                    rowTarget.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs font-medium text-emerald-600 bg-emerald-50/40 rounded-xl border border-dashed border-emerald-100">🎉 Complete Liability Clearance: No outstanding tabs owed.</td></tr>`;
-                }
-                document.getElementById('global-debt-badge').innerText = `Total Open Risk: R${aggregateRiskPool.toFixed(2)}`;
+            // Security Gate: Enforce verification challenge matching existing password profile state
+            if (currentPassCheck !== currentProfile.password) {
+                alert("🔒 Protection Halt: The verification password entered does not match your active registry password profile.");
+                return;
             }
 
-            function settleEntireAccountDebt(username) {
-                const user = state.users.find(u => u.username === username);
-                if (!user) return;
-                const maxCredit = user.max_credit || 200.00;
-                const outstandingDue = maxCredit - user.credit;
-
-                if (outstandingDue <= 0) return;
-
-                if (confirm(`Confirm physical cash or card swipe processing of R${outstandingDue.toFixed(2)} to clear @${username}'s store credit balance?`)) {
-                    user.credit = maxCredit;
-                    state.orders.push({ id: `PAY-${Math.floor(1000 + Math.random() * 9000)}`, username: username, date: "2026-06-15", total: outstandingDue, summary: "Full Credit Line Settlement" });
-                    alert(`Account balance fully cleared for @${username}.`);
-                    refreshEntireUIPanel();
-                }
+            if (newPassword && newPassword !== confirmPassword) {
+                alert("Validation Error: Your new password inputs do not match.");
+                return;
             }
 
-            // --- CONTROLLER SUB-SYSTEMS ---
-            function renderShelfInventoryWarnings() {
-                const warningBox = document.getElementById('stock-warning-box');
-                warningBox.innerHTML = '';
-                const criticallyLowProducts = state.products.filter(p => p.stock < 6);
-                criticallyLowProducts.sort((a, b) => a.stock - b.stock);
-
-                if (criticallyLowProducts.length === 0) {
-                    warningBox.innerHTML = `<div class="p-4 bg-emerald-50 rounded-xl text-emerald-800 text-xs font-bold text-center border border-emerald-100">✓ All catalog lines maintain secure restock baselines.</div>`;
-                } else {
-                    criticallyLowProducts.forEach(p => {
-                        const isZero = p.stock === 0;
-                        warningBox.innerHTML += `
-                            <div class="p-3 rounded-xl border flex justify-between items-center bg-white ${isZero ? 'border-rose-200' : 'border-slate-200'}">
-                                <div>
-                                    <p class="text-xs font-bold text-slate-900">${p.name}</p>
-                                    <p class="text-[10px] text-slate-400">Unit Price: R${p.price.toFixed(2)}</p>
-                                </div>
-                                <span class="text-[11px] font-black px-2 py-0.5 rounded ${isZero ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-800'}">${isZero ? '⚠️ Out of Stock' : `${p.stock} left`}</span>
-                            </div>`;
-                    });
-                }
-            }
-
-            function triggerSimulatedSale() {
-                const availableProducts = state.products.filter(p => p.stock > 0);
-                if (availableProducts.length === 0) {
-                    alert("Simulated Sale Blocked: All products are entirely out of stock.");
+            // Check if user is renaming to a handle already taken by another profile account
+            if (targetUser.toLowerCase() !== currentProfile.username.toLowerCase()) {
+                const uniqueCheck = state.users.some(u => u.username.toLowerCase() === targetUser.toLowerCase());
+                if (uniqueCheck) {
+                    alert("⚠️ Handle Collision: The target username requested is already tied to another registered account.");
                     return;
                 }
-                const targetProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
-                const randomUser = state.users[Math.floor(Math.random() * state.users.length)];
-                
-                targetProduct.stock -= 1;
-                state.orders.push({ id: `TX-${Math.floor(100 + Math.random() * 900)}`, username: randomUser.username, date: "2026-06-15", total: targetProduct.price, summary: `${targetProduct.name} (x1)` });
-                alert(`Live Event: @${randomUser.username} bought 1x ${targetProduct.name} for R${targetProduct.price.toFixed(2)}.`);
-                refreshEntireUIPanel();
             }
 
-            function handleProfileUpdate(event) {
-                event.preventDefault();
-                const username = document.getElementById('profile-username').value;
-                const email = document.getElementById('profile-email').value;
-                const newPassword = document.getElementById('profile-new-password').value;
-                const confirmPassword = document.getElementById('profile-confirm-password').value;
+            // Patch state model mutations safely
+            currentProfile.username = targetUser;
+            currentProfile.email = targetEmail;
+            if (newPassword) currentProfile.password = newPassword;
 
-                if (newPassword && newPassword !== confirmPassword) {
-                    alert("Validation Error: Your new password inputs do not match.");
-                    return;
-                }
+            // Update session tracking variables to guarantee structural sync values
+            sessionStorage.setItem('portal_active_user', targetUser);
+            
+            alert("Simulation Success: Your profile modifications have been synchronized inside the runtime database state.");
+            
+            document.getElementById('profile-new-password').value = '';
+            document.getElementById('profile-confirm-password').value = '';
+            document.getElementById('profile-current-password').value = '';
+            evaluateSessionToken();
+        }
 
-                const userInstance = state.users.find(u => u.username === "jozi_shopper");
-                if (userInstance) {
-                    userInstance.username = username;
-                    userInstance.email = email;
-                }
-
-                alert("Simulation Success: Profile modifications saved to local variable data states.");
-                document.getElementById('profile-new-password').value = '';
-                document.getElementById('profile-confirm-password').value = '';
-                document.getElementById('profile-current-password').value = '';
-                refreshEntireUIPanel();
-            }
-
-            function togglePrivacyModal(shouldOpen) {
-                const modal = document.getElementById('privacy-policy-modal');
-                if (shouldOpen) modal.classList.remove('hidden');
-                else modal.classList.add('hidden');
-            }
-        </script>
-    </div>
+        function togglePrivacyModal(shouldOpen) {
+            const modal = document.getElementById('privacy-policy-modal');
+            if (shouldOpen) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
