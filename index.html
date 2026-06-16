@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AE Operations & Analytics Portal</title>
+    <title>AE Operations & Multi-Role Portal</title>
     <!-- Tailwind CSS Engine -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
@@ -19,33 +19,37 @@
             <div class="text-center space-y-1.5">
                 <span id="auth-icon" class="text-3xl bg-blue-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1">🔐</span>
                 <h2 id="auth-title" class="text-xl font-black text-slate-900 tracking-tight">AE Portal Sign In</h2>
-                <p id="auth-subtitle" class="text-xs text-slate-400 font-medium">Enter your credentials to unlock management modules.</p>
+                <p id="auth-subtitle" class="text-xs text-slate-400 font-medium">Enter credentials to safely route your access role.</p>
             </div>
 
-            <!-- DEMO INFORMATION ACCORDION / HINT BOX -->
+            <!-- DEMO CREDENTIALS ACCORDION HINT BOX -->
             <div id="demo-credentials-box" class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-[11px] text-blue-900 font-semibold leading-relaxed">
-                💡 <strong>Demo Administrator Credentials:</strong><br>
-                • Username: <span class="font-mono bg-blue-100 px-1 rounded text-blue-700">jozi_shopper</span><br>
-                • Password: <span class="font-mono bg-blue-100 px-1 rounded text-blue-700">password123</span>
+                💡 <strong>Role Routing Testing Accounts:</strong><br>
+                <div class="mt-1 border-b border-blue-100 pb-1 mb-1">
+                    <strong class="text-blue-700">👑 Store Administrator:</strong><br>
+                    • User: <span class="font-mono bg-blue-100 px-1 rounded">admin_exec</span> | Pass: <span class="font-mono bg-blue-100 px-1 rounded">admin123</span>
+                </div>
+                <div>
+                    <strong class="text-emerald-700">🛍️ Regular Customer Profile:</strong><br>
+                    • User: <span class="font-mono bg-emerald-100 px-1 rounded text-emerald-800">jozi_shopper</span> | Pass: <span class="font-mono bg-emerald-100 px-1 rounded text-emerald-800">password123</span>
+                </div>
             </div>
 
-            <!-- DYNAMIC TARGET FORM ENGINE -->
+            <!-- SYSTEM TARGET AUTH FORM -->
             <form id="portal-core-form" onsubmit="handleAuthFormSubmission(event)" class="space-y-4 text-xs">
-                <!-- Username Input (Shared) -->
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username Handle</label>
                     <input type="text" id="auth-username" required placeholder="e.g., jozi_shopper"
                         class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
                 </div>
 
-                <!-- Email Input (Registration Only - Hidden by Default) -->
+                <!-- Registration Email Input (Hidden during default login phase) -->
                 <div id="reg-email-wrapper" class="hidden">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Email Address</label>
                     <input type="email" id="auth-email" placeholder="name@domain.co.za"
                         class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
                 </div>
 
-                <!-- Password Input (Shared) -->
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Account Password</label>
                     <input type="password" id="auth-password" required placeholder="••••••••"
@@ -58,7 +62,7 @@
                 </button>
             </form>
 
-            <!-- AUTH SCREEN TOGGLE FOOTER -->
+            <!-- AUTH SWITCH FOOTER -->
             <div class="text-center pt-2 border-t border-slate-100">
                 <button type="button" onclick="toggleAuthMode()" id="auth-toggle-link" class="text-xs text-blue-600 hover:underline cursor-pointer font-bold">
                     New customer? Register a new profile profile here
@@ -73,19 +77,20 @@
     <!-- ========================================== -->
     <div id="main-application-layout" class="hidden">
         
-        <!-- TOP GLOBAL STICKY HEADER -->
+        <!-- MAIN STICKY NAVIGATION BAR -->
         <nav class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <span class="text-2xl bg-blue-600 p-1.5 rounded-xl shadow-xs">📊</span>
                     <div>
                         <h1 class="text-base font-black tracking-tight leading-none">AE Convenient Store</h1>
-                        <p class="text-[10px] text-slate-400 mt-0.5 font-medium">Live Executive Enterprise Dashboard</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5 font-medium" id="portal-role-descriptor">Dynamic Control Node Portal</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <span id="user-welcome-badge" class="hidden md:inline text-xs text-slate-300 font-medium bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-                        Welcome, <strong class="text-white" id="current-user-display">--</strong>
+                    <span class="inline-flex text-xs text-slate-300 font-medium bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 gap-1.5 items-center">
+                        <span id="role-badge" class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        Welcome, <strong class="text-white font-bold" id="current-user-display">--</strong>
                     </span>
                     <button onclick="handlePortalSignOut()" 
                         class="bg-rose-600/10 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/20 text-xs font-bold px-3 py-1.5 rounded-lg transition cursor-pointer flex items-center gap-1">
@@ -97,125 +102,162 @@
 
         <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
             
-            <!-- MODULE 1: ANALYTICS CONTROL PANEL & FILTERS -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-5 border-b border-slate-100 gap-4 mb-6">
-                    <div>
-                        <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>🏆</span> Customer Value Matrix Filter Engine
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-1">Isolate and analyze top-performing consumer expenditures by real-time chronological sliding windows.</p>
-                    </div>
-                    
-                    <div class="bg-slate-100 p-1 rounded-xl flex flex-wrap gap-1 w-full lg:w-auto border border-slate-200/60">
-                        <button onclick="setSalesFilter('daily')" id="time-btn-daily" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
-                            ☀️ Daily Sales
-                        </button>
-                        <button onclick="setSalesFilter('monthly')" id="time-btn-monthly" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
-                            📅 Monthly Sales
-                        </button>
-                        <button onclick="setSalesFilter('biannual')" id="time-btn-biannual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
-                            🔄 Bi-Annual Sales
-                        </button>
-                        <button onclick="setSalesFilter('annual')" id="time-btn-annual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
-                            🦅 Annual Sales
-                        </button>
-                    </div>
+            <!-- ========================================== -->
+            <!--   VIEW NODE A: CORE CUSTOMER PERSONAL HUB  -->
+            <!-- ========================================== -->
+            <div id="role-view-customer" class="hidden space-y-6">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl text-white p-6 shadow-sm">
+                    <h2 class="text-xl font-black tracking-tight">Your Personal Shopping Hub</h2>
+                    <p class="text-xs text-blue-100 max-w-xl mt-1">Review verified profile transactions, keep track of store credit tabs, and manage account authorization security structures.</p>
                 </div>
 
-                <!-- INTERACTIVE CONTROL THRESHOLDS -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
-                    <div>
-                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
-                        <select id="filter-top-n" onchange="renderTopCustomersGrid()" class="w-full bg-white border border-slate-200 p-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
-                            <option value="3">Show Top 3 Shoppers</option>
-                            <option value="5" selected>Show Top 5 Shoppers</option>
-                            <option value="10">Show Top 10 Shoppers</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Minimum Spending Value</label>
-                        <div class="relative">
-                            <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">R</span>
-                            <input type="number" id="filter-min-spend" oninput="renderTopCustomersGrid()" value="0" class="w-full bg-white border border-slate-200 pl-6 pr-2 py-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20" placeholder="0.00">
-                        </div>
-                    </div>
-                    <div class="flex flex-col justify-end">
-                        <div class="text-right text-xs text-slate-400 font-medium">
-                            Active Time Horizon Scope: <span id="scope-date-badge" class="font-bold text-blue-600 block text-sm mt-0.5">--</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MAIN DATA RENDER GRID FOR TOP CUSTOMERS -->
-                <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Dynamic Cards Inject Here -->
-                </div>
-            </div>
-
-            <!-- MODULE 2: SPLIT MATRIX (DEBTORS MATRIX & STOCK RESTOCK ENGINE) -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- OUTSTANDING DEBTS LEDGER -->
-                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/10 lg:col-span-2">
-                    <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <div>
-                            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-rose-800">
-                                <span class="bg-rose-100 p-1.5 rounded-lg text-sm">💳</span> Store Credit Outstanding Tab Tracker
-                            </h3>
-                            <p class="text-[11px] text-slate-500 mt-0.5">Real-time balances for users currently utilizing open house lines of store credit.</p>
-                        </div>
-                        <span id="global-debt-badge" class="bg-rose-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-xs">
-                            Total Open Risk: R0.00
-                        </span>
+                <!-- PERSONAL INVOICE PURSUIT LEDGER -->
+                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="border-b border-slate-100 pb-3 mb-4">
+                        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                            <span class="bg-blue-50 p-1.5 rounded-lg text-sm text-blue-600">🛍️</span> Your Itemized Purchase History
+                        </h3>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Verified chronological history of your successful checkouts at AE Convenient Store.</p>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[500px]">
+                        <table class="w-full text-left border-collapse min-w-[450px]">
                             <thead>
                                 <tr class="border-b border-slate-100 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
-                                    <th class="pb-2.5">Customer Handle</th>
-                                    <th class="pb-2.5">Email Context</th>
-                                    <th class="pb-2.5">Credit Window Limit</th>
-                                    <th class="pb-2.5 text-rose-700">Balance Owed</th>
-                                    <th class="pb-2.5 text-right">Quick Ledger Action</th>
+                                    <th class="pb-2.5">Invoice ID</th>
+                                    <th class="pb-2.5">Checkout Date</th>
+                                    <th class="pb-2.5">Itemized Summary Breakdown</th>
+                                    <th class="pb-2.5 text-right">Total Basket Paid</th>
                                 </tr>
                             </thead>
-                            <tbody id="debt-ledger-rows" class="text-xs divide-y divide-slate-100 font-medium">
-                                <!-- Debts dynamically inject here -->
+                            <tbody id="customer-personal-invoice-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
+                                <!-- Customer Specific Rows Inject Dynamically Here -->
                             </tbody>
                         </table>
                     </div>
                 </div>
-
-                <!-- SHELF INVENTORY RESTOCK ENGINE -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                    <div>
-                        <div class="mb-4 border-b border-slate-100 pb-2">
-                            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
-                                <span>📦</span> Shelf Stock Warning Signals
-                            </h3>
-                            <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
-                        </div>
-                        <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
-                            <!-- Warnings Injected Here -->
-                        </div>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 mt-4">
-                        <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
-                            <span>⚡</span> Simulate Live Store Checkout Sale
-                        </button>
-                    </div>
-                </div>
             </div>
 
-            <!-- MODULE 3: USER PROFILE MANAGEMENT SECURITY COMPONENT -->
+            <!-- ========================================== -->
+            <!--    VIEW NODE B: EXECUTIVE ADMIN SUITE      -->
+            <!-- ========================================== -->
+            <div id="role-view-admin" class="hidden space-y-6">
+                
+                <!-- EXECUTIVE VALUE MATRIX FILTER DASHBOARD -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-5 border-b border-slate-100 gap-4 mb-6">
+                        <div>
+                            <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                                <span>🏆</span> Customer Value Matrix Filter Engine (Admin Exclusive)
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-1">Isolate and analyze top-performing consumer expenditures by real-time chronological sliding windows.</p>
+                        </div>
+                        
+                        <div class="bg-slate-100 p-1 rounded-xl flex flex-wrap gap-1 w-full lg:w-auto border border-slate-200/60">
+                            <button onclick="setSalesFilter('daily')" id="time-btn-daily" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Daily Sales</button>
+                            <button onclick="setSalesFilter('monthly')" id="time-btn-monthly" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Monthly Sales</button>
+                            <button onclick="setSalesFilter('biannual')" id="time-btn-biannual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Bi-Annual Sales</button>
+                            <button onclick="setSalesFilter('annual')" id="time-btn-annual" class="flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">Annual Sales</button>
+                        </div>
+                    </div>
+
+                    <!-- INTERACTIVE CONTROL THRESHOLDS -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
+                            <select id="filter-top-n" onchange="renderTopCustomersGrid()" class="w-full bg-white border border-slate-200 p-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
+                                <option value="3">Show Top 3 Shoppers</option>
+                                <option value="5" selected>Show Top 5 Shoppers</option>
+                                <option value="10">Show Top 10 Shoppers</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Minimum Spending Value</label>
+                            <div class="relative">
+                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">R</span>
+                                <input type="number" id="filter-min-spend" oninput="renderTopCustomersGrid()" value="0" class="w-full bg-white border border-slate-200 pl-6 pr-2 py-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20" placeholder="0.00">
+                        </div>
+                        </div>
+                        <div class="flex flex-col justify-end">
+                            <div class="text-right text-xs text-slate-400 font-medium">
+                                Active Time Horizon Scope: <span id="scope-date-badge" class="font-bold text-blue-600 block text-sm mt-0.5">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MAIN CUSTOMER GRID -->
+                    <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Dynamic Analytics Cards Inject Here -->
+                    </div>
+                </div>
+
+                <!-- INVENTORY CONTROL & STORE CREDIT TABS SPLIT GRID -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- MASTER DEBTORS LEDGER -->
+                    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/10 lg:col-span-2">
+                        <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-rose-800">
+                                    <span class="bg-rose-100 p-1.5 rounded-lg text-sm">💳</span> Store Credit Outstanding Tab Tracker (Admin View)
+                                </h3>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Global ledger auditing user profiles carrying active store-financed line liabilities.</p>
+                            </div>
+                            <span id="global-debt-badge" class="bg-rose-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-xs">
+                                Total Open Risk: R0.00
+                            </span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[500px]">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+                                        <th class="pb-2.5">Customer Handle</th>
+                                        <th class="pb-2.5">Email Context</th>
+                                        <th class="pb-2.5">Credit Window Limit</th>
+                                        <th class="pb-2.5 text-rose-700">Balance Owed</th>
+                                        <th class="pb-2.5 text-right">Quick Ledger Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="debt-ledger-rows" class="text-xs divide-y divide-slate-100 font-medium">
+                                    <!-- Dynamic Debts Injected Here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SHELF STOCK INVENTORY & SIMULATOR CONTROL BOX -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="mb-4 border-b border-slate-100 pb-2">
+                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
+                                    <span>📦</span> Shelf Stock Warning Signals
+                                </h3>
+                                <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
+                            </div>
+                            <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                                <!-- Inventory Warnings Injected Here -->
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 mt-4">
+                            <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
+                                <span>⚡</span> Simulate Live Store Checkout Sale
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========================================== -->
+            <!--  MODULE 3: INTEGRATED ACCOUNT UPDATE PANEL -->
+            <!-- ========================================== -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 max-w-2xl mx-auto">
                 <div class="border-b border-slate-100 pb-3 mb-5">
                     <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-slate-800">
-                        <span class="bg-blue-100 p-1.5 rounded-lg text-sm">👤</span> Manage Account Security
+                        <span class="bg-blue-100 p-1.5 rounded-lg text-sm text-blue-600">👤</span> Manage Profile Settings
                     </h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Amend your public credentials and account access credentials securely.</p>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Amend active user records, emails, or password credentials.</p>
                 </div>
 
                 <form id="profile-update-form" onsubmit="handleProfileUpdate(event)" class="space-y-4 text-xs">
@@ -266,7 +308,7 @@
 
         </main>
 
-        <!-- FOOTER PRIVACY MODAL BUTTON -->
+        <!-- PRIVACY BUTTON FOOTER -->
         <footer class="text-center mt-8 pb-4">
             <button onclick="togglePrivacyModal(true)" class="text-[11px] font-bold text-slate-400 hover:text-blue-600 transition cursor-pointer underline">
                 View Legal Privacy Policy & Data Guarantee
@@ -274,9 +316,9 @@
         </footer>
     </div>
 
-    <!-- FIXED FLOATING PRIVACY POLICY SCREEN MODAL -->
+    <!-- DATA PRIVACY MODAL COMPONENT -->
     <div id="privacy-policy-modal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-5 md:p-6 shadow-xl border border-slate-200 flex flex-col justify-between">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 md:p-6 shadow-xl border border-slate-200 flex flex-col justify-between">
             <div class="space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <h3 class="text-base font-black text-slate-900 flex items-center gap-1.5">
@@ -288,12 +330,9 @@
                 <div class="text-slate-600 font-medium text-[11px] leading-relaxed space-y-3">
                     <p><strong>Effective Date:</strong> June 16, 2026</p>
                     <p>At AE Convenient Store, your data integrity is paramount. We process only the credentials required to keep your account operational (Username, Email, Passwords, and Store Credit Balances).</p>
-                    
                     <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-blue-900 font-bold">
                         🚫 <strong>Zero Third-Party Sharing:</strong> Your personal profile, contact information, and transactional histories will never be shared, sold, or distributed to any external third party, data broker, or marketer.
                     </div>
-                    
-                    <p><strong>Profile Self-Management:</strong> You hold full authority to amend your credentials or update your passwords at any time directly through your account dashboard.</p>
                 </div>
             </div>
 
@@ -305,13 +344,14 @@
         </div>
     </div>
 
-    <!-- LIVE RUNTIME LOGIC ENGINE -->
+    <!-- LIVE DATA RUNTIME ENGINE -->
     <script>
         // --- DATA STATE SCHEMA ---
         const state = {
             activeSalesTimeframe: 'monthly',
-            currentSessionUser: null, // Populated dynamically upon valid authorization
-            authScreenMode: 'login', // Tracks either 'login' or 'register'
+            currentSessionUser: null,    // Populated on successful auth pass
+            currentSessionRole: null,    // 'admin' or 'customer'
+            authScreenMode: 'login',     // 'login' or 'register'
             products: [
                 { id: 1, name: "Fresh White Bread Roll", price: 18.50, stock: 12 },
                 { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 3 }, 
@@ -319,11 +359,14 @@
                 { id: 4, name: "Premium Coffee Granules", price: 45.00, stock: 5 }     
             ],
             users: [
-                { email: "jozi_shopper@gmail.co.za", username: "jozi_shopper", password: "password123", credit: 63.00, max_credit: 200.00 },
-                { email: "sipho.m@kasi.net", username: "sipho_kasi", password: "password123", credit: 280.00, max_credit: 500.00 },
-                { email: "khanyisile_d@domain.za", username: "khanyi_star", password: "password123", credit: 150.00, max_credit: 400.00 },
-                { email: "lerato_mokoena@gmail.com", username: "lerato_m", password: "password123", credit: 300.00, max_credit: 300.00 },
-                { email: "dev_tester@store.com", username: "rapid_buyer", password: "password123", credit: 450.00, max_credit: 1000.00 }
+                // System Administrators
+                { email: "executive@store.co.za", username: "admin_exec", password: "admin123", role: "admin" },
+                // Store Customers
+                { email: "jozi_shopper@gmail.co.za", username: "jozi_shopper", password: "password123", role: "customer", credit: 63.00, max_credit: 200.00 },
+                { email: "sipho.m@kasi.net", username: "sipho_kasi", password: "password123", role: "customer", credit: 280.00, max_credit: 500.00 },
+                { email: "khanyisile_d@domain.za", username: "khanyi_star", password: "password123", role: "customer", credit: 150.00, max_credit: 400.00 },
+                { email: "lerato_mokoena@gmail.com", username: "lerato_m", password: "password123", role: "customer", credit: 300.00, max_credit: 300.00 },
+                { email: "dev_tester@store.com", username: "rapid_buyer", password: "password123", role: "customer", credit: 450.00, max_credit: 1000.00 }
             ],
             orders: [
                 { id: "TX-901", username: "jozi_shopper", date: "2026-06-15", total: 37.00, summary: "Fresh White Bread Roll (x2)" },
@@ -338,31 +381,51 @@
             ]
         };
 
-        // --- GATEWAY RUNTIME CHECK ---
+        // --- SESSION INITIALIZATION ---
         window.onload = function() {
             evaluateSessionToken();
         };
 
         function evaluateSessionToken() {
             const activeUserHandle = sessionStorage.getItem('portal_active_user');
+            const activeUserRole = sessionStorage.getItem('portal_active_role');
             
-            if (activeUserHandle) {
+            if (activeUserHandle && activeUserRole) {
                 state.currentSessionUser = activeUserHandle;
+                state.currentSessionRole = activeUserRole;
+                
                 document.getElementById('auth-portal-screen').classList.add('hidden');
                 document.getElementById('main-application-layout').classList.remove('hidden');
                 
-                // Establish current profile view data bind
+                // Adjust Welcome Navbar context elements
                 document.getElementById('current-user-display').innerText = `@${activeUserHandle}`;
+                const badge = document.getElementById('role-badge');
+                const descriptor = document.getElementById('portal-role-descriptor');
+                
+                // Toggle Application View Tree Nodes based on validated authorization claims
+                if (activeUserRole === 'admin') {
+                    badge.className = "w-2 h-2 rounded-full bg-amber-500 shadow-xs animate-pulse";
+                    descriptor.innerText = "Executive Enterprise Administrator Node";
+                    document.getElementById('role-view-admin').classList.remove('hidden');
+                    document.getElementById('role-view-customer').classList.add('hidden');
+                } else {
+                    badge.className = "w-2 h-2 rounded-full bg-emerald-500 shadow-xs";
+                    descriptor.innerText = "Verified Customer Portal Lounge";
+                    document.getElementById('role-view-customer').classList.remove('hidden');
+                    document.getElementById('role-view-admin').classList.add('hidden');
+                }
+
                 populateProfileFormInputs();
                 refreshEntireUIPanel();
             } else {
                 state.currentSessionUser = null;
+                state.currentSessionRole = null;
                 document.getElementById('auth-portal-screen').classList.remove('hidden');
                 document.getElementById('main-application-layout').classList.add('hidden');
             }
         }
 
-        // --- REGISTRATION VS LOGIN INTERFACE TOGGLE ENGINE ---
+        // --- LOGIN VS REGISTRATION RECONFIGURATOR ---
         function toggleAuthMode() {
             const emailWrapper = document.getElementById('reg-email-wrapper');
             const emailInput = document.getElementById('auth-email');
@@ -377,8 +440,8 @@
                 state.authScreenMode = 'register';
                 emailWrapper.classList.remove('hidden');
                 emailInput.required = true;
-                title.innerText = "Create Your Account";
-                subtitle.innerText = "Register a new profile to access your dashboard metrics.";
+                title.innerText = "Create Customer Account";
+                subtitle.innerText = "Register a profile to start tracking your purchases.";
                 icon.innerText = "📝";
                 icon.className = "text-3xl bg-emerald-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1";
                 submitBtn.innerText = "Register Account Profile";
@@ -390,7 +453,7 @@
                 emailWrapper.classList.add('hidden');
                 emailInput.required = false;
                 title.innerText = "AE Portal Sign In";
-                subtitle.innerText = "Enter your credentials to unlock management modules.";
+                subtitle.innerText = "Enter credentials to safely route your access role.";
                 icon.innerText = "🔐";
                 icon.className = "text-3xl bg-blue-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1";
                 submitBtn.innerText = "Authorize Security Token";
@@ -400,53 +463,53 @@
             }
         }
 
-        // --- UNIFIED GATEWAY CONTROLLER ---
+        // --- GATEWAY SIGN IN / REGISTRATION MANAGER ---
         function handleAuthFormSubmission(event) {
             event.preventDefault();
             const usernameInput = document.getElementById('auth-username').value.trim().toLowerCase();
             const passwordInput = document.getElementById('auth-password').value;
 
             if (state.authScreenMode === 'login') {
-                // RUN LOGIN MATCH
                 const userMatch = state.users.find(u => u.username.toLowerCase() === usernameInput && u.password === passwordInput);
                 if (userMatch) {
                     sessionStorage.setItem('portal_active_user', userMatch.username);
+                    sessionStorage.setItem('portal_active_role', userMatch.role);
                     evaluateSessionToken();
                 } else {
                     alert("🚫 Access Denied: Invalid username handle or profile password configuration.");
                 }
             } else {
-                // RUN REGISTER ACTION
                 const emailInput = document.getElementById('auth-email').value.trim();
-                
-                // Guard: Check duplication constraints
                 const exists = state.users.some(u => u.username.toLowerCase() === usernameInput || u.email.toLowerCase() === emailInput.toLowerCase());
+                
                 if (exists) {
                     alert("⚠️ Registration Halted: That username or email profile already exists inside our store system database registry.");
                     return;
                 }
 
-                // Append newly registered account directly into state runtime structure
+                // Force role claim explicitly to 'customer' upon public self-registration action
                 state.users.push({
                     username: usernameInput,
                     email: emailInput,
                     password: passwordInput,
-                    credit: 200.00, // Pre-assign a starting R200 store credit account tier balance cap
+                    role: "customer",
+                    credit: 200.00,
                     max_credit: 200.00
                 });
 
-                alert("🎉 Registration Profile Generated Successfully!\n\nYou can now immediately pass through authentication checks using your newly defined credentials.");
+                alert("🎉 Customer Profile Generated Successfully!\n\nYou can now immediately log into the platform with your credentials.");
                 
-                // Clear state inputs and flip window back to standard login matrix context
                 document.getElementById('auth-email').value = '';
-                document.getElementById('auth-username').value = usernameInput; // Pre-fill registration handle for ease
+                document.getElementById('auth-username').value = usernameInput;
                 document.getElementById('auth-password').value = '';
+                state.authScreenMode = 'register';
                 toggleAuthMode();
             }
         }
 
         function handlePortalSignOut() {
             sessionStorage.removeItem('portal_active_user');
+            sessionStorage.removeItem('portal_active_role');
             document.getElementById('auth-username').value = '';
             document.getElementById('auth-password').value = '';
             evaluateSessionToken();
@@ -461,12 +524,42 @@
         }
 
         function refreshEntireUIPanel() {
-            renderTopCustomersGrid();
-            renderDebtOutstandingLedger();
-            renderShelfInventoryWarnings();
+            if (state.currentSessionRole === 'admin') {
+                renderTopCustomersGrid();
+                renderDebtOutstandingLedger();
+                renderShelfInventoryWarnings();
+            } else if (state.currentSessionRole === 'customer') {
+                renderCustomerPersonalLedger();
+            }
         }
 
-        // --- SUB-SYSTEM 1: DYNAMIC TIMEFRAME FILTERS ---
+        // --- SUB-SYSTEM: CUSTOMER PERSONAL HISTORY LEDGER ---
+        function renderCustomerPersonalLedger() {
+            const rowTarget = document.getElementById('customer-personal-invoice-rows');
+            if (!rowTarget) return;
+
+            // Filter transactions exclusively matching active logged-in customer identity context
+            const personalizedOrders = state.orders.filter(o => o.username.toLowerCase() === state.currentSessionUser.toLowerCase());
+            
+            rowTarget.innerHTML = '';
+            if (personalizedOrders.length === 0) {
+                rowTarget.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-xs text-slate-400 font-medium border border-dashed border-slate-100 rounded-xl bg-slate-50/50">You have no checkout transactions recorded yet.</td></tr>`;
+                return;
+            }
+
+            personalizedOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+            personalizedOrders.forEach(o => {
+                rowTarget.innerHTML += `
+                    <tr class="hover:bg-slate-50/80">
+                        <td class="py-3 font-mono font-bold text-blue-600">${o.id}</td>
+                        <td class="py-3 text-slate-400 font-medium">${o.date}</td>
+                        <td class="py-3 font-semibold text-slate-800">${o.summary}</td>
+                        <td class="py-3 text-right font-black text-slate-900">R${o.total.toFixed(2)}</td>
+                    </tr>`;
+            });
+        }
+
+        // --- SUB-SYSTEM: ADMINISTRATIVE CONTROL SUITE METRICS ---
         function setSalesFilter(timeframe) {
             state.activeSalesTimeframe = timeframe;
             renderTopCustomersGrid();
@@ -481,9 +574,10 @@
             const intervals = ['daily', 'monthly', 'biannual', 'annual'];
             intervals.forEach(i => {
                 const b = document.getElementById(`time-btn-${i}`);
-                b.className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-transparent text-slate-600 hover:bg-slate-200/60";
+                if(b) b.className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-transparent text-slate-600 hover:bg-slate-200/60";
             });
-            document.getElementById(`time-btn-${state.activeSalesTimeframe}`).className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-blue-600 text-white shadow-sm";
+            const activeBtn = document.getElementById(`time-btn-${state.activeSalesTimeframe}`);
+            if(activeBtn) activeBtn.className = "flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-blue-600 text-white shadow-sm";
 
             const systemAnchorDate = new Date("2026-06-16");
             let cutoffDate = new Date("2026-06-16");
@@ -502,7 +596,7 @@
             }
 
             const performanceMap = {};
-            state.users.forEach(u => { performanceMap[u.username] = 0; });
+            state.users.forEach(u => { if(u.role === 'customer') performanceMap[u.username] = 0; });
 
             state.orders.forEach(o => {
                 const orderDate = new Date(o.date);
@@ -519,23 +613,23 @@
                 }
             });
 
-            let rankedProfiles = state.users.map(u => ({
+            let customerProfiles = state.users.filter(u => u.role === 'customer').map(u => ({
                 ...u,
                 computedSalesVolume: performanceMap[u.username] || 0
             }));
 
-            rankedProfiles = rankedProfiles.filter(p => p.computedSalesVolume >= minSpend);
-            rankedProfiles.sort((a, b) => b.computedSalesVolume - a.computedSalesVolume);
-            const finalRenderSlice = rankedProfiles.slice(0, topN);
+            customerProfiles = customerProfiles.filter(p => p.computedSalesVolume >= minSpend);
+            customerProfiles.sort((a, b) => b.computedSalesVolume - a.computedSalesVolume);
+            const finalRenderSlice = customerProfiles.slice(0, topN);
 
             targetGrid.innerHTML = '';
             if (finalRenderSlice.length === 0) {
-                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No results match your criteria.</div>`;
+                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No customer records found matching filter constraints.</div>`;
                 return;
             }
 
             finalRenderSlice.forEach((p, index) => {
-                let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium tier' : '🛍️ Core Account';
+                let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium tier' : '🛍️ Active Customer';
                 targetGrid.innerHTML += `
                     <div class="bg-white p-4.5 rounded-xl border border-slate-200 shadow-2xs hover:shadow-xs transition flex flex-col justify-between relative overflow-hidden">
                         <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-1 text-slate-100 font-black text-6xl pointer-events-none select-none font-mono">#${index + 1}</div>
@@ -552,14 +646,13 @@
             });
         }
 
-        // --- SUB-SYSTEM 2: DEBT OUTSTANDING LEDGER TRACKER ---
         function renderDebtOutstandingLedger() {
             const rowTarget = document.getElementById('debt-ledger-rows');
             if (!rowTarget) return;
             rowTarget.innerHTML = '';
             let aggregateRiskPool = 0;
 
-            state.users.forEach(u => {
+            state.users.filter(u => u.role === 'customer').forEach(u => {
                 const maxCredit = u.max_credit || 200.00;
                 const outstandingDue = maxCredit - u.credit;
 
@@ -579,7 +672,7 @@
             });
 
             if (aggregateRiskPool === 0) {
-                rowTarget.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs font-medium text-emerald-600 bg-emerald-50/40 rounded-xl border border-dashed border-emerald-100">🎉 Complete Liability Clearance: No outstanding tabs owed.</td></tr>`;
+                rowTarget.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs font-medium text-emerald-600 bg-emerald-50/40 rounded-xl border border-dashed border-emerald-100">🎉 Complete Liability Clearance: No outstanding customer balances.</td></tr>`;
             }
             document.getElementById('global-debt-badge').innerText = `Total Open Risk: R${aggregateRiskPool.toFixed(2)}`;
         }
@@ -592,7 +685,7 @@
 
             if (outstandingDue <= 0) return;
 
-            if (confirm(`Confirm physical cash or card swipe processing of R${outstandingDue.toFixed(2)} to clear @${username}'s store credit balance?`)) {
+            if (confirm(`Confirm physical payment processing of R${outstandingDue.toFixed(2)} to clear @${username}'s store credit balance?`)) {
                 user.credit = maxCredit;
                 state.orders.push({ id: `PAY-${Math.floor(1000 + Math.random() * 9000)}`, username: username, date: "2026-06-16", total: outstandingDue, summary: "Full Credit Line Settlement" });
                 alert(`Account balance fully cleared for @${username}.`);
@@ -600,9 +693,9 @@
             }
         }
 
-        // --- SUB-SYSTEM 3: INVENTORY RESTOCK & SALES SIMULATOR ---
         function renderShelfInventoryWarnings() {
             const warningBox = document.getElementById('stock-warning-box');
+            if(!warningBox) return;
             warningBox.innerHTML = '';
             const criticallyLowProducts = state.products.filter(p => p.stock < 6);
             criticallyLowProducts.sort((a, b) => a.stock - b.stock);
@@ -630,8 +723,9 @@
                 alert("Simulated Sale Blocked: All products are entirely out of stock.");
                 return;
             }
+            const customersOnly = state.users.filter(u => u.role === 'customer');
             const targetProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
-            const randomUser = state.users[Math.floor(Math.random() * state.users.length)];
+            const randomUser = customersOnly[Math.floor(Math.random() * customersOnly.length)];
             
             targetProduct.stock -= 1;
             state.orders.push({ id: `TX-${Math.floor(100 + Math.random() * 900)}`, username: randomUser.username, date: "2026-06-16", total: targetProduct.price, summary: `${targetProduct.name} (x1)` });
@@ -639,7 +733,7 @@
             refreshEntireUIPanel();
         }
 
-        // --- SUB-SYSTEM 4: SECURITY MODIFICATIONS PANEL ---
+        // --- SUB-SYSTEM: PROFILE PROFILE SECURITY CONFIGURATOR ---
         function handleProfileUpdate(event) {
             event.preventDefault();
             const currentProfile = state.users.find(u => u.username === state.currentSessionUser);
@@ -651,7 +745,6 @@
             const newPassword = document.getElementById('profile-new-password').value;
             const confirmPassword = document.getElementById('profile-confirm-password').value;
 
-            // Security Gate: Enforce verification challenge matching existing password profile state
             if (currentPassCheck !== currentProfile.password) {
                 alert("🔒 Protection Halt: The verification password entered does not match your active registry password profile.");
                 return;
@@ -662,24 +755,27 @@
                 return;
             }
 
-            // Check if user is renaming to a handle already taken by another profile account
             if (targetUser.toLowerCase() !== currentProfile.username.toLowerCase()) {
                 const uniqueCheck = state.users.some(u => u.username.toLowerCase() === targetUser.toLowerCase());
                 if (uniqueCheck) {
                     alert("⚠️ Handle Collision: The target username requested is already tied to another registered account.");
                     return;
                 }
+                
+                // Cascade update any orders tied to this user to protect history data-binding integrity
+                state.orders.forEach(o => {
+                    if (o.username.toLowerCase() === currentProfile.username.toLowerCase()) {
+                        o.username = targetUser;
+                    }
+                });
             }
 
-            // Patch state model mutations safely
             currentProfile.username = targetUser;
             currentProfile.email = targetEmail;
             if (newPassword) currentProfile.password = newPassword;
 
-            // Update session tracking variables to guarantee structural sync values
             sessionStorage.setItem('portal_active_user', targetUser);
-            
-            alert("Simulation Success: Your profile modifications have been synchronized inside the runtime database state.");
+            alert("Simulation Success: Account updates successfully synchronized inside runtime memory configuration.");
             
             document.getElementById('profile-new-password').value = '';
             document.getElementById('profile-confirm-password').value = '';
