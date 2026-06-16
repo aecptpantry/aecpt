@@ -90,21 +90,59 @@
         <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
             
             <div id="role-view-customer" class="hidden space-y-6">
-                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl text-white p-6 shadow-sm">
-                    <h2 class="text-xl font-black tracking-tight">Your Personal Shopping Hub</h2>
-                    <p class="text-xs text-blue-100 max-w-xl mt-1">Review verified profile transactions, browse active store inventory levels, and update your personal security files.</p>
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl text-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-black tracking-tight">Your Personal Shopping Hub</h2>
+                        <p class="text-xs text-blue-100 max-w-xl mt-1">Review verified profile transactions, browse active store inventory levels, and update your personal security files.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-xs border border-white/20 p-3 rounded-xl text-right">
+                        <span class="block text-[10px] uppercase font-bold text-blue-200 tracking-wider">Available Credit Line</span>
+                        <span id="customer-credit-display" class="text-lg font-black text-white">R0.00</span>
+                    </div>
                 </div>
 
-                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="border-b border-slate-100 pb-3 mb-5">
-                        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                            <span class="bg-emerald-50 p-1.5 rounded-lg text-sm text-emerald-600">🛒</span> Store Catalog & Live Shelf Stock
-                        </h3>
-                        <p class="text-[11px] text-slate-400 mt-0.5">Explore available stock lines. Click any product to simulate an instantaneous ledger purchase.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2 space-y-4">
+                        <div class="border-b border-slate-100 pb-3">
+                            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                                <span class="bg-emerald-50 p-1.5 rounded-lg text-sm text-emerald-600">🛒</span> Store Catalog & Live Shelf Stock
+                            </h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Explore available lines. Add products individually to build out your personalized shopping basket.</p>
+                        </div>
+
+                        <div id="customer-product-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            </div>
                     </div>
 
-                    <div id="customer-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="border-b border-slate-100 pb-3 mb-3">
+                                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-blue-900">
+                                    <span>🧺</span> Your Current Basket
+                                </h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Add, modify, or remove lines before submitting for ledger authorization.</p>
+                            </div>
+
+                            <div id="customer-basket-container" class="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
+                                </div>
                         </div>
+
+                        <div class="pt-4 border-t border-slate-100 space-y-3">
+                            <div class="flex justify-between items-center text-xs font-medium text-slate-500">
+                                <span>Cart Subtotal</span>
+                                <span id="basket-subtotal" class="font-bold text-slate-800">R0.00</span>
+                            </div>
+                            <div class="flex justify-between items-baseline pt-1">
+                                <span class="text-xs uppercase text-slate-400 font-bold tracking-wider">Total Owed</span>
+                                <span id="basket-total" class="text-2xl font-black text-slate-900">R0.00</span>
+                            </div>
+                            <button onclick="executeBasketCheckout()" id="basket-checkout-btn" disabled
+                                class="w-full bg-slate-100 text-slate-400 border border-slate-200 text-xs font-bold py-2.5 rounded-xl transition shadow-xs cursor-not-allowed text-center flex justify-center items-center gap-2">
+                                🔒 <span>Proceed To Checkout</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
@@ -171,9 +209,9 @@
                             <div>
                                 <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
                                 <select id="filter-top-n" onchange="renderTopCustomersGrid()" class="w-full bg-white border border-slate-200 p-2 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
-                                    <option value="3">Show Top 3 Shoppers</option>
-                                    <option value="5" selected>Show Top 5 Shoppers</option>
-                                    <option value="10">Show Top 10 Shoppers</option>
+                                    <option value="3">Show Top 3 Entries</option>
+                                    <option value="5" selected>Show Top 5 Entries</option>
+                                    <option value="10">Show Top 10 Entries</option>
                                 </select>
                             </div>
                             <div>
@@ -190,15 +228,24 @@
                             </div>
                         </div>
 
-                        <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            </div>
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-black tracking-widest text-slate-400 uppercase">Top Shoppers Revenue Stream</h3>
+                            <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-slate-100 space-y-4 mt-6">
+                            <h3 class="text-xs font-black tracking-widest text-slate-400 uppercase flex items-center gap-1.5">🔥 Best Selling Inventory Lines (By Unit Volume)</h3>
+                            <div id="top-products-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                </div>
+                        </div>
                     </div>
                 </div>
 
                 <div id="admin-section-inventory" class="hidden space-y-6">
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
-                            <div class="border-b border-slate-100 pb-3 mb-4">
+                        <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2 space-y-4">
+                            <div class="border-b border-slate-100 pb-3">
                                 <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-indigo-900">
                                     <span>📝</span> Master Stock Inventory & Catalog Management
                                 </h3>
@@ -213,7 +260,7 @@
                                             <th class="pb-2.5">Product Label/Name</th>
                                             <th class="pb-2.5 w-28">Unit Price</th>
                                             <th class="pb-2.5 w-24">Stock Level</th>
-                                            <th class="pb-2.5 text-right w-20">Actions</th>
+                                            <th class="pb-2.5 text-right w-24">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="admin-inventory-table-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
@@ -222,21 +269,54 @@
                             </div>
                         </div>
 
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                            <div>
-                                <div class="mb-4 border-b border-slate-100 pb-2">
-                                    <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5 text-blue-800">
-                                        <span>📦</span> Shelf Stock Warning Signals
+                        <div class="space-y-6">
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3.5">
+                                <div class="border-b border-slate-100 pb-2">
+                                    <h3 class="text-sm font-black text-slate-900 flex items-center gap-1.5 text-blue-600">
+                                        <span>➕</span> Provision New Inventory Line
                                     </h3>
-                                    <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
+                                    <p class="text-[10px] text-slate-400">Instantly deploy a new stock catalog item.</p>
                                 </div>
-                                <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                                <form id="admin-add-product-form" onsubmit="handleAdminAddProduct(event)" class="space-y-3 text-[11px]">
+                                    <div>
+                                        <label class="block font-bold text-slate-500 mb-1">Product Name / Descriptor</label>
+                                        <input type="text" id="new-p-name" required placeholder="e.g., Organic Bananas Bunch"
+                                            class="w-full bg-slate-50 border border-slate-200 p-2 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
                                     </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block font-bold text-slate-500 mb-1">Unit Price (ZAR)</label>
+                                            <input type="number" id="new-p-price" required step="0.01" min="0" placeholder="0.00"
+                                                class="w-full bg-slate-50 border border-slate-200 p-2 rounded-lg text-xs font-mono font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-bold text-slate-500 mb-1">Initial Base Stock</label>
+                                            <input type="number" id="new-p-stock" required min="0" placeholder="10"
+                                                class="w-full bg-slate-50 border border-slate-200 p-2 rounded-lg text-xs font-mono font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg transition cursor-pointer text-center text-xs shadow-xs">
+                                        Launch Product Line
+                                    </button>
+                                </form>
                             </div>
-                            <div class="pt-4 border-t border-slate-100 mt-4">
-                                <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
-                                    <span>⚡</span> Simulate Random Customer Sale
-                                </button>
+
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                                <div>
+                                    <div class="mb-4 border-b border-slate-100 pb-2">
+                                        <h3 class="text-sm font-black text-slate-900 flex items-center gap-1.5 text-amber-700">
+                                            <span>📦</span> Shelf Stock Warning Signals
+                                        </h3>
+                                        <p class="text-[10px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
+                                    </div>
+                                    <div id="stock-warning-box" class="space-y-2.5 max-h-[180px] overflow-y-auto pr-1">
+                                        </div>
+                                </div>
+                                <div class="pt-4 border-t border-slate-100 mt-4">
+                                    <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
+                                        <span>⚡</span> Simulate Random Customer Sale
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -413,6 +493,7 @@
             currentSessionUser: null,    
             currentSessionRole: null,    
             authScreenMode: 'login',     
+            customerBasket: [], // Live runtime tracker for adding/removing items individually
             products: [
                 { id: 1, name: "Fresh White Bread Roll", price: 18.50, stock: 12 },
                 { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 3 }, 
@@ -421,18 +502,18 @@
             ],
             users: [
                 { email: "executive@store.co.za", username: "admin_exec", password: "admin123", role: "admin" },
-                { email: "jozi_shopper@gmail.co.za", username: "jozi_shopper", password: "password123", role: "customer", credit: 63.00, max_credit: 200.00 },
-                { email: "sipho.m@kasi.net", username: "sipho_kasi", password: "password123", role: "customer", credit: 280.00, max_credit: 500.00 },
+                { email: "jozi_shopper@gmail.co.za", username: "jozi_shopper", password: "password123", role: "customer", credit: 137.00, max_credit: 200.00 },
+                { email: "sipho.m@kasi.net", username: "sipho_kasi", password: "password123", role: "customer", credit: 390.00, max_credit: 500.00 },
                 { email: "khanyisile_d@domain.za", username: "khanyi_star", password: "password123", role: "customer", credit: 150.00, max_credit: 400.00 },
                 { email: "lerato_mokoena@gmail.com", username: "lerato_m", password: "password123", role: "customer", credit: 300.00, max_credit: 300.00 },
                 { email: "dev_tester@store.com", username: "rapid_buyer", password: "password123", role: "customer", credit: 450.00, max_credit: 1000.00 }
             ],
             orders: [
-                { id: "TX-901", username: "jozi_shopper", date: "2026-06-15", total: 37.00, summary: "Fresh White Bread Roll (x2)" },
-                { id: "TX-902", username: "sipho_kasi", date: "2026-06-15", total: 110.00, summary: "Premium Coffee Granules (x2), Milk (x1)" },
-                { id: "TX-801", username: "khanyi_star", date: "2026-06-10", total: 250.00, summary: "Bulk Grocery Package Fulfillment" },
-                { id: "TX-802", username: "rapid_buyer", date: "2026-06-04", total: 550.00, summary: "Premium Multi-Box Goods Store Restock" },
-                { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 95.00, summary: "Salted Potato Crisp Chips (x5), Bread (x1)" }
+                { id: "TX-901", username: "jozi_shopper", date: "2026-06-15", total: 37.00, summary: "Fresh White Bread Roll (x2)", items: [{ name: "Fresh White Bread Roll", qty: 2 }] },
+                { id: "TX-902", username: "sipho_kasi", date: "2026-06-15", total: 112.00, summary: "Premium Coffee Granules (x2), Full Cream Milk (1 Litre) (x1)", items: [{ name: "Premium Coffee Granules", qty: 2 }, { name: "Full Cream Milk (1 Litre)", qty: 1 }] },
+                { id: "TX-801", username: "khanyi_star", date: "2026-06-10", total: 250.00, summary: "Fresh White Bread Roll (x10), Premium Coffee Granules (x1)", items: [{ name: "Fresh White Bread Roll", qty: 10 }, { name: "Premium Coffee Granules", qty: 1 }] },
+                { id: "TX-802", username: "rapid_buyer", date: "2026-06-04", total: 540.00, summary: "Premium Coffee Granules (x12)", items: [{ name: "Premium Coffee Granules", qty: 12 }] },
+                { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 93.50, summary: "Salted Potato Crisp Chips (x5), Fresh White Bread Roll (x1)", items: [{ name: "Salted Potato Crisp Chips", qty: 5 }, { name: "Fresh White Bread Roll", qty: 1 }] }
             ]
         };
 
@@ -467,6 +548,9 @@
                     descriptor.innerText = "Verified Customer Portal Lounge";
                     document.getElementById('role-view-customer').classList.remove('hidden');
                     document.getElementById('role-view-admin').classList.add('hidden');
+                    
+                    // Flush individual cart buffer on new logins to avoid cross-user state bleed
+                    state.customerBasket = [];
                 }
 
                 populateProfileFormInputs();
@@ -597,12 +681,17 @@
                 renderGlobalSalesLedger();
                 renderDebtOutstandingLedger();
             } else if (state.currentSessionRole === 'customer') {
+                const customerProfile = state.users.find(u => u.username === state.currentSessionUser);
+                if (customerProfile) {
+                    document.getElementById('customer-credit-display').innerText = `R${customerProfile.credit.toFixed(2)}`;
+                }
                 renderCustomerProductCatalog();
+                renderCustomerBasketSidebar();
                 renderCustomerPersonalLedger();
             }
         }
 
-        // --- CUSTOMER ACTIONS ---
+        // --- CUSTOMER ACTIONS & BASKET ARCHITECTURE ---
         function renderCustomerProductCatalog() {
             const catalogGrid = document.getElementById('customer-product-grid');
             if (!catalogGrid) return;
@@ -612,43 +701,178 @@
                 const outOfStock = p.stock === 0;
                 
                 catalogGrid.innerHTML += `
-                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between transition hover:shadow-xs">
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col justify-between transition hover:shadow-xs">
                         <div class="space-y-1">
                             <h4 class="font-bold text-slate-900 text-sm">${p.name}</h4>
                             <p class="text-xs text-slate-400 font-medium">Catalog Line #${p.id}</p>
                             <div class="pt-2">
-                                <span class="text-xs font-bold font-mono px-2 py-0.5 rounded ${outOfStock ? 'bg-rose-100 text-rose-700' : 'bg-slate-200 text-slate-700'}">
+                                <span class="text-xs font-bold font-mono px-2 py-0.5 rounded ${outOfStock ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-700'}">
                                     ${outOfStock ? '🚫 Out of Stock' : `📦 ${p.stock} Available`}
                                 </span>
                             </div>
                         </div>
                         <div class="mt-5 pt-3 border-t border-slate-200/60 flex items-center justify-between gap-2">
                             <span class="text-lg font-black text-slate-900">R${p.price.toFixed(2)}</span>
-                            <button onclick="executeCustomerPurchase(${p.id})" ${outOfStock ? 'disabled' : ''}
+                            <button onclick="addProductToBasket(${p.id})" ${outOfStock ? 'disabled' : ''}
                                 class="text-[11px] font-bold px-3 py-1.5 rounded-lg border transition cursor-pointer font-sans
-                                ${outOfStock ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed' : 'bg-emerald-600 text-white border-emerald-500 hover:bg-emerald-700'}">
-                                Buy Item
+                                ${outOfStock ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed' : 'bg-blue-600 text-white border-blue-500 hover:bg-blue-700'}">
+                                Add to Basket
                             </button>
                         </div>
                     </div>`;
             });
         }
 
-        function executeCustomerPurchase(productId) {
+        function addProductToBasket(productId) {
             const product = state.products.find(p => p.id === productId);
             if (!product || product.stock <= 0) return;
 
-            product.stock -= 1;
-            const newInvoice = {
-                id: `TX-${Math.floor(100 + Math.random() * 900)}`,
-                username: state.currentSessionUser,
-                date: "2026-06-16", 
-                total: product.price,
-                summary: `${product.name} (x1)`
-            };
+            const existingCartItem = state.customerBasket.find(item => item.id === productId);
             
-            state.orders.push(newInvoice);
-            alert(`🎉 Purchase Confirmed! Bought 1x ${product.name}.`);
+            // Check total added quantity against physical shelf restrictions
+            if (existingCartItem) {
+                if (existingCartItem.qty >= product.stock) {
+                    alert(`⚠️ Supply Constraint: Cannot exceed physical store allocation of ${product.stock} units for this item.`);
+                    return;
+                }
+                existingCartItem.qty += 1;
+            } else {
+                state.customerBasket.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    qty: 1
+                });
+            }
+
+            renderCustomerBasketSidebar();
+        }
+
+        function adjustBasketItemQuantity(productId, modifier) {
+            const item = state.customerBasket.find(i => i.id === productId);
+            const product = state.products.find(p => p.id === productId);
+            if (!item || !product) return;
+
+            const targetQty = item.qty + modifier;
+
+            if (targetQty <= 0) {
+                removeProductFromBasketCompletely(productId);
+                return;
+            }
+
+            if (modifier > 0 && targetQty > product.stock) {
+                alert(`⚠️ Supply Constraint: Max inventory allocation reached (${product.stock} units).`);
+                return;
+            }
+
+            item.qty = targetQty;
+            renderCustomerBasketSidebar();
+        }
+
+        function removeProductFromBasketCompletely(productId) {
+            state.customerBasket = state.customerBasket.filter(item => item.id !== productId);
+            renderCustomerBasketSidebar();
+        }
+
+        function renderCustomerBasketSidebar() {
+            const basketContainer = document.getElementById('customer-basket-container');
+            const subtotalDom = document.getElementById('basket-subtotal');
+            const totalDom = document.getElementById('basket-total');
+            const checkoutBtn = document.getElementById('basket-checkout-btn');
+            
+            if (!basketContainer) return;
+
+            basketContainer.innerHTML = '';
+            let basketTotalValue = 0;
+
+            if (state.customerBasket.length === 0) {
+                basketContainer.innerHTML = `
+                    <div class="py-12 text-center text-slate-400 font-medium text-xs border border-dashed border-slate-200 rounded-xl px-2">
+                        🛒 Your basket is entirely empty.<br>Select items from the catalog.
+                    </div>`;
+                subtotalDom.innerText = "R0.00";
+                totalDom.innerText = "R0.00";
+                checkoutBtn.disabled = true;
+                checkoutBtn.className = "w-full bg-slate-100 text-slate-400 border border-slate-200 text-xs font-bold py-2.5 rounded-xl transition shadow-xs cursor-not-allowed text-center flex justify-center items-center gap-2";
+                return;
+            }
+
+            state.customerBasket.forEach(item => {
+                const lineTotal = item.price * item.qty;
+                basketTotalValue += lineTotal;
+
+                basketContainer.innerHTML += `
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col justify-between gap-2 text-xs">
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h4 class="font-bold text-slate-800 leading-tight">${item.name}</h4>
+                                <p class="text-[10px] text-slate-400 mt-0.5 font-mono">R${item.price.toFixed(2)} each</p>
+                            </div>
+                            <button onclick="removeProductFromBasketCompletely(${item.id})" class="text-slate-400 hover:text-rose-600 transition cursor-pointer font-bold px-1" title="Drop Line Item">
+                                ✕
+                            </button>
+                        </div>
+                        <div class="flex justify-between items-center pt-1 border-t border-slate-200/50">
+                            <div class="flex items-center bg-white border border-slate-200 rounded-md overflow-hidden">
+                                <button onclick="adjustBasketItemQuantity(${item.id}, -1)" class="px-2 py-0.5 text-slate-500 hover:bg-slate-100 font-black cursor-pointer">-</button>
+                                <span class="px-2.5 font-mono font-bold text-slate-800 text-[11px]">${item.qty}</span>
+                                <button onclick="adjustBasketItemQuantity(${item.id}, 1)" class="px-2 py-0.5 text-slate-500 hover:bg-slate-100 font-black cursor-pointer">+</button>
+                            </div>
+                            <span class="font-black text-slate-900 font-mono">R${lineTotal.toFixed(2)}</span>
+                        </div>
+                    </div>`;
+            });
+
+            subtotalDom.innerText = `R${basketTotalValue.toFixed(2)}`;
+            totalDom.innerText = `R${basketTotalValue.toFixed(2)}`;
+            
+            // Enable checkout processing node
+            checkoutBtn.disabled = false;
+            checkoutBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition shadow-xs cursor-pointer text-center flex justify-center items-center gap-2 text-xs";
+        }
+
+        function executeBasketCheckout() {
+            if (state.customerBasket.length === 0) return;
+
+            const customerProfile = state.users.find(u => u.username === state.currentSessionUser);
+            if (!customerProfile) return;
+
+            let basketTotalValue = state.customerBasket.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            // Credit boundary audit guard
+            if (basketTotalValue > customerProfile.credit) {
+                alert(`🚫 Liquidity Rejection: Total basket value (R${basketTotalValue.toFixed(2)}) exceeds your available financing allowance (R${customerProfile.credit.toFixed(2)}). Remove items or settle open line balances before retry.`);
+                return;
+            }
+
+            // Deduct system values from inventory logs and customer ledger limits
+            customerProfile.credit -= basketTotalValue;
+
+            // Apply stock allocations sequentially
+            state.customerBasket.forEach(cartItem => {
+                const liveProduct = state.products.find(p => p.id === cartItem.id);
+                if (liveProduct) {
+                    liveProduct.stock = Math.max(0, liveProduct.stock - cartItem.qty);
+                }
+            });
+
+            // Format dynamic ledger invoice parameters
+            const itemizedSummary = state.customerBasket.map(i => `${i.name} (x${i.qty})`).join(', ');
+            const serializedItemsArray = state.customerBasket.map(i => ({ name: i.name, qty: i.qty }));
+
+            const newInvoiceId = `TX-${Math.floor(100 + Math.random() * 900)}`;
+            state.orders.push({
+                id: newInvoiceId,
+                username: state.currentSessionUser,
+                date: "2026-06-16",
+                total: basketTotalValue,
+                summary: itemizedSummary,
+                items: serializedItemsArray
+            });
+
+            // Flush dynamic client state values
+            state.customerBasket = [];
+            alert(`🎉 Invoice ${newInvoiceId} Approved! R${basketTotalValue.toFixed(2)} written against account finance terms.`);
             refreshEntireUIPanel();
         }
 
@@ -664,7 +888,8 @@
                 return;
             }
 
-            personalizedOrders.forEach(o => {
+            // Show newest transactions first for chronological readability
+            [...personalizedOrders].reverse().forEach(o => {
                 rowTarget.innerHTML += `
                     <tr class="hover:bg-slate-50/80">
                         <td class="py-3 font-mono font-bold text-blue-600">${o.id}</td>
@@ -731,10 +956,14 @@
                             <input type="number" id="edit-p-stock-${p.id}" value="${p.stock}" min="0" 
                                 class="bg-transparent hover:bg-slate-100 focus:bg-white border-none focus:ring-2 focus:ring-blue-500/20 px-2 py-1 rounded font-mono font-bold text-slate-700 w-20 transition">
                         </td>
-                        <td class="py-3 text-right">
+                        <td class="py-3 text-right space-x-1">
                             <button onclick="saveAdminProductUpdates(${p.id})" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1 rounded-lg shadow-2xs transition text-[11px] cursor-pointer">
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2.5 py-1 rounded-lg shadow-2xs transition text-[11px] cursor-pointer">
                                 Save
+                            </button>
+                            <button onclick="deleteAdminProduct(${p.id})" 
+                                class="bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white border border-rose-200 hover:border-rose-600 font-bold px-2 py-1 rounded-lg transition text-[11px] cursor-pointer">
+                                Remove
                             </button>
                         </td>
                     </tr>`;
@@ -762,6 +991,33 @@
             refreshEntireUIPanel();
         }
 
+        function handleAdminAddProduct(event) {
+            event.preventDefault();
+            const name = document.getElementById('new-p-name').value.trim();
+            const price = parseFloat(document.getElementById('new-p-price').value);
+            const stock = parseInt(document.getElementById('new-p-stock').value);
+
+            const nextId = state.products.length > 0 ? Math.max(...state.products.map(p => p.id)) + 1 : 1;
+            
+            state.products.push({ id: nextId, name, price, stock });
+            
+            alert(`🎉 Success: "${name}" registered into catalog under Line ID #${nextId}`);
+            document.getElementById('admin-add-product-form').reset();
+            refreshEntireUIPanel();
+        }
+
+        function deleteAdminProduct(productId) {
+            const targetIndex = state.products.findIndex(p => p.id === productId);
+            if (targetIndex === -1) return;
+            
+            if (confirm(`⚠️ Deletion Warning: Are you sure you want to permanently strip "${state.products[targetIndex].name}" from active store schemas?`)) {
+                // If customers have this item cached in their active carts, remove it safely
+                state.customerBasket = state.customerBasket.filter(item => item.id !== productId);
+                state.products.splice(targetIndex, 1);
+                refreshEntireUIPanel();
+            }
+        }
+
         // --- VALUE ANALYTICS CONTROLS ---
         function setSalesFilter(timeframe) {
             state.activeSalesTimeframe = timeframe;
@@ -770,7 +1026,8 @@
 
         function renderTopCustomersGrid() {
             const targetGrid = document.getElementById('top-customers-render-target');
-            if (!targetGrid) return;
+            const targetProductGrid = document.getElementById('top-products-render-target');
+            if (!targetGrid || !targetProductGrid) return;
             
             const topN = parseInt(document.getElementById('filter-top-n').value);
             const minSpend = parseFloat(document.getElementById('filter-min-spend').value) || 0;
@@ -800,7 +1057,10 @@
                 cutoffDate.setFullYear(systemAnchorDate.getFullYear() - 1);
             }
 
+            // --- COMPUTATION MAPS ---
             const performanceMap = {};
+            const productSalesMap = {};
+            
             state.users.forEach(u => { if(u.role === 'customer') performanceMap[u.username] = 0; });
 
             state.orders.forEach(o => {
@@ -813,11 +1073,19 @@
                     checkPassed = (orderDate >= cutoffDate && orderDate <= systemAnchorDate);
                 }
 
-                if (checkPassed && performanceMap.hasOwnProperty(o.username)) {
-                    performanceMap[o.username] += o.total;
+                if (checkPassed) {
+                    if (performanceMap.hasOwnProperty(o.username)) {
+                        performanceMap[o.username] += o.total;
+                    }
+                    if (o.items && Array.isArray(o.items)) {
+                        o.items.forEach(item => {
+                            productSalesMap[item.name] = (productSalesMap[item.name] || 0) + item.qty;
+                        });
+                    }
                 }
             });
 
+            // --- RENDER CUSTOMERS ---
             let customerProfiles = state.users.filter(u => u.role === 'customer').map(u => ({
                 ...u,
                 computedSalesVolume: performanceMap[u.username] || 0
@@ -829,26 +1097,53 @@
 
             targetGrid.innerHTML = '';
             if (finalRenderSlice.length === 0) {
-                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No results match filters.</div>`;
-                return;
+                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No customer metrics found.</div>`;
+            } else {
+                finalRenderSlice.forEach((p, index) => {
+                    let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite Tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium Tier' : '🛍️ Active Customer';
+                    targetGrid.innerHTML += `
+                        <div class="bg-white p-4.5 rounded-xl border border-slate-200 shadow-2xs hover:shadow-xs transition flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-1 text-slate-100 font-black text-6xl pointer-events-none select-none font-mono">#${index + 1}</div>
+                            <div class="space-y-1.5 relative z-10">
+                                <span class="inline-block text-[9px] uppercase font-black tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-100">${badgeMedal}</span>
+                                <h4 class="font-bold text-slate-900 text-base">@${p.username}</h4>
+                                <p class="text-[11px] text-slate-400 font-mono truncate">${p.email}</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-baseline relative z-10">
+                                <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Total Value:</span>
+                                <span class="text-xl font-black text-emerald-600">R${p.computedSalesVolume.toFixed(2)}</span>
+                            </div>
+                        </div>`;
+                });
             }
 
-            finalRenderSlice.forEach((p, index) => {
-                let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite Tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium Tier' : '🛍️ Active Customer';
-                targetGrid.innerHTML += `
-                    <div class="bg-white p-4.5 rounded-xl border border-slate-200 shadow-2xs hover:shadow-xs transition flex flex-col justify-between relative overflow-hidden">
-                        <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-1 text-slate-100 font-black text-6xl pointer-events-none select-none font-mono">#${index + 1}</div>
-                        <div class="space-y-1.5 relative z-10">
-                            <span class="inline-block text-[9px] uppercase font-black tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-100">${badgeMedal}</span>
-                            <h4 class="font-bold text-slate-900 text-base">@${p.username}</h4>
-                            <p class="text-[11px] text-slate-400 font-mono truncate">${p.email}</p>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-baseline relative z-10">
-                            <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Total Value:</span>
-                            <span class="text-xl font-black text-emerald-600">R${p.computedSalesVolume.toFixed(2)}</span>
-                        </div>
-                    </div>`;
-            });
+            // --- RENDER PRODUCTS ---
+            let productRankings = Object.keys(productSalesMap).map(name => ({
+                name: name,
+                unitsSold: productSalesMap[name]
+            }));
+            
+            productRankings.sort((a, b) => b.unitsSold - a.unitsSold);
+            const productSlice = productRankings.slice(0, topN);
+
+            targetProductGrid.innerHTML = '';
+            if (productSlice.length === 0) {
+                targetProductGrid.innerHTML = `<div class="col-span-full py-6 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No sales metrics recorded for this timeline frame.</div>`;
+            } else {
+                productSlice.forEach((prod, index) => {
+                    targetProductGrid.innerHTML += `
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between relative">
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md">Rank #${index + 1}</span>
+                                <h4 class="font-extrabold text-slate-800 text-xs pt-1.5 line-clamp-2">${prod.name}</h4>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-slate-200 flex justify-between items-center text-xs">
+                                <span class="text-slate-400 font-semibold">Volume Output:</span>
+                                <span class="font-black text-slate-900">${prod.unitsSold} units</span>
+                            </div>
+                        </div>`;
+                });
+            }
         }
 
         // --- CREDIT MANAGEMENT ---
@@ -919,7 +1214,14 @@
             if (availableProducts.length === 0) return;
             const targetProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
             targetProduct.stock -= 1;
-            state.orders.push({ id: `TX-${Math.floor(100 + Math.random() * 900)}`, username: "jozi_shopper", date: "2026-06-16", total: targetProduct.price, summary: `${targetProduct.name} (x1)` });
+            state.orders.push({ 
+                id: `TX-${Math.floor(100 + Math.random() * 900)}`, 
+                username: "jozi_shopper", 
+                date: "2026-06-16", 
+                total: targetProduct.price, 
+                summary: `${targetProduct.name} (x1)`,
+                items: [{ name: targetProduct.name, qty: 1 }]
+            });
             alert(`Live Simulation: 1x ${targetProduct.name} bought by customer.`);
             refreshEntireUIPanel();
         }
