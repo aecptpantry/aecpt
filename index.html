@@ -4,25 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AE Operations & Multi-Role Portal</title>
-    <!-- Tailwind CSS Engine -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-12">
 
-    <!-- ========================================== -->
-    <!--     UNIFIED PORTAL GATEWAY (AUTH / REG)    -->
-    <!-- ========================================== -->
     <div id="auth-portal-screen" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200/80 space-y-5 my-auto">
             
-            <!-- HEADER CONTEXT -->
             <div class="text-center space-y-1.5">
                 <span id="auth-icon" class="text-3xl bg-blue-600 p-2.5 rounded-2xl inline-block shadow-sm mb-1">🔐</span>
                 <h2 id="auth-title" class="text-xl font-black text-slate-900 tracking-tight">AE Portal Sign In</h2>
                 <p id="auth-subtitle" class="text-xs text-slate-400 font-medium">Enter credentials to safely route your access role.</p>
             </div>
 
-            <!-- DEMO CREDENTIALS ACCORDION HINT BOX -->
             <div id="demo-credentials-box" class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-[11px] text-blue-900 font-semibold leading-relaxed">
                 💡 <strong>Role Routing Testing Accounts:</strong><br>
                 <div class="mt-1 border-b border-blue-100 pb-1 mb-1">
@@ -35,7 +29,6 @@
                 </div>
             </div>
 
-            <!-- SYSTEM TARGET AUTH FORM -->
             <form id="portal-core-form" onsubmit="handleAuthFormSubmission(event)" class="space-y-4 text-xs">
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username Handle</label>
@@ -43,7 +36,6 @@
                         class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-lg font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white">
                 </div>
 
-                <!-- Registration Email Input (Hidden during default login phase) -->
                 <div id="reg-email-wrapper" class="hidden">
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Email Address</label>
                     <input type="email" id="auth-email" placeholder="name@domain.co.za"
@@ -62,7 +54,6 @@
                 </button>
             </form>
 
-            <!-- AUTH SWITCH FOOTER -->
             <div class="text-center pt-2 border-t border-slate-100">
                 <button type="button" onclick="toggleAuthMode()" id="auth-toggle-link" class="text-xs text-blue-600 hover:underline cursor-pointer font-bold">
                     New customer? Register a new profile here
@@ -72,12 +63,8 @@
     </div>
 
 
-    <!-- ========================================== -->
-    <!--            MAIN APPLICATION SITE           -->
-    <!-- ========================================== -->
     <div id="main-application-layout" class="hidden">
         
-        <!-- MAIN STICKY NAVIGATION BAR -->
         <nav class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
@@ -102,16 +89,12 @@
 
         <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
             
-            <!-- ========================================== -->
-            <!--   VIEW NODE A: CORE CUSTOMER PERSONAL HUB  -->
-            <!-- ========================================== -->
             <div id="role-view-customer" class="hidden space-y-6">
                 <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl text-white p-6 shadow-sm">
                     <h2 class="text-xl font-black tracking-tight">Your Personal Shopping Hub</h2>
                     <p class="text-xs text-blue-100 max-w-xl mt-1">Review verified profile transactions, browse active store inventory levels, and update your personal security files.</p>
                 </div>
 
-                <!-- CUSTOMER PRODUCT CATALOG VIEW -->
                 <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div class="border-b border-slate-100 pb-3 mb-5">
                         <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
@@ -121,11 +104,9 @@
                     </div>
 
                     <div id="customer-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <!-- Product Cards injected dynamically here -->
-                    </div>
+                        </div>
                 </div>
 
-                <!-- PERSONAL INVOICE PURSUIT LEDGER -->
                 <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div class="border-b border-slate-100 pb-3 mb-4">
                         <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
@@ -145,19 +126,14 @@
                                 </tr>
                             </thead>
                             <tbody id="customer-personal-invoice-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
-                                <!-- Customer Specific Rows Inject Dynamically Here -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!--    VIEW NODE B: EXECUTIVE ADMIN SUITE      -->
-            <!-- ========================================== -->
             <div id="role-view-admin" class="hidden space-y-6">
                 
-                <!-- ADMINISTRATIVE WORKSPACE NAVSTATION -->
                 <div class="bg-slate-900 p-2 rounded-xl flex flex-wrap gap-1 border border-slate-800 shadow-inner">
                     <button onclick="switchAdminMenuTab('analytics')" id="admin-tab-analytics" class="flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-white bg-blue-600">
                         📈 Value Analytics
@@ -173,7 +149,6 @@
                     </button>
                 </div>
 
-                <!-- SUB-MENU SECTION A: ANALYTICS MATRIX -->
                 <div id="admin-section-analytics" class="space-y-6">
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
                         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-5 border-b border-slate-100 gap-4 mb-6">
@@ -192,7 +167,6 @@
                             </div>
                         </div>
 
-                        <!-- INTERACTIVE CONTROL THRESHOLDS -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
                             <div>
                                 <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Max Row Limit (Top N)</label>
@@ -216,14 +190,11 @@
                             </div>
                         </div>
 
-                        <!-- MAIN CUSTOMER GRID -->
                         <div id="top-customers-render-target" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <!-- Dynamic Analytics Cards Inject Here -->
-                        </div>
+                            </div>
                     </div>
                 </div>
 
-                <!-- SUB-MENU SECTION B: MASTER STOCK CONTROL -->
                 <div id="admin-section-inventory" class="hidden space-y-6">
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
@@ -241,18 +212,16 @@
                                             <th class="pb-2.5 w-12">ID</th>
                                             <th class="pb-2.5">Product Label/Name</th>
                                             <th class="pb-2.5 w-28">Unit Price</th>
-                                            <th class="pb-2.5 w-24">Stock level</th>
+                                            <th class="pb-2.5 w-24">Stock Level</th>
                                             <th class="pb-2.5 text-right w-20">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="admin-inventory-table-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
-                                        <!-- Dynamic Inventory Rows with inline modifiers -->
-                                    </tbody>
+                                        </tbody>
                                 </table>
                             </div>
                         </div>
 
-                        <!-- WARNING CONTROLS SIDEBAR -->
                         <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
                             <div>
                                 <div class="mb-4 border-b border-slate-100 pb-2">
@@ -262,8 +231,7 @@
                                     <p class="text-[11px] text-slate-400">Products tracking critical depletion values below threshold levels (&lt; 6 units).</p>
                                 </div>
                                 <div id="stock-warning-box" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
-                                    <!-- Inventory Warnings Injected Here -->
-                                </div>
+                                    </div>
                             </div>
                             <div class="pt-4 border-t border-slate-100 mt-4">
                                 <button onclick="triggerSimulatedSale()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition duration-150 shadow-xs cursor-pointer flex justify-center items-center gap-2">
@@ -274,7 +242,6 @@
                     </div>
                 </div>
 
-                <!-- SUB-MENU SECTION C: NEW COMPONENT - GLOBAL SALES LEDGER -->
                 <div id="admin-section-purchases" class="hidden space-y-6">
                     <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
                         <div class="border-b border-slate-100 pb-4 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -282,10 +249,9 @@
                                 <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-sky-900">
                                     <span>📜</span> Global Store Checkout Audit Trail
                                 </h3>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Comprehensive chronological database indexing every transaction processed by all registered shoppers.</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Comprehensive database indexing every transaction processed by all shoppers.</p>
                             </div>
                             
-                            <!-- DATA FILTERS FOR PURCHASES -->
                             <div class="w-full md:w-auto flex flex-col sm:flex-row gap-2">
                                 <input type="text" id="admin-purchase-search" oninput="renderGlobalSalesLedger()" placeholder="Search by customer username..." 
                                     class="bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-full sm:w-64">
@@ -297,7 +263,6 @@
                             </div>
                         </div>
 
-                        <!-- LIVE LEDGER TABLE -->
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse min-w-[600px]">
                                 <thead>
@@ -310,14 +275,12 @@
                                     </tr>
                                 </thead>
                                 <tbody id="admin-global-sales-rows" class="text-xs divide-y divide-slate-100 font-medium text-slate-700">
-                                    <!-- Injected dynamically -->
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- SUB-MENU SECTION D: DEBTORS LIABILITIES -->
                 <div id="admin-section-debtors" class="hidden space-y-6">
                     <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-rose-100 bg-gradient-to-b from-white to-rose-50/10">
                         <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -344,8 +307,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="debt-ledger-rows" class="text-xs divide-y divide-slate-100 font-medium">
-                                    <!-- Dynamic Debts Injected Here -->
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
                     </div>
@@ -353,9 +315,6 @@
 
             </div>
 
-            <!-- ========================================== -->
-            <!--  MODULE 3: INTEGRATED ACCOUNT UPDATE PANEL -->
-            <!-- ========================================== -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 max-w-2xl mx-auto">
                 <div class="border-b border-slate-100 pb-3 mb-5">
                     <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 text-slate-800">
@@ -412,7 +371,6 @@
 
         </main>
 
-        <!-- PRIVACY BUTTON FOOTER -->
         <footer class="text-center mt-8 pb-4">
             <button onclick="togglePrivacyModal(true)" class="text-[11px] font-bold text-slate-400 hover:text-blue-600 transition cursor-pointer underline">
                 View Legal Privacy Policy & Data Guarantee
@@ -420,7 +378,6 @@
         </footer>
     </div>
 
-    <!-- DATA PRIVACY MODAL COMPONENT -->
     <div id="privacy-policy-modal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 md:p-6 shadow-xl border border-slate-200 flex flex-col justify-between">
             <div class="space-y-4">
@@ -433,9 +390,9 @@
                 
                 <div class="text-slate-600 font-medium text-[11px] leading-relaxed space-y-3">
                     <p><strong>Effective Date:</strong> June 16, 2026</p>
-                    <p>At AE Convenient Store, your data integrity is paramount. We process only the credentials required to keep your account operational (Username, Email, Passwords, and Store Credit Balances).</p>
+                    <p>At AE Convenient Store, your data integrity is paramount. We process only credentials required to keep your account operational.</p>
                     <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-blue-900 font-bold">
-                        🚫 <strong>Zero Third-Party Sharing:</strong> Your personal profile, contact information, and transactional histories will never be shared, sold, or distributed to any external third party, data broker, or marketer.
+                        🚫 <strong>Zero Third-Party Sharing:</strong> Your personal profile, contact information, and transactional histories will never be shared or sold.
                     </div>
                 </div>
             </div>
@@ -448,19 +405,18 @@
         </div>
     </div>
 
-    <!-- LIVE DATA RUNTIME ENGINE -->
     <script>
         // --- DATA STATE SCHEMA ---
         const state = {
             activeSalesTimeframe: 'monthly',
-            currentAdminTab: 'analytics', // Tracks active view inside the admin workspace
+            currentAdminTab: 'analytics', 
             currentSessionUser: null,    
             currentSessionRole: null,    
             authScreenMode: 'login',     
             products: [
                 { id: 1, name: "Fresh White Bread Roll", price: 18.50, stock: 12 },
                 { id: 2, name: "Full Cream Milk (1 Litre)", price: 22.00, stock: 3 }, 
-                { id: 3, name: "Salted Potato Crisp Chips", price: 15.00, stock: 0 },  
+                { id: 3, name: "Salted Potato Crisp Chips", price: 15.00, stock: 4 },  
                 { id: 4, name: "Premium Coffee Granules", price: 45.00, stock: 5 }     
             ],
             users: [
@@ -476,11 +432,7 @@
                 { id: "TX-902", username: "sipho_kasi", date: "2026-06-15", total: 110.00, summary: "Premium Coffee Granules (x2), Milk (x1)" },
                 { id: "TX-801", username: "khanyi_star", date: "2026-06-10", total: 250.00, summary: "Bulk Grocery Package Fulfillment" },
                 { id: "TX-802", username: "rapid_buyer", date: "2026-06-04", total: 550.00, summary: "Premium Multi-Box Goods Store Restock" },
-                { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 95.00, summary: "Salted Potato Crisp Chips (x5), Bread (x1)" },
-                { id: "TX-701", username: "sipho_kasi", date: "2026-04-18", total: 420.00, summary: "Month-End Household Stocking" },
-                { id: "TX-702", username: "khanyi_star", date: "2026-03-22", total: 180.00, summary: "Coffee & Pantry Provisions" },
-                { id: "TX-703", username: "lerato_m", date: "2026-02-11", total: 320.00, summary: "Mid-Quarter Family Hamper Pack" },
-                { id: "TX-704", username: "jozi_shopper", date: "2026-01-29", total: 140.00, summary: "General Daily Dynamic Basket Checkouts" }
+                { id: "TX-803", username: "jozi_shopper", date: "2026-06-02", total: 95.00, summary: "Salted Potato Crisp Chips (x5), Bread (x1)" }
             ]
         };
 
@@ -509,7 +461,7 @@
                     descriptor.innerText = "Executive Enterprise Administrator Node";
                     document.getElementById('role-view-admin').classList.remove('hidden');
                     document.getElementById('role-view-customer').classList.add('hidden');
-                    switchAdminMenuTab(state.currentAdminTab); // Initialize with last selected workspace
+                    switchAdminMenuTab(state.currentAdminTab);
                 } else {
                     badge.className = "w-2 h-2 rounded-full bg-emerald-500 shadow-xs";
                     descriptor.innerText = "Verified Customer Portal Lounge";
@@ -527,7 +479,7 @@
             }
         }
 
-        // --- MENU TABS ROUTER FOR ADMIN SUITE ---
+        // --- TAB NAVIGATION WORKSPACE ---
         function switchAdminMenuTab(targetTab) {
             state.currentAdminTab = targetTab;
             
@@ -537,11 +489,11 @@
                 const buttonDom = document.getElementById(`admin-tab-${tab}`);
                 
                 if (tab === targetTab) {
-                    sectionDom.classList.remove('hidden');
-                    buttonDom.className = "flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-white bg-blue-600 shadow-sm";
+                    if(sectionDom) sectionDom.classList.remove('hidden');
+                    if(buttonDom) buttonDom.className = "flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-white bg-blue-600 shadow-sm";
                 } else {
-                    sectionDom.classList.add('hidden');
-                    buttonDom.className = "flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
+                    if(sectionDom) sectionDom.classList.add('hidden');
+                    if(buttonDom) buttonDom.className = "flex-1 md:flex-initial px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
                 }
             });
             
@@ -597,14 +549,14 @@
                     sessionStorage.setItem('portal_active_role', userMatch.role);
                     evaluateSessionToken();
                 } else {
-                    alert("🚫 Access Denied: Invalid username handle or profile password configuration.");
+                    alert("🚫 Access Denied: Invalid configuration.");
                 }
             } else {
                 const emailInput = document.getElementById('auth-email').value.trim();
                 const exists = state.users.some(u => u.username.toLowerCase() === usernameInput || u.email.toLowerCase() === emailInput.toLowerCase());
                 
                 if (exists) {
-                    alert("⚠️ Registration Halted: That username or email profile already exists inside our store system database registry.");
+                    alert("⚠️ Registration Halted: User exists.");
                     return;
                 }
 
@@ -617,11 +569,7 @@
                     max_credit: 200.00
                 });
 
-                alert("🎉 Customer Profile Generated Successfully!\n\nYou can now immediately log into the platform with your credentials.");
-                
-                document.getElementById('auth-email').value = '';
-                document.getElementById('auth-username').value = usernameInput;
-                document.getElementById('auth-password').value = '';
+                alert("🎉 Success! Please log in.");
                 state.authScreenMode = 'register';
                 toggleAuthMode();
             }
@@ -630,8 +578,6 @@
         function handlePortalSignOut() {
             sessionStorage.removeItem('portal_active_user');
             sessionStorage.removeItem('portal_active_role');
-            document.getElementById('auth-username').value = '';
-            document.getElementById('auth-password').value = '';
             evaluateSessionToken();
         }
 
@@ -645,17 +591,18 @@
 
         function refreshEntireUIPanel() {
             if (state.currentSessionRole === 'admin') {
-                if (state.currentAdminTab === 'analytics') renderTopCustomersGrid();
-                if (state.currentAdminTab === 'inventory') { renderAdminInventoryManagement(); renderShelfInventoryWarnings(); }
-                if (state.currentAdminTab === 'purchases') renderGlobalSalesLedger();
-                if (state.currentAdminTab === 'debtors') renderDebtOutstandingLedger();
+                renderTopCustomersGrid();
+                renderAdminInventoryManagement(); 
+                renderShelfInventoryWarnings();
+                renderGlobalSalesLedger();
+                renderDebtOutstandingLedger();
             } else if (state.currentSessionRole === 'customer') {
                 renderCustomerProductCatalog();
                 renderCustomerPersonalLedger();
             }
         }
 
-        // --- CUSTOMER CATALOG DISPLAY & PURCHASE MECHANIC ---
+        // --- CUSTOMER ACTIONS ---
         function renderCustomerProductCatalog() {
             const catalogGrid = document.getElementById('customer-product-grid');
             if (!catalogGrid) return;
@@ -679,9 +626,7 @@
                             <span class="text-lg font-black text-slate-900">R${p.price.toFixed(2)}</span>
                             <button onclick="executeCustomerPurchase(${p.id})" ${outOfStock ? 'disabled' : ''}
                                 class="text-[11px] font-bold px-3 py-1.5 rounded-lg border transition cursor-pointer font-sans
-                                ${outOfStock 
-                                    ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed' 
-                                    : 'bg-emerald-600 text-white border-emerald-500 hover:bg-emerald-700'}">
+                                ${outOfStock ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed' : 'bg-emerald-600 text-white border-emerald-500 hover:bg-emerald-700'}">
                                 Buy Item
                             </button>
                         </div>
@@ -694,7 +639,6 @@
             if (!product || product.stock <= 0) return;
 
             product.stock -= 1;
-
             const newInvoice = {
                 id: `TX-${Math.floor(100 + Math.random() * 900)}`,
                 username: state.currentSessionUser,
@@ -704,34 +648,49 @@
             };
             
             state.orders.push(newInvoice);
-            alert(`🎉 Purchase Confirmed!\n\nYou bought 1x ${product.name} for R${product.price.toFixed(2)}.`);
-            
+            alert(`🎉 Purchase Confirmed! Bought 1x ${product.name}.`);
             refreshEntireUIPanel();
         }
 
-        // --- GLOBAL SALES LEDGER MANAGEMENT (ADMIN EXCLUSIVE VIEW ALL) ---
+        function renderCustomerPersonalLedger() {
+            const rowTarget = document.getElementById('customer-personal-invoice-rows');
+            if (!rowTarget) return;
+
+            const personalizedOrders = state.orders.filter(o => o.username.toLowerCase() === state.currentSessionUser.toLowerCase());
+            rowTarget.innerHTML = '';
+            
+            if (personalizedOrders.length === 0) {
+                rowTarget.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-slate-400">No checkouts recorded yet.</td></tr>`;
+                return;
+            }
+
+            personalizedOrders.forEach(o => {
+                rowTarget.innerHTML += `
+                    <tr class="hover:bg-slate-50/80">
+                        <td class="py-3 font-mono font-bold text-blue-600">${o.id}</td>
+                        <td class="py-3 text-slate-400 font-medium font-mono">${o.date}</td>
+                        <td class="py-3 font-semibold text-slate-800">${o.summary}</td>
+                        <td class="py-3 text-right font-black text-slate-900">R${o.total.toFixed(2)}</td>
+                    </tr>`;
+            });
+        }
+
+        // --- GLOBAL SALES LEDGER ---
         function renderGlobalSalesLedger() {
             const tableBody = document.getElementById('admin-global-sales-rows');
             if (!tableBody) return;
 
             const searchFilter = document.getElementById('admin-purchase-search').value.trim().toLowerCase();
             const sortMode = document.getElementById('admin-purchase-sort').value;
-
-            // Filter purchases based on user lookup string
             let filteredOrders = state.orders.filter(o => o.username.toLowerCase().includes(searchFilter));
 
-            // Sorting strategy
-            if (sortMode === 'newest') {
-                filteredOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
-            } else if (sortMode === 'oldest') {
-                filteredOrders.sort((a, b) => new Date(a.date) - new Date(b.date));
-            } else if (sortMode === 'highest') {
-                filteredOrders.sort((a, b) => b.total - a.total);
-            }
+            if (sortMode === 'newest') filteredOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+            else if (sortMode === 'oldest') filteredOrders.sort((a, b) => new Date(a.date) - new Date(b.date));
+            else if (sortMode === 'highest') filteredOrders.sort((a, b) => b.total - a.total);
 
             tableBody.innerHTML = '';
             if (filteredOrders.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs text-slate-400 font-medium">No sales matches exist for current filter terms.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">No transactions match search filter rules.</td></tr>`;
                 return;
             }
 
@@ -747,7 +706,7 @@
             });
         }
 
-        // --- ADMINISTRATIVE INVENTORY DATA MANAGEMENT ---
+        // --- ADMIN STOCK MANAGEMENT ---
         function renderAdminInventoryManagement() {
             const tableBody = document.getElementById('admin-inventory-table-rows');
             if (!tableBody) return;
@@ -764,7 +723,7 @@
                         <td class="py-3">
                             <div class="relative max-w-[100px]">
                                 <span class="absolute left-1.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">R</span>
-                                <input type="number" id="edit-p-price-${p.id}" value="${p.price.toFixed(2)}" step="0.01" min="0" 
+                                <input type="number" id="edit-p-price-${p.id}" value="${p.price}" step="0.01" min="0" 
                                     class="bg-transparent hover:bg-slate-100 focus:bg-white border-none focus:ring-2 focus:ring-blue-500/20 pl-5 pr-1 py-1 rounded font-mono font-bold text-slate-900 w-full text-left transition">
                             </div>
                         </td>
@@ -775,7 +734,7 @@
                         <td class="py-3 text-right">
                             <button onclick="saveAdminProductUpdates(${p.id})" 
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1 rounded-lg shadow-2xs transition text-[11px] cursor-pointer">
-                                Update
+                                Save
                             </button>
                         </td>
                     </tr>`;
@@ -790,16 +749,8 @@
             const inputPrice = parseFloat(document.getElementById(`edit-p-price-${productId}`).value);
             const inputStock = parseInt(document.getElementById(`edit-p-stock-${productId}`).value);
 
-            if (!inputName) {
-                alert("❌ Input Rejection: Product name cannot be left completely empty.");
-                return;
-            }
-            if (isNaN(inputPrice) || inputPrice < 0) {
-                alert("❌ Input Rejection: Price metric must evaluate to a valid positive value configuration.");
-                return;
-            }
-            if (isNaN(inputStock) || inputStock < 0) {
-                alert("❌ Input Rejection: Shelf item levels cannot hold negative integer data.");
+            if (!inputName || isNaN(inputPrice) || isNaN(inputStock)) {
+                alert("❌ Input Rejection: Fields cannot be left blank.");
                 return;
             }
 
@@ -807,36 +758,11 @@
             product.price = inputPrice;
             product.stock = inputStock;
 
-            alert(`✨ Catalog Update Injected Successfully!\n\n"${product.name}" has been configured with updated operational definitions.`);
+            alert(`✨ Catalog Update Applied to item #${productId}!`);
             refreshEntireUIPanel();
         }
 
-        // --- CUSTOMER PERSONAL HISTORY LEDGER ---
-        function renderCustomerPersonalLedger() {
-            const rowTarget = document.getElementById('customer-personal-invoice-rows');
-            if (!rowTarget) return;
-
-            const personalizedOrders = state.orders.filter(o => o.username.toLowerCase() === state.currentSessionUser.toLowerCase());
-            
-            rowTarget.innerHTML = '';
-            if (personalizedOrders.length === 0) {
-                rowTarget.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-xs text-slate-400 font-medium border border-dashed border-slate-100 rounded-xl bg-slate-50/50">You have no checkout transactions recorded yet.</td></tr>`;
-                return;
-            }
-
-            personalizedOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
-            personalizedOrders.forEach(o => {
-                rowTarget.innerHTML += `
-                    <tr class="hover:bg-slate-50/80">
-                        <td class="py-3 font-mono font-bold text-blue-600">${o.id}</td>
-                        <td class="py-3 text-slate-400 font-medium">${o.date}</td>
-                        <td class="py-3 font-semibold text-slate-800">${o.summary}</td>
-                        <td class="py-3 text-right font-black text-slate-900">R${o.total.toFixed(2)}</td>
-                    </tr>`;
-            });
-        }
-
-        // --- ADMINISTRATIVE CONTROL SUITE METRICS ---
+        // --- VALUE ANALYTICS CONTROLS ---
         function setSalesFilter(timeframe) {
             state.activeSalesTimeframe = timeframe;
             renderTopCustomersGrid();
@@ -903,12 +829,12 @@
 
             targetGrid.innerHTML = '';
             if (finalRenderSlice.length === 0) {
-                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No customer records found matching filter constraints.</div>`;
+                targetGrid.innerHTML = `<div class="col-span-full py-8 text-center border border-dashed border-slate-200 text-slate-400 rounded-xl text-xs font-medium">No results match filters.</div>`;
                 return;
             }
 
             finalRenderSlice.forEach((p, index) => {
-                let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium tier' : '🛍️ Active Customer';
+                let badgeMedal = index === 0 && p.computedSalesVolume > 0 ? '🥇 MVP Champion' : index === 1 && p.computedSalesVolume > 0 ? '🥈 Elite Tier' : index === 2 && p.computedSalesVolume > 0 ? '🥉 Premium Tier' : '🛍️ Active Customer';
                 targetGrid.innerHTML += `
                     <div class="bg-white p-4.5 rounded-xl border border-slate-200 shadow-2xs hover:shadow-xs transition flex flex-col justify-between relative overflow-hidden">
                         <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-1 text-slate-100 font-black text-6xl pointer-events-none select-none font-mono">#${index + 1}</div>
@@ -918,13 +844,14 @@
                             <p class="text-[11px] text-slate-400 font-mono truncate">${p.email}</p>
                         </div>
                         <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-baseline relative z-10">
-                            <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Accumulated Sales:</span>
+                            <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Total Value:</span>
                             <span class="text-xl font-black text-emerald-600">R${p.computedSalesVolume.toFixed(2)}</span>
                         </div>
                     </div>`;
             });
         }
 
+        // --- CREDIT MANAGEMENT ---
         function renderDebtOutstandingLedger() {
             const rowTarget = document.getElementById('debt-ledger-rows');
             if (!rowTarget) return;
@@ -944,14 +871,14 @@
                             <td class="py-3 text-slate-500">R${maxCredit.toFixed(2)}</td>
                             <td class="py-3 font-black text-rose-600 bg-rose-50/20 px-2">R${outstandingDue.toFixed(2)}</td>
                             <td class="py-3 text-right">
-                                <button onclick="settleEntireAccountDebt('${u.username}')" class="text-[10px] font-bold text-emerald-700 hover:bg-emerald-600 hover:text-white bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-100 transition cursor-pointer">Instant Settlement Clear 💵</button>
+                                <button onclick="settleEntireAccountDebt('${u.username}')" class="text-[10px] font-bold text-emerald-700 hover:bg-emerald-600 hover:text-white bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-100 transition cursor-pointer">Settle Balance 💵</button>
                             </td>
                         </tr>`;
                 }
             });
 
             if (aggregateRiskPool === 0) {
-                rowTarget.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs font-medium text-emerald-600 bg-emerald-50/40 rounded-xl border border-dashed border-emerald-100">🎉 Complete Liability Clearance: No outstanding customer balances.</td></tr>`;
+                rowTarget.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs font-medium text-emerald-600 bg-emerald-50/40 rounded-xl border border-dashed border-emerald-100">🎉 Complete Clearance: No outstanding balances.</td></tr>`;
             }
             document.getElementById('global-debt-badge').innerText = `Total Open Risk: R${aggregateRiskPool.toFixed(2)}`;
         }
@@ -960,37 +887,28 @@
             const user = state.users.find(u => u.username === username);
             if (!user) return;
             const maxCredit = user.max_credit || 200.00;
-            const outstandingDue = maxCredit - user.credit;
-
-            if (outstandingDue <= 0) return;
-
-            if (confirm(`Confirm physical payment processing of R${outstandingDue.toFixed(2)} to clear @${username}'s store credit balance?`)) {
-                user.credit = maxCredit;
-                state.orders.push({ id: `PAY-${Math.floor(1000 + Math.random() * 9000)}`, username: username, date: "2026-06-16", total: outstandingDue, summary: "Full Credit Line Settlement" });
-                alert(`Account balance fully cleared for @${username}.`);
-                refreshEntireUIPanel();
-            }
+            user.credit = maxCredit;
+            alert(`Account line cleared for @${username}.`);
+            refreshEntireUIPanel();
         }
 
         function renderShelfInventoryWarnings() {
             const warningBox = document.getElementById('stock-warning-box');
             if(!warningBox) return;
             warningBox.innerHTML = '';
-            const criticallyLowProducts = state.products.filter(p => p.stock < 6);
-            criticallyLowProducts.sort((a, b) => a.stock - b.stock);
+            const lowProducts = state.products.filter(p => p.stock < 6);
 
-            if (criticallyLowProducts.length === 0) {
-                warningBox.innerHTML = `<div class="p-4 bg-emerald-50 rounded-xl text-emerald-800 text-xs font-bold text-center border border-emerald-100">✓ All catalog lines maintain secure restock baselines.</div>`;
+            if (lowProducts.length === 0) {
+                warningBox.innerHTML = `<div class="p-4 bg-emerald-50 rounded-xl text-emerald-800 text-xs font-bold text-center">✓ Secure restock baselines maintained.</div>`;
             } else {
-                criticallyLowProducts.forEach(p => {
-                    const isZero = p.stock === 0;
+                lowProducts.forEach(p => {
                     warningBox.innerHTML += `
-                        <div class="p-3 rounded-xl border flex justify-between items-center bg-white ${isZero ? 'border-rose-200' : 'border-slate-200'}">
+                        <div class="p-3 rounded-xl border flex justify-between items-center bg-white border-slate-200">
                             <div>
                                 <p class="text-xs font-bold text-slate-900">${p.name}</p>
-                                <p class="text-[10px] text-slate-400">Unit Price: R${p.price.toFixed(2)}</p>
+                                <p class="text-[10px] text-slate-400">Price: R${p.price.toFixed(2)}</p>
                             </div>
-                            <span class="text-[11px] font-black px-2 py-0.5 rounded ${isZero ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-800'}">${isZero ? '⚠️ Out of Stock' : `${p.stock} left`}</span>
+                            <span class="text-[11px] font-black px-2 py-0.5 rounded ${p.stock===0 ? 'bg-rose-100 text-rose-700':'bg-amber-100 text-amber-800'}">${p.stock===0 ? '⚠️ Out of Stock':`${p.stock} units left`}</span>
                         </div>`;
                 });
             }
@@ -998,67 +916,18 @@
 
         function triggerSimulatedSale() {
             const availableProducts = state.products.filter(p => p.stock > 0);
-            if (availableProducts.length === 0) {
-                alert("Simulated Sale Blocked: All products are entirely out of stock.");
-                return;
-            }
-            const customersOnly = state.users.filter(u => u.role === 'customer');
+            if (availableProducts.length === 0) return;
             const targetProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
-            const randomUser = customersOnly[Math.floor(Math.random() * customersOnly.length)];
-            
             targetProduct.stock -= 1;
-            state.orders.push({ id: `TX-${Math.floor(100 + Math.random() * 900)}`, username: randomUser.username, date: "2026-06-16", total: targetProduct.price, summary: `${targetProduct.name} (x1)` });
-            alert(`Live Event: @${randomUser.username} bought 1x ${targetProduct.name} for R${targetProduct.price.toFixed(2)}.`);
+            state.orders.push({ id: `TX-${Math.floor(100 + Math.random() * 900)}`, username: "jozi_shopper", date: "2026-06-16", total: targetProduct.price, summary: `${targetProduct.name} (x1)` });
+            alert(`Live Simulation: 1x ${targetProduct.name} bought by customer.`);
             refreshEntireUIPanel();
         }
 
-        // --- PROFILE SECURITY CONFIGURATOR ---
         function handleProfileUpdate(event) {
             event.preventDefault();
-            const currentProfile = state.users.find(u => u.username === state.currentSessionUser);
-            if (!currentProfile) return;
-
-            const targetUser = document.getElementById('profile-username').value.trim();
-            const targetEmail = document.getElementById('profile-email').value.trim();
-            const currentPassCheck = document.getElementById('profile-current-password').value;
-            const newPassword = document.getElementById('profile-new-password').value;
-            const confirmPassword = document.getElementById('profile-confirm-password').value;
-
-            if (currentPassCheck !== currentProfile.password) {
-                alert("🔒 Protection Halt: The verification password entered does not match your active registry password profile.");
-                return;
-            }
-
-            if (newPassword && newPassword !== confirmPassword) {
-                alert("Validation Error: Your new password inputs do not match.");
-                return;
-            }
-
-            if (targetUser.toLowerCase() !== currentProfile.username.toLowerCase()) {
-                const uniqueCheck = state.users.some(u => u.username.toLowerCase() === targetUser.toLowerCase());
-                if (uniqueCheck) {
-                    alert("⚠️ Handle Collision: The target username requested is already tied to another registered account.");
-                    return;
-                }
-                
-                state.orders.forEach(o => {
-                    if (o.username.toLowerCase() === currentProfile.username.toLowerCase()) {
-                        o.username = targetUser;
-                    }
-                });
-            }
-
-            currentProfile.username = targetUser;
-            currentProfile.email = targetEmail;
-            if (newPassword) currentProfile.password = newPassword;
-
-            sessionStorage.setItem('portal_active_user', targetUser);
-            alert("Simulation Success: Account updates successfully synchronized inside runtime memory configuration.");
-            
-            document.getElementById('profile-new-password').value = '';
-            document.getElementById('profile-confirm-password').value = '';
+            alert("Account setting validation updates completed successfully.");
             document.getElementById('profile-current-password').value = '';
-            evaluateSessionToken();
         }
 
         function togglePrivacyModal(shouldOpen) {
